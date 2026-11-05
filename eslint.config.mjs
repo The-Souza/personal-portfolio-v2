@@ -27,6 +27,8 @@ const eslintConfig = defineConfig([
     // Vendored agent skill scripts, not part of this project's source.
     ".agents/**",
     ".claude/**",
+    // Reference kit, copied into src/ where it applies.
+    "portfolio-kit/**",
   ]),
 ]);
 
