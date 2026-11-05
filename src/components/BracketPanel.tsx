@@ -15,7 +15,16 @@ export interface BracketPanelProps {
   children?: ReactNode;
   as?: ElementType;
   className?: string;
+  /** Desenha os cantos como 4 elementos (`data-corner`) em vez de fundo, para animá-los um a um. */
+  animatedCorners?: boolean;
 }
+
+const CORNERS = [
+  { name: "tl", className: "top-0 left-0 border-t border-l" },
+  { name: "tr", className: "top-0 right-0 border-t border-r" },
+  { name: "bl", className: "bottom-0 left-0 border-b border-l" },
+  { name: "br", className: "right-0 bottom-0 border-r border-b" },
+];
 
 /** Caixa de conteúdo marcada só por quatro cantos de 10px. */
 export function BracketPanel({
@@ -27,16 +36,27 @@ export function BracketPanel({
   children,
   as: Comp = "div",
   className,
+  animatedCorners,
 }: BracketPanelProps) {
   return (
     <Comp
       className={cn(
-        "brackets relative px-5.5 pt-4 pb-4.75 text-foreground",
+        !animatedCorners && "brackets",
+        "relative px-5.5 pt-4 pb-4.75 text-foreground",
         tone === "focus" && "[--bc:var(--foreground)]",
         filled && "bg-card",
         className,
       )}
     >
+      {animatedCorners &&
+        CORNERS.map((corner) => (
+          <span
+            key={corner.name}
+            data-corner={corner.name}
+            aria-hidden="true"
+            className={cn("pointer-events-none absolute size-2.5 border-(--bc,var(--field-border))", corner.className)}
+          />
+        ))}
       {eyebrow && (
         <p className="font-mono text-eyebrow uppercase text-primary-accessible">
           {eyebrow}
