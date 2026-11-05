@@ -306,6 +306,18 @@
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring;
   }
+  /* Set by the inline script in the layout after a language switch (see boot-session.ts). */
+  .boot-skip #boot {
+    display: none;
+  }
+  .locale-restoring body {
+    visibility: hidden;
+  }
+  /* Tailwind v4 leaves buttons with the default cursor; every enabled one gets the pointer. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
   /* Square cyan thumb on the page background, like a HUD gauge. Firefox and current Chromium
      read the standard properties; the ::-webkit rules cover Safari and add the hover state. */
   html {

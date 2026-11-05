@@ -1,6 +1,7 @@
 "use client";
 
 import { ACT_IDS } from "@/content/acts";
+import { requestBootSkip } from "@/features/boot/boot-session";
 import {
   consumeScrollPosition,
   localeHref,
@@ -10,7 +11,7 @@ import { useActiveSection } from "@/features/hud/use-active-section";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
-import { type MouseEvent, useEffect } from "react";
+import { type MouseEvent, useLayoutEffect } from "react";
 
 /**
  * Plain links on purpose: a client navigation would keep each locale's ThemeProvider
@@ -21,9 +22,13 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   const current = useLocale();
   const { index } = useActiveSection();
 
-  useEffect(() => {
+  // A layout effect, so the position is back before paint and before the acts below (which
+  // run later in the tree) measure what is already on screen.
+  useLayoutEffect(() => {
     const y = consumeScrollPosition();
     if (y !== null) window.scrollTo(0, y);
+    // Set by the inline script after a language switch; the page was hidden until now.
+    document.documentElement.classList.remove("locale-restoring");
   }, []);
 
   const handleClick = (
@@ -37,6 +42,8 @@ export function LanguageSwitcher({ className }: { className?: string }) {
     const hash = index > 0 ? `#${ACT_IDS[index]}` : window.location.hash;
     event.currentTarget.href = localeHref(locale, hash);
     saveScrollPosition(window.scrollY);
+    // The switch is a full page load; the visitor already saw the boot, so the next page skips it.
+    requestBootSkip();
   };
 
   return (

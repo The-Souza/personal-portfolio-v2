@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import type { TerminalLine } from "@/components/Terminal";
-import { hasSeenBoot, markBootSeen } from "@/features/boot/boot-session";
+import { consumeBootSkip, hasSeenBoot, markBootSeen } from "@/features/boot/boot-session";
 import { completeBoot } from "@/features/boot/boot-state";
 import { runBootSequence } from "@/features/boot/boot-sequence";
 import { Container } from "@/features/shared/Container";
@@ -25,7 +25,10 @@ export function Boot() {
   const loadedLabel = t("loaded");
 
   useEffect(() => {
-    if (reducedMotion) {
+    // `boot-skip` comes from the inline script in the layout, set before the first paint, so
+    // the veil is already hidden; the class (not the storage flag) survives StrictMode's rerun.
+    if (reducedMotion || document.documentElement.classList.contains("boot-skip")) {
+      consumeBootSkip();
       completeBoot();
       return;
     }

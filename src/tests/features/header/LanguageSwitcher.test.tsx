@@ -34,6 +34,18 @@ describe("LanguageSwitcher", () => {
     expect(link).toHaveAttribute("href", "/en#projects");
   });
 
+  it("mostra a página de novo depois de restaurar a rolagem", () => {
+    document.documentElement.classList.add("locale-restoring");
+    renderWithIntl(<LanguageSwitcher />);
+    expect(document.documentElement).not.toHaveClass("locale-restoring");
+  });
+
+  it("pede para a próxima página pular o boot", () => {
+    renderWithIntl(<LanguageSwitcher />);
+    fireEvent.click(screen.getByRole("link", { name: "en" }));
+    expect(sessionStorage.getItem("boot-skip")).toBe("1");
+  });
+
   it("salva a posição de rolagem ao trocar de idioma", () => {
     window.scrollY = 640;
     renderWithIntl(<LanguageSwitcher />);
