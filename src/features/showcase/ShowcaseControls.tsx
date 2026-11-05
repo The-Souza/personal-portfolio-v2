@@ -3,7 +3,6 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/Button";
-import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
@@ -22,10 +21,11 @@ export function ShowcaseControls() {
       </Button>
       <nav aria-label={t("language")} className="flex gap-4 font-mono text-eyebrow uppercase">
         {routing.locales.map((locale) => (
-          <Link
+          // A plain link on purpose: a client navigation would keep each locale's ThemeProvider
+          // alive in a hidden <Activity>, restoring a stale theme when coming back.
+          <a
             key={locale}
-            href="/"
-            locale={locale}
+            href={`/${locale}`}
             aria-current={locale === current ? "page" : undefined}
             className={cn(
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
@@ -33,7 +33,7 @@ export function ShowcaseControls() {
             )}
           >
             {locale}
-          </Link>
+          </a>
         ))}
       </nav>
     </div>
