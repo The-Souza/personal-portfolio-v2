@@ -1,0 +1,24 @@
+{
+  "showcase": {
+    "controls": { "night": "Noite", "day": "Dia", "language": "Idioma" },
+    "masthead": { "name": "Guilherme", "suffix": "_dev", "link": "Projetos", "contact": "Contato" },
+    "eyebrow": "// tema controlado · noite ou dia",
+    "eyebrowAlert": "// tema alerta",
+    "impact": "Guilherme",
+    "display": "Sobre",
+    "heading": "BillWise Dashboard",
+    "lead": "Sites, sistemas e automações para pequenas e médias empresas.",
+    "rail": "自動化システム",
+    "buttonOutline": "Ver projetos",
+    "buttonSolid": "Falar com a The Souza Tech",
+    "buttonDisabled": "Desabilitado",
+    "warning": "sinal aberto",
+    "panelFocus": { "eyebrow": "// Agora", "title": "The Souza Tech", "detail": "sócio-fundador · dev" },
+    "panelDefault": { "eyebrow": "// Status", "title": "online", "detail": "Osasco, SP" },
+    "stats": { "tests": "testes", "photos": "fotos por dia", "release": "release" },
+    "tags": { "default": "Next.js", "live": "em produção", "accent": "TypeScript", "hot": "v1", "plain": "Python" },
+    "terminal": { "init": "init_portfolio:", "ok": "ok", "errorLabel": "falha:", "error": "erro inesperado", "comment": "aviso: café baixo" },
+    "progress": "Carregando portfólio",
+    "hud": { "status": "● online · Osasco, SP", "mark": "GC-026" }
+  }
+}
