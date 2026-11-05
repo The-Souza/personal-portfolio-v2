@@ -15,6 +15,15 @@
     "status": "● online · Osasco, SP",
     "theme": { "night": "Noite", "day": "Dia", "toNight": "Mudar para o tema Noite", "toDay": "Mudar para o tema Dia" }
   },
+  "boot": {
+    "loading": "Carregando portfólio",
+    "loaded": "Carregado",
+    "lines": [
+      { "prefix": ">", "text": "init_portfolio:", "status": "ok" },
+      { "prefix": ">", "text": "montando stack [next.js · ts · python]" },
+      { "prefix": ">", "text": "conectando a the souza tech", "status": "ok" }
+    ]
+  },
   "hud": {
     "label": "Atos da página",
     "goTo": "Ir para {act}",
