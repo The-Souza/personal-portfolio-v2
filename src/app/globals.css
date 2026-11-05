@@ -6,6 +6,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Brief section 4.1: short screens, like a phone in landscape. */
+@custom-variant short (@media (max-height: 37.49rem));
+
+/* Breakpoints from the brief and the prototype; `lg` (64rem) already matches the brief. */
+@theme {
+  --breakpoint-xs: 30rem;
+  --breakpoint-phone: 35rem;
+  --breakpoint-tablet: 45rem;
+  --breakpoint-about: 51.25rem;
+  --breakpoint-rail: 56.25rem;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -285,6 +297,10 @@
   body {
     @apply bg-background text-foreground font-sans;
     font-optical-sizing: auto;
+  }
+  /* Brief section 5: a visible 2px ring with a 2px offset on every interactive element. */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
   }
 }
 

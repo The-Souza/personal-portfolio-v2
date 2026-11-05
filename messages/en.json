@@ -1,24 +1,171 @@
 {
-  "showcase": {
-    "controls": { "night": "Night", "day": "Day", "language": "Language" },
-    "masthead": { "name": "Guilherme", "suffix": "_dev", "link": "Projects", "contact": "Contact" },
-    "eyebrow": "// controlled theme · night or day",
-    "eyebrowAlert": "// alert theme",
-    "impact": "Guilherme",
-    "display": "About",
-    "heading": "BillWise Dashboard",
-    "lead": "Websites, systems and automations for small and mid-sized businesses.",
-    "rail": "自動化システム",
-    "buttonOutline": "View projects",
-    "buttonSolid": "Talk to The Souza Tech",
-    "buttonDisabled": "Disabled",
+  "header": {
+    "aria": "Top",
+    "logoAria": "Guilherme, back to top",
+    "logoName": "Guilherme",
+    "logoSuffix": "_dev",
+    "sectionsAria": "Sections",
+    "language": "Language",
+    "nav": { "about": "About", "projects": "Projects", "stack": "Stack" },
+    "contact": "Contact",
+    "menu": "Menu",
+    "menuEyebrow": "// menu",
+    "menuClose": "Close",
+    "menuItems": { "hero": "Home", "about": "About", "projects": "Projects", "stack": "Stack", "contact": "Contact" },
+    "status": "● online · Osasco, Brazil",
+    "theme": { "night": "Night", "day": "Day", "toNight": "Switch to the Night theme", "toDay": "Switch to the Day theme" }
+  },
+  "hud": {
+    "label": "Page acts",
+    "goTo": "Go to {act}",
+    "reading": "act {number} · {act} · {percent}%",
+    "acts": { "hero": "Hero", "about": "About", "projects": "Projects", "stack": "Stack", "contact": "Contact" }
+  },
+  "hero": {
+    "aria": "Introduction",
+    "eyebrow": "// web_dev + automation · osasco, brazil",
+    "firstName": "Guilherme",
+    "lastName": "Campos",
+    "bio": "Co-founder and developer at The Souza Tech. I build websites, systems and automations with Next.js, React, TypeScript and Python, testing from day one and paying attention to performance and accessibility.",
+    "viewProjects": "View projects",
+    "contact": "Contact",
+    "now": { "eyebrow": "// Now", "company": "The Souza Tech", "role": "co-founder · dev", "since": "since 2026" },
+    "status": { "eyebrow": "// Status", "online": "online", "line": "websites, systems and automations", "place": "Osasco, Brazil" },
+    "rail": "自動化システム"
+  },
+  "about": {
+    "aria": "About",
+    "eyebrow": "// about · dev_guilherme",
+    "title": "About",
+    "paragraphs": [
+      "I started at CREA-SP, modernizing a large institutional system without breaking what already worked.",
+      "Later I spent a few days helping at my mother's trucking company, now my business partner, and built an app that cut the time to send proof-of-delivery photos from hours to minutes, with hundreds a day in peak season.",
+      "That project made me see automation as a service and led to The Souza Tech, where I handle the code, the deployment and the direct conversation with clients."
+    ],
+    "milestones": [
+      { "year": "2025", "code": "// milestone_01 · jun–dec", "title": "CREA-SP", "description": "Web development internship: incremental modernization of a system used across the state of São Paulo, integrated with legacy C# ASP.NET, internal APIs and DB2." },
+      { "year": "APP", "code": "// milestone_02 · trucking company", "title": "The photo app", "description": "Batch invoice lookup, OCR for the invoice number and batch upload through the API. Sending the photos went from hours to minutes." },
+      { "year": "2026", "code": "// milestone_03 · now", "title": "The Souza Tech", "description": "Websites, automations and systems for small and mid-sized businesses. I handle the code, the deployment and the conversation with clients." }
+    ],
+    "stats": [
+      { "value": "723", "label": "tests", "note": "in BillWise, with TDD" },
+      { "value": "150", "label": "photos a day", "note": "100 to 150, hundreds at peak" },
+      { "value": "v1.5.1", "label": "release", "note": "The Souza Tech website" }
+    ]
+  },
+  "projects": {
+    "aria": "Projects",
+    "eyebrow": "// projects · 04 + lab + clients",
+    "title": "Projects",
+    "result": "Result",
+    "privateRepo": "private repository",
+    "live": "in production",
+    "imagePlaceholder": "image · empty",
+    "links": { "site": "Visit site", "repo": "Repository", "v1": "v1: Account Management" },
+    "items": {
+      "nfe": {
+        "category": "desktop automation",
+        "title": "NF-e / CT-e Lookup",
+        "description": "The team looked up invoices one by one and downloaded, renamed and sent every proof-of-delivery photo by hand. Now it's batch lookup, Excel export, OCR of the invoice number and batch upload through the API, shipped as an .exe.",
+        "result": "Sending the photos went from hours to minutes; the team only reviews the exceptions.",
+        "terminal": [
+          { "prefix": ">", "text": "batch: 148 photos" },
+          { "prefix": ">", "text": "invoice no. ocr:", "status": "ok" },
+          { "prefix": ">", "text": "api upload: 148/148", "status": "ok" },
+          { "prefix": "//", "text": "only exceptions left to review" }
+        ]
+      },
+      "billwise": {
+        "category": "fullstack",
+        "title": "BillWise Dashboard",
+        "description": "Personal finance management with shared and isolated workspaces, role-based permissions, installments, budgets, analytics, cron-based recurrences, CSV/XLSX import and Turnstile.",
+        "result": "In production and used by my family. 723 tests, TDD, CI on GitHub Actions and Git Flow."
+      },
+      "souzaTech": {
+        "category": "company website",
+        "title": "The Souza Tech",
+        "description": "Lead capture with a thank-you page, consent-based GA4, local SEO with structured data and 70+ tests. Git Flow with versioned releases.",
+        "result": "Currently at v1.5.1."
+      },
+      "souzaTransportes": {
+        "category": "corporate website",
+        "title": "The Souza Transportes",
+        "description": "Scroll-driven animated story, respects prefers-reduced-motion, content visible without JavaScript, video that skips slow connections and WhatsApp quotes with a prefilled message.",
+        "result": "A group project, with AI-generated images."
+      },
+      "jsonGenerator": {
+        "category": "experiment",
+        "title": "JSON Generator",
+        "description": "Generates large JSON files with parallel processing.",
+        "result": "A 400 MB file took about 10 seconds in the README example."
+      }
+    }
+  },
+  "clients": {
+    "aria": "Clients, fictional examples",
+    "eyebrow": "// clients · case format",
+    "title": "Clients",
+    "fake": "⚠ fictional examples",
+    "code": "client_0{number}",
+    "preview": "project preview · {name}",
+    "items": {
+      "frotaAgil": { "name": "Frota Ágil Entregas", "segment": "Logistics · last mile", "challenge": "Routes put together by hand in a spreadsheet every morning.", "result": "<b>1h30 → 10 min</b> to close the day's routes." },
+      "odontoLume": { "name": "Odonto Lume", "segment": "Health · dental clinic", "challenge": "Bookings by phone only and lots of no-shows.", "result": "<b>−35%</b> no-shows with online booking and reminders." },
+      "emporioVilaNova": { "name": "Empório Vila Nova", "segment": "Retail · neighborhood grocery", "challenge": "Orders by voice message and no up-to-date price list.", "result": "<b>+18%</b> average ticket with the WhatsApp catalog." },
+      "baseFirme": { "name": "Base Firme Construções", "segment": "Construction", "challenge": "Weekly site report assembled by hand.", "result": "<b>1 day → 20 min</b> with a Python-generated PDF." }
+    }
+  },
+  "stack": {
+    "aria": "Stack",
+    "eyebrow": "// stack · what i use to ship",
+    "title": "Stack",
+    "layer": "// layer {current}/{total}",
+    "runningHere": "// running on this page",
+    "categories": {
+      "frontend": "Frontend",
+      "state": "State & forms",
+      "animation": "Animation",
+      "backend": "Backend & data",
+      "automation": "Automation",
+      "delivery": "Testing & delivery"
+    },
+    "ai": {
+      "eyebrow": "// ai day to day",
+      "title": "Each tool for what it does best",
+      "terminal": [
+        { "prefix": ">", "text": "claude code:", "status": "dev, agents and sub-agents" },
+        { "prefix": ">", "text": "claude design:", "status": "templates and design systems" },
+        { "prefix": ">", "text": "gemini:", "status": "video, image, research" },
+        { "prefix": ">", "text": "writing:", "status": "claude + gemini" },
+        { "prefix": "//", "text": "the decisions are still mine" },
+        { "prefix": ">", "text": "i review tests, diffs, prs and merges:", "status": "ok" }
+      ],
+      "note": "They speed up the work, but the decisions are still mine. I build with TDD and review everything they produce.",
+      "practices": "TDD · Clean Code · SRP · accessibility · Core Web Vitals · technical & local SEO · consent-based GA4 (LGPD)"
+    }
+  },
+  "contact": {
+    "aria": "Contact",
+    "eyebrow": "// contact · signal open",
     "warning": "signal open",
-    "panelFocus": { "eyebrow": "// Now", "title": "The Souza Tech", "detail": "co-founder · dev" },
-    "panelDefault": { "eyebrow": "// Status", "title": "online", "detail": "Osasco, Brazil" },
-    "stats": { "tests": "tests", "photos": "photos a day", "release": "release" },
-    "tags": { "default": "Next.js", "live": "in production", "accent": "TypeScript", "hot": "v1", "plain": "Python" },
-    "terminal": { "init": "init_portfolio:", "ok": "ok", "errorLabel": "fault:", "error": "unexpected error", "comment": "warning: coffee low" },
-    "progress": "Loading portfolio",
-    "hud": { "status": "● online · Osasco, Brazil", "mark": "GC-026" }
+    "title": "I automate what holds your operation back.",
+    "lead": "Websites, systems and automations for small and mid-sized businesses.",
+    "cta": "Talk to The Souza Tech",
+    "linkedin": "LinkedIn",
+    "github": "GitHub"
+  },
+  "copyEmail": {
+    "copy": "Copy email",
+    "copied": "> copied: ok",
+    "selected": "> selected: ctrl+c"
+  },
+  "footer": {
+    "navAria": "Footer",
+    "status": "● online · Osasco, Brazil",
+    "company": "The Souza Tech · 2026",
+    "mark": "GC-026",
+    "nav": { "about": "About", "projects": "Projects", "stack": "Stack", "top": "Top" },
+    "opportunity": "Also open to Frontend or Fullstack developer roles.",
+    "copyright": "© 2026 The Souza Tech"
   }
 }

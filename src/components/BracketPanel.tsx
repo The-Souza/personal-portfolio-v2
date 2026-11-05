@@ -43,7 +43,7 @@ export function BracketPanel({
         </p>
       )}
       {(title || details) && (
-        <dl className="mt-4 grid gap-1.5 text-sm leading-[1.1] uppercase">
+        <dl className="mt-4 grid gap-1.5 text-sm leading-none uppercase">
           {title && <dt className="font-bold">{title}</dt>}
           {details?.map((d, i) => (
             <dd key={i} className="text-muted-foreground">
