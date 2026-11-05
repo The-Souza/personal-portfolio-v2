@@ -46,6 +46,11 @@
     "aria": "Sobre",
     "eyebrow": "// sobre · dev_guilherme",
     "title": "Sobre",
+    "photo": {
+      "alt": "Guilherme Campos, sócio-fundador da The Souza Tech",
+      "caption": "// dev_guilherme · osasco, sp",
+      "placeholder": "imagem · vazia"
+    },
     "paragraphs": [
       "Comecei no CREA-SP, modernizando um sistema institucional de grande porte sem quebrar o que já funcionava.",
       "Depois, passei alguns dias ajudando na transportadora da minha mãe, hoje minha sócia, e criei um app que reduziu de horas para minutos o envio das fotos de comprovantes, que chega a centenas por dia conforme a época.",

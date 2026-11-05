@@ -1,9 +1,10 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it } from "vitest";
 import { SiteHeader } from "@/features/header/SiteHeader";
 import { ThemeProvider } from "@/features/theme/ThemeProvider";
+import { mockMediaQueries } from "@/tests/media-query";
 import messages from "../../../../messages/pt.json";
 
 function renderHeader() {
@@ -18,6 +19,8 @@ function renderHeader() {
 
 const menuButton = () => screen.getByRole("button", { name: "Menu" });
 const dialog = () => screen.getByRole("dialog");
+/** The panel leaves the DOM once its 0.3s close animation ends. */
+const waitForClosed = () => waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
 
 async function openDrawer() {
   const user = userEvent.setup();
@@ -67,30 +70,38 @@ describe("Drawer", () => {
   it("fecha com Esc e devolve o foco ao botão Menu", async () => {
     const user = await openDrawer();
     await user.keyboard("{Escape}");
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(menuButton()).toHaveAttribute("aria-expanded", "false");
     expect(menuButton()).toHaveFocus();
     expect(document.documentElement.style.overflow).toBe("");
+    await waitForClosed();
+  });
+
+  it("mantém o painel na tela enquanto a animação de fechar roda", async () => {
+    const user = await openDrawer();
+    await user.keyboard("{Escape}");
+    expect(menuButton()).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    await waitForClosed();
   });
 
   it("fecha pelo botão Fechar", async () => {
     const user = await openDrawer();
     await user.click(within(dialog()).getByRole("button", { name: "Fechar" }));
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(menuButton()).toHaveFocus();
+    await waitForClosed();
   });
 
   it("fecha ao clicar no fundo", async () => {
     const user = await openDrawer();
     await user.click(screen.getByTestId("drawer-overlay"));
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    await waitForClosed();
   });
 
   it("fecha ao clicar num item, sem devolver o foco ao botão", async () => {
     const user = await openDrawer();
     await user.click(within(dialog()).getByRole("link", { name: /Sobre/ }));
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(menuButton()).not.toHaveFocus();
+    await waitForClosed();
   });
 
   it("prende o foco: Tab no último volta ao primeiro", async () => {
@@ -114,7 +125,7 @@ describe("Drawer", () => {
     const width = window.innerWidth;
     window.innerWidth = 1024;
     fireEvent(window, new Event("resize"));
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    await waitForClosed();
     window.innerWidth = width;
   });
 
@@ -125,5 +136,13 @@ describe("Drawer", () => {
     fireEvent(window, new Event("resize"));
     expect(dialog()).toBeVisible();
     window.innerWidth = width;
+  });
+
+  // Last on purpose: the reduced-motion matchMedia stays mocked for the rest of the file.
+  it("fecha na hora com movimento reduzido", async () => {
+    mockMediaQueries((query) => query.includes("reduce"));
+    const user = await openDrawer();
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });

@@ -8,6 +8,8 @@ const FOCUSABLE = "a[href], button";
 
 export function useDrawer() {
   const [open, setOpen] = useState(false);
+  // Stays true after `open` turns false, until the close animation ends and calls `onHidden`.
+  const [visible, setVisible] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
@@ -77,5 +79,10 @@ export function useDrawer() {
     });
   };
 
-  return { open, openDrawer: () => setOpen(true), close, navigate, triggerRef, panelRef };
+  const openDrawer = () => {
+    setVisible(true);
+    setOpen(true);
+  };
+
+  return { open, visible, openDrawer, close, onHidden: () => setVisible(false), navigate, triggerRef, panelRef };
 }

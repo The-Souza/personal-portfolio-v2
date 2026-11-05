@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Boot } from "@/features/boot/Boot";
+import { BOOT_SKIP_SCRIPT } from "@/features/boot/boot-session";
 import { SiteHeader } from "@/features/header/SiteHeader";
 import { SideHud } from "@/features/hud/SideHud";
 import { ThemeProvider } from "@/features/theme/ThemeProvider";
@@ -29,6 +30,8 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
       <body className="min-h-dvh overflow-x-clip">
         {/* Without JS the boot never hands over, so its veil must not cover the content. */}
         <noscript dangerouslySetInnerHTML={{ __html: "<style>#boot{display:none}</style>" }} />
+        {/* Runs before the veil below is painted; a constant string, no user input. */}
+        <script dangerouslySetInnerHTML={{ __html: BOOT_SKIP_SCRIPT }} />
         <NextIntlClientProvider messages={clientMessages}>
           <ThemeProvider>
             <LenisProvider>

@@ -18,7 +18,7 @@ import { SPRINGS } from "@/lib/motion/spring";
 
 export function SiteHeader() {
   const t = useTranslations("header");
-  const { open, openDrawer, close, navigate, triggerRef, panelRef } = useDrawer();
+  const { open, visible, openDrawer, close, onHidden, navigate, triggerRef, panelRef } = useDrawer();
   const { index } = useActiveSection();
   const headerRef = useRef<HTMLElement>(null);
 
@@ -40,7 +40,8 @@ export function SiteHeader() {
         aria-label={t("aria")}
         className="fixed inset-x-0 top-0 z-40 border-b border-border bg-background/86 backdrop-blur-sm"
       >
-        <Container className="relative flex h-14 items-center justify-between gap-6">
+        {/* The HUD sits below the header, so the header keeps the plain side margins. */}
+        <Container className="relative flex h-14 items-center justify-between gap-6 tablet:pr-4 rail:pr-10">
           <LogoLink name={t("logoName")} suffix={t("logoSuffix")} label={t("logoAria")} />
 
           {/* Centered on the page, not between its neighbors, which have different widths. */}
@@ -80,7 +81,15 @@ export function SiteHeader() {
         </Container>
       </header>
 
-      <Drawer open={open} activeIndex={index} panelRef={panelRef} onClose={close} onNavigate={navigate} />
+      <Drawer
+        open={open}
+        visible={visible}
+        activeIndex={index}
+        panelRef={panelRef}
+        onClose={close}
+        onNavigate={navigate}
+        onHidden={onHidden}
+      />
     </>
   );
 }
