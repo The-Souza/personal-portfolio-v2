@@ -33,7 +33,7 @@ export function Masthead({ name, suffix, homeHref = "/", links, contact, linkAs:
         {name}
         {suffix && <span className="text-primary-accessible">{suffix}</span>}
       </L>
-      <nav className="flex gap-6 max-[35rem]:hidden" aria-label="Principal">
+      <nav className="flex gap-6 max-phone:hidden" aria-label="Principal">
         {links.map((l) => (
           <L key={l.href} href={l.href} className={link} aria-current={l.current ? "page" : undefined}>
             {l.label}

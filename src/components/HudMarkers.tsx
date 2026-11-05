@@ -13,7 +13,7 @@ export function Target() {
 /** Losango de aviso com texto curto em duas linhas. */
 export function WarningMark({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 font-heading text-xs font-semibold leading-[1.1] tracking-wider uppercase text-foreground">
+    <span className="inline-flex items-center gap-2 font-heading text-xs font-semibold leading-none tracking-wider uppercase text-foreground">
       <i
         aria-hidden="true"
         className="inline-grid size-4.5 rotate-45 place-items-center border-2 border-foreground text-xs not-italic"
