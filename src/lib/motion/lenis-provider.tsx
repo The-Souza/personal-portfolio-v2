@@ -11,11 +11,20 @@ type ScrollTarget = string | HTMLElement | number;
 // Module-level on purpose: the page has one Lenis, and the controls must work
 // from anywhere (the drawer, the boot) without re-rendering when it changes.
 let instance: Lenis | null = null;
+// The boot asks to stop before the provider's effect creates Lenis (children's effects run
+// first), so the request is kept and applied when the instance appears.
+let stopRequested = false;
 
 const controls = {
   /** Locks scrolling, e.g. while the drawer or the boot is on screen. */
-  stop: () => instance?.stop(),
-  start: () => instance?.start(),
+  stop: () => {
+    stopRequested = true;
+    instance?.stop();
+  },
+  start: () => {
+    stopRequested = false;
+    instance?.start();
+  },
   scrollTo: (target: ScrollTarget) => {
     if (instance) {
       instance.scrollTo(target);
@@ -59,6 +68,7 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     gsap.ticker.lagSmoothing(0);
     document.addEventListener("click", onAnchorClick);
     instance = lenis;
+    if (stopRequested) lenis.stop();
 
     return () => {
       document.removeEventListener("click", onAnchorClick);

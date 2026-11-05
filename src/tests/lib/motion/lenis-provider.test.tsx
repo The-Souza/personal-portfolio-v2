@@ -96,4 +96,14 @@ describe("LenisProvider", () => {
     render(<Page />);
     expect(() => fireEvent.click(screen.getByRole("button", { name: "stop" }))).not.toThrow();
   });
+
+  it("aplica um stop pedido antes de o Lenis ligar", () => {
+    mockMediaQueries(reduced(false));
+    const page = render(<Page />);
+    fireEvent.click(screen.getByRole("button", { name: "stop" }));
+    page.unmount();
+
+    renderPage();
+    expect(html()).toHaveClass("lenis-stopped");
+  });
 });
