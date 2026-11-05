@@ -15,6 +15,15 @@
     "status": "● online · Osasco, Brazil",
     "theme": { "night": "Night", "day": "Day", "toNight": "Switch to the Night theme", "toDay": "Switch to the Day theme" }
   },
+  "boot": {
+    "loading": "Loading portfolio",
+    "loaded": "Loaded",
+    "lines": [
+      { "prefix": ">", "text": "init_portfolio:", "status": "ok" },
+      { "prefix": ">", "text": "loading stack [next.js · ts · python]" },
+      { "prefix": ">", "text": "connecting to the souza tech", "status": "ok" }
+    ]
+  },
   "hud": {
     "label": "Page acts",
     "goTo": "Go to {act}",

@@ -1,30 +1,47 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useRef } from "react";
 import { NAV_IDS } from "@/content/acts";
+import { isBootDone, onBootHandover } from "@/features/boot/boot-state";
 import { Drawer } from "@/features/header/Drawer";
 import { LanguageSwitcher } from "@/features/header/LanguageSwitcher";
+import { LogoLink } from "@/features/header/LogoLink";
 import { ThemeToggle } from "@/features/header/ThemeToggle";
 import { useDrawer } from "@/features/header/use-drawer";
 import { useActiveSection } from "@/features/hud/use-active-section";
 import { ActionLink } from "@/features/shared/ActionLink";
 import { Container } from "@/features/shared/Container";
+import { MEDIA } from "@/lib/motion/breakpoints";
+import { gsap, useGSAP } from "@/lib/motion/gsap";
+import { SPRINGS } from "@/lib/motion/spring";
 
 export function SiteHeader() {
   const t = useTranslations("header");
   const { open, openDrawer, close, navigate, triggerRef, panelRef } = useDrawer();
   const { index } = useActiveSection();
+  const headerRef = useRef<HTMLElement>(null);
+
+  // Brief 7.1: the header drops in (yPercent −100 → 0, ITEM) when the boot hands over.
+  useGSAP(
+    (_context, contextSafe) => {
+      const header = headerRef.current;
+      if (!header || !contextSafe || isBootDone() || window.matchMedia(MEDIA.reducedMotion).matches) return;
+      gsap.set(header, { yPercent: -100 });
+      return onBootHandover(contextSafe(() => gsap.to(header, { yPercent: 0, ...SPRINGS.ITEM })));
+    },
+    { scope: headerRef },
+  );
 
   return (
     <>
-      <header aria-label={t("aria")} className="fixed inset-x-0 top-0 z-40 border-b border-border bg-background/86 backdrop-blur-sm">
+      <header
+        ref={headerRef}
+        aria-label={t("aria")}
+        className="fixed inset-x-0 top-0 z-40 border-b border-border bg-background/86 backdrop-blur-sm"
+      >
         <Container className="relative flex h-14 items-center justify-between gap-6">
-          <a href="#hero" aria-label={t("logoAria")} className="font-heading text-base font-bold tracking-wide text-foreground uppercase">
-            <span aria-hidden="true">{t("logoName")}</span>
-            <span aria-hidden="true" className="text-primary-accessible">
-              {t("logoSuffix")}
-            </span>
-          </a>
+          <LogoLink name={t("logoName")} suffix={t("logoSuffix")} label={t("logoAria")} />
 
           {/* Centered on the page, not between its neighbors, which have different widths. */}
           <nav aria-label={t("sectionsAria")} className="absolute left-1/2 hidden -translate-x-1/2 gap-10 lg:flex">
