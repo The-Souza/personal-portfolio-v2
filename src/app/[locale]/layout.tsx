@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/features/theme/ThemeProvider";
 import { htmlLang } from "@/i18n/locale";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
+import { LenisProvider } from "@/lib/motion/lenis-provider";
 import { cn } from "@/lib/utils";
 import "@/app/globals.css";
 
@@ -27,9 +28,11 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
       <body className="min-h-dvh overflow-x-clip">
         <NextIntlClientProvider messages={clientMessages}>
           <ThemeProvider>
-            <SiteHeader />
-            <SideHud />
-            {children}
+            <LenisProvider>
+              <SiteHeader />
+              <SideHud />
+              {children}
+            </LenisProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

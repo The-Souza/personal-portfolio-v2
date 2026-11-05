@@ -302,6 +302,29 @@
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring;
   }
+  /* Square cyan thumb on the page background, like a HUD gauge. Firefox and current Chromium
+     read the standard properties; the ::-webkit rules cover Safari and add the hover state. */
+  html {
+    scrollbar-color: var(--primary) var(--background);
+    scrollbar-width: thin;
+    /* Locking the scroll (drawer, boot) would drop the bar, widen the page and reflow the text. */
+    scrollbar-gutter: stable;
+  }
+  ::-webkit-scrollbar {
+    width: 0.625rem;
+    height: 0.625rem;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+    border-left: 1px solid var(--border);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--field-border);
+    border: 2px solid var(--background);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
