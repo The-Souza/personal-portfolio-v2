@@ -21,6 +21,9 @@ export interface ButtonProps extends Omit<
   type?: "button" | "submit" | "reset";
   /** Componente de link, ex.: `Link` do next/link. */
   as?: ElementType;
+  /** Repassados ao link, ex.: `target="_blank"` para sites externos. */
+  target?: string;
+  rel?: string;
 }
 
 /** CTA chanfrado com flood que entra da esquerda no hover. */

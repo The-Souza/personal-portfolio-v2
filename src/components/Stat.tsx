@@ -7,14 +7,17 @@ export interface StatProps {
   value: string | number;
   /** Unidade pequena em `primary-accessible`, ex.: "%". */
   unit?: string;
+  /** Linha curta de contexto abaixo do label, em `muted-foreground`. */
+  note?: string;
 }
 
 /** Um número grande com label em mono. Use dentro de StatGroup. */
-export function Stat({ label, value, unit }: StatProps) {
+export function Stat({ label, value, unit, note }: StatProps) {
   return (
-    <div className="flex flex-col-reverse gap-2">
-      <dt className="font-mono text-xs font-medium whitespace-nowrap uppercase tracking-wider text-muted-foreground">{label}</dt>
-      <dd className="font-heading text-4xl font-semibold leading-[0.8] tracking-[-0.04em] tabular-nums">
+    <div className="flex flex-col gap-2">
+      <dt className="order-2 font-mono text-xs font-medium whitespace-nowrap uppercase tracking-wider text-muted-foreground">{label}</dt>
+      {note && <dd className="order-3 text-xs text-muted-foreground">{note}</dd>}
+      <dd className="order-1 font-heading text-4xl font-semibold leading-[0.8] tracking-tighter tabular-nums">
         {value}
         {unit && <small className="ml-0.5 text-[0.45em] tracking-normal text-primary-accessible">{unit}</small>}
       </dd>

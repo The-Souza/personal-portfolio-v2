@@ -33,7 +33,7 @@ export function Terminal({
   return (
     <div
       className={cn(
-        "font-mono text-code uppercase tracking-[0.02em] text-foreground",
+        "font-mono text-code uppercase tracking-wide text-foreground",
         className,
       )}
       aria-hidden={decorative || undefined}
