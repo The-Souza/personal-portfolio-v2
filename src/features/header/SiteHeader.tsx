@@ -12,7 +12,7 @@ import { Container } from "@/features/shared/Container";
 
 export function SiteHeader() {
   const t = useTranslations("header");
-  const { open, openDrawer, close, triggerRef, panelRef } = useDrawer();
+  const { open, openDrawer, close, navigate, triggerRef, panelRef } = useDrawer();
   const { index } = useActiveSection();
 
   return (
@@ -63,7 +63,7 @@ export function SiteHeader() {
         </Container>
       </header>
 
-      <Drawer open={open} activeIndex={index} panelRef={panelRef} onClose={close} />
+      <Drawer open={open} activeIndex={index} panelRef={panelRef} onClose={close} onNavigate={navigate} />
     </>
   );
 }

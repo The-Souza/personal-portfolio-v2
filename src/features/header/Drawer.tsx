@@ -14,9 +14,11 @@ interface DrawerProps {
   activeIndex: number;
   panelRef: RefObject<HTMLDivElement | null>;
   onClose: (returnFocus?: boolean) => void;
+  /** Closes and scrolls to the section; the href still works without JS. */
+  onNavigate: (hash: string) => void;
 }
 
-export function Drawer({ open, activeIndex, panelRef, onClose }: DrawerProps) {
+export function Drawer({ open, activeIndex, panelRef, onClose, onNavigate }: DrawerProps) {
   const t = useTranslations("header");
 
   return (
@@ -31,6 +33,7 @@ export function Drawer({ open, activeIndex, panelRef, onClose }: DrawerProps) {
       <div
         ref={panelRef}
         role="dialog"
+        data-lenis-prevent
         aria-modal="true"
         aria-labelledby="drawer-title"
         className="absolute inset-y-0 right-0 flex w-[min(26.25rem,85vw)] flex-col gap-7 overflow-y-auto border-l border-field-border bg-card px-6 pt-4 pb-6 text-foreground"
@@ -60,7 +63,10 @@ export function Drawer({ open, activeIndex, panelRef, onClose }: DrawerProps) {
                 <a
                   href={`#${id}`}
                   aria-current={i === activeIndex ? "true" : "false"}
-                  onClick={() => onClose(false)}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    onNavigate(`#${id}`);
+                  }}
                   className="group flex items-baseline gap-4 border-b border-border py-4"
                 >
                   <span className="font-mono text-xs tracking-widest text-muted-foreground group-aria-current:text-primary-accessible">

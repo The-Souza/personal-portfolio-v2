@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLenis } from "@/lib/motion/lenis-provider";
 
 const DESKTOP_MIN_WIDTH = 1024;
 const FOCUSABLE = "a[href], button";
@@ -9,8 +10,11 @@ export function useDrawer() {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const lenis = useLenis();
 
   const close = (returnFocus = true) => {
+    // Started here, not only in the effect cleanup, so a menu item's anchor scroll runs right away.
+    lenis.start();
     setOpen(false);
     if (returnFocus) triggerRef.current?.focus();
   };
@@ -20,6 +24,7 @@ export function useDrawer() {
     const root = document.documentElement;
     const previousOverflow = root.style.overflow;
     root.style.overflow = "hidden";
+    lenis.stop();
 
     const panel = panelRef.current;
     const initial = panel?.querySelector<HTMLElement>('[aria-current="true"]') ?? panel?.querySelector<HTMLElement>(FOCUSABLE);
@@ -57,10 +62,20 @@ export function useDrawer() {
     window.addEventListener("resize", onResize);
     return () => {
       root.style.overflow = previousOverflow;
+      lenis.start();
       document.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("resize", onResize);
     };
-  }, [open]);
+  }, [open, lenis]);
 
-  return { open, openDrawer: () => setOpen(true), close, triggerRef, panelRef };
+  /** Closes first and scrolls on the next frame, once the scroll lock is gone and the layout is back. */
+  const navigate = (hash: string) => {
+    close(false);
+    requestAnimationFrame(() => {
+      lenis.scrollTo(hash);
+      history.replaceState(null, "", hash);
+    });
+  };
+
+  return { open, openDrawer: () => setOpen(true), close, navigate, triggerRef, panelRef };
 }
