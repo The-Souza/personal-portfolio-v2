@@ -56,7 +56,7 @@ export function Button({
           className={cn(
             "chamfer relative flex h-12.5 items-center gap-3 overflow-hidden px-6 text-base",
             solid
-              ? "bg-primary text-primary-foreground"
+              ? "bg-primary text-primary-foreground in-[.alert]:group-hover:text-foreground"
               : "bg-card text-primary-accessible group-hover:text-primary-foreground",
             "transition-colors duration-250 ease-plate",
           )}
@@ -66,7 +66,7 @@ export function Button({
             aria-hidden="true"
             className={cn(
               "absolute inset-0 origin-left scale-x-0 transition-transform duration-250 ease-plate group-hover:scale-x-100",
-              solid ? "bg-live" : "bg-primary",
+              solid ? "bg-live in-[.alert]:bg-secondary" : "bg-primary",
             )}
           />
           <span className="relative">{children}</span>
