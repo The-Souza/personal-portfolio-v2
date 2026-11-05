@@ -1,0 +1,24 @@
+{
+  "showcase": {
+    "controls": { "night": "Night", "day": "Day", "language": "Language" },
+    "masthead": { "name": "Guilherme", "suffix": "_dev", "link": "Projects", "contact": "Contact" },
+    "eyebrow": "// controlled theme · night or day",
+    "eyebrowAlert": "// alert theme",
+    "impact": "Guilherme",
+    "display": "About",
+    "heading": "BillWise Dashboard",
+    "lead": "Websites, systems and automations for small and mid-sized businesses.",
+    "rail": "自動化システム",
+    "buttonOutline": "View projects",
+    "buttonSolid": "Talk to The Souza Tech",
+    "buttonDisabled": "Disabled",
+    "warning": "signal open",
+    "panelFocus": { "eyebrow": "// Now", "title": "The Souza Tech", "detail": "co-founder · dev" },
+    "panelDefault": { "eyebrow": "// Status", "title": "online", "detail": "Osasco, Brazil" },
+    "stats": { "tests": "tests", "photos": "photos a day", "release": "release" },
+    "tags": { "default": "Next.js", "live": "in production", "accent": "TypeScript", "hot": "v1", "plain": "Python" },
+    "terminal": { "init": "init_portfolio:", "ok": "ok", "errorLabel": "fault:", "error": "unexpected error", "comment": "warning: coffee low" },
+    "progress": "Loading portfolio",
+    "hud": { "status": "● online · Osasco, Brazil", "mark": "GC-026" }
+  }
+}
