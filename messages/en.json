@@ -46,6 +46,11 @@
     "aria": "About",
     "eyebrow": "// about · dev_guilherme",
     "title": "About",
+    "photo": {
+      "alt": "Guilherme Campos, co-founder of The Souza Tech",
+      "caption": "// dev_guilherme · osasco, brazil",
+      "placeholder": "image · empty"
+    },
     "paragraphs": [
       "I started at CREA-SP, modernizing a large institutional system without breaking what already worked.",
       "Later I spent a few days helping at my mother's trucking company, now my business partner, and built an app that cut the time to send proof-of-delivery photos from hours to minutes, with hundreds a day in peak season.",
