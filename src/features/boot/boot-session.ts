@@ -39,10 +39,13 @@ export function consumeBootSkip() {
 }
 
 /**
- * Inline script for the top of <body>, run before the first paint after a language switch:
+ * Inline script for the top of <body>, run before the first paint:
+ * - `js` on every load, so CSS can drop no-JS fallbacks (like the scrollable project track)
+ *   before the first paint instead of after hydration;
+ * after a language switch:
  * - `boot-skip` hides the boot veil, so a skipped boot never flashes;
  * - `locale-restoring` hides the page until the scroll position is back (the LanguageSwitcher
  *   removes it), so the top of the page never flashes either. After 3s it lifts on its own,
  *   so the page can't stay hidden if something fails.
  */
-export const BOOT_SKIP_SCRIPT = `try{if(sessionStorage.getItem("${SKIP_KEY}")==="1"){var h=document.documentElement;h.classList.add("boot-skip","locale-restoring");setTimeout(function(){h.classList.remove("locale-restoring")},3000)}}catch(e){}`;
+export const BOOT_SKIP_SCRIPT = `var h=document.documentElement;h.classList.add("js");try{if(sessionStorage.getItem("${SKIP_KEY}")==="1"){h.classList.add("boot-skip","locale-restoring");setTimeout(function(){h.classList.remove("locale-restoring")},3000)}}catch(e){}`;

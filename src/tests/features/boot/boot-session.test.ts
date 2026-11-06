@@ -46,4 +46,9 @@ describe("boot-session", () => {
     new Function(BOOT_SKIP_SCRIPT)();
     expect(document.documentElement).not.toHaveClass("boot-skip");
   });
+
+  it("marca o html com js em toda carga, para o CSS saber que o script vai rodar", () => {
+    new Function(BOOT_SKIP_SCRIPT)();
+    expect(document.documentElement).toHaveClass("js");
+  });
 });

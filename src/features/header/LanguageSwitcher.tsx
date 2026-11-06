@@ -3,15 +3,19 @@
 import { ACT_IDS } from "@/content/acts";
 import { requestBootSkip } from "@/features/boot/boot-session";
 import {
-  consumeScrollPosition,
+  consumeScrollAnchor,
   localeHref,
-  saveScrollPosition,
+  type ScrollAnchor,
+  saveScrollAnchor,
+  scrollTargetFor,
+  sectionTop,
 } from "@/features/header/locale-switch";
 import { useActiveSection } from "@/features/hud/use-active-section";
 import { routing } from "@/i18n/routing";
+import { ScrollTrigger } from "@/lib/motion/gsap";
 import { cn } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
-import { type MouseEvent, useLayoutEffect } from "react";
+import { type MouseEvent, useLayoutEffect, useRef } from "react";
 
 /**
  * Plain links on purpose: a client navigation would keep each locale's ThemeProvider
@@ -21,14 +25,36 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   const t = useTranslations("header");
   const current = useLocale();
   const { index } = useActiveSection();
+  // A ref survives StrictMode's double run in dev, so the anchor is read once and used by both.
+  const anchorRef = useRef<ScrollAnchor | null | undefined>(undefined);
 
-  // A layout effect, so the position is back before paint and before the acts below (which
-  // run later in the tree) measure what is already on screen.
   useLayoutEffect(() => {
-    const y = consumeScrollPosition();
-    if (y !== null) window.scrollTo(0, y);
-    // Set by the inline script after a language switch; the page was hidden until now.
-    document.documentElement.classList.remove("locale-restoring");
+    if (anchorRef.current === undefined) anchorRef.current = consumeScrollAnchor();
+    const anchor = anchorRef.current;
+    const restore = () => {
+      const top = anchor && sectionTop(anchor.section);
+      if (anchor && top !== null) window.scrollTo(0, scrollTargetFor(anchor, top));
+    };
+
+    // Before paint, so the acts below (later in the tree) measure what is already on screen.
+    restore();
+    // The pins (hero, projects) only get their scroll length when ScrollTrigger refreshes,
+    // which also happens on the window load event; until then the same offset lands too high.
+    // So: refresh now, restore again, and once more after any refresh in the next 2s.
+    const frame = requestAnimationFrame(() => {
+      if (anchor) {
+        ScrollTrigger.refresh();
+        restore();
+      }
+      document.documentElement.classList.remove("locale-restoring");
+    });
+    if (anchor) ScrollTrigger.addEventListener("refresh", restore);
+    const stopListening = window.setTimeout(() => ScrollTrigger.removeEventListener("refresh", restore), 2000);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(stopListening);
+      ScrollTrigger.removeEventListener("refresh", restore);
+    };
   }, []);
 
   const handleClick = (
@@ -41,7 +67,9 @@ export function LanguageSwitcher({ className }: { className?: string }) {
     }
     const hash = index > 0 ? `#${ACT_IDS[index]}` : window.location.hash;
     event.currentTarget.href = localeHref(locale, hash);
-    saveScrollPosition(window.scrollY);
+    const section = ACT_IDS[index];
+    const top = sectionTop(section);
+    if (top !== null) saveScrollAnchor({ section, offset: window.scrollY - top });
     // The switch is a full page load; the visitor already saw the boot, so the next page skips it.
     requestBootSkip();
   };
