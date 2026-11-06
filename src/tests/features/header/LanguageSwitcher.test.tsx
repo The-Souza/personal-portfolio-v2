@@ -1,5 +1,5 @@
-import { fireEvent, screen } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LanguageSwitcher } from "@/features/header/LanguageSwitcher";
 import { renderWithIntl } from "@/tests/helpers";
 
@@ -34,10 +34,23 @@ describe("LanguageSwitcher", () => {
     expect(link).toHaveAttribute("href", "/en#projects");
   });
 
-  it("mostra a página de novo depois de restaurar a rolagem", () => {
+  it("mostra a página de novo depois de restaurar a rolagem", async () => {
     document.documentElement.classList.add("locale-restoring");
     renderWithIntl(<LanguageSwitcher />);
-    expect(document.documentElement).not.toHaveClass("locale-restoring");
+    await waitFor(() => expect(document.documentElement).not.toHaveClass("locale-restoring"));
+  });
+
+  it("volta à mesma distância do topo da seção salva", async () => {
+    sessionStorage.setItem("locale-switch-scroll", JSON.stringify({ section: "about", offset: 120 }));
+    const scrollTo = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+    renderWithIntl(
+      <>
+        <section id="about" />
+        <LanguageSwitcher />
+      </>,
+    );
+    await waitFor(() => expect(scrollTo).toHaveBeenCalledWith(0, 120));
+    scrollTo.mockRestore();
   });
 
   it("pede para a próxima página pular o boot", () => {
@@ -46,11 +59,14 @@ describe("LanguageSwitcher", () => {
     expect(sessionStorage.getItem("boot-skip")).toBe("1");
   });
 
-  it("salva a posição de rolagem ao trocar de idioma", () => {
-    window.scrollY = 640;
-    renderWithIntl(<LanguageSwitcher />);
+  it("salva a seção atual e a distância até o topo dela", () => {
+    renderWithIntl(
+      <>
+        <section id="hero" />
+        <LanguageSwitcher />
+      </>,
+    );
     fireEvent.click(screen.getByRole("link", { name: "en" }));
-    expect(sessionStorage.getItem("locale-switch-scroll")).toBe("640");
-    window.scrollY = 0;
+    expect(JSON.parse(sessionStorage.getItem("locale-switch-scroll") ?? "null")).toEqual({ section: "hero", offset: 0 });
   });
 });
