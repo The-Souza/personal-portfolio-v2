@@ -1,5 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { consumeScrollAnchor, localeHref, saveScrollAnchor, scrollTargetFor } from "@/features/header/locale-switch";
+import {
+  anchorAt,
+  consumeScrollAnchor,
+  localeHref,
+  saveScrollAnchor,
+  scrollTargetFor,
+  shouldRestoreScroll,
+} from "@/features/header/locale-switch";
 
 describe("localeHref", () => {
   it("aponta para a raiz do idioma sem hash", () => {
@@ -34,6 +41,49 @@ describe("âncora de rolagem", () => {
     expect(consumeScrollAnchor()).toBeNull();
     sessionStorage.setItem("locale-switch-scroll", JSON.stringify({ section: "about", offset: "x" }));
     expect(consumeScrollAnchor()).toBeNull();
+  });
+});
+
+describe("anchorAt", () => {
+  const tops = [
+    { id: "hero", top: 0 },
+    { id: "about", top: 800 },
+    { id: "projects", top: 2400 },
+    { id: "stack", top: 9200 },
+  ];
+
+  it("usa a última seção que começa antes da posição", () => {
+    expect(anchorAt(tops, 12000)).toEqual({ section: "stack", offset: 2800 });
+  });
+
+  it("conta o topo exato como dentro da seção", () => {
+    expect(anchorAt(tops, 2400)).toEqual({ section: "projects", offset: 0 });
+  });
+
+  it("usa a primeira seção no topo da página", () => {
+    expect(anchorAt(tops, 0)).toEqual({ section: "hero", offset: 0 });
+  });
+
+  it("devolve null sem seções", () => {
+    expect(anchorAt([], 500)).toBeNull();
+  });
+});
+
+describe("shouldRestoreScroll", () => {
+  it("restaura num reload", () => {
+    expect(shouldRestoreScroll("reload", false)).toBe(true);
+  });
+
+  it("restaura ao voltar ou avançar no histórico", () => {
+    expect(shouldRestoreScroll("back_forward", false)).toBe(true);
+  });
+
+  it("restaura depois de trocar de idioma", () => {
+    expect(shouldRestoreScroll("navigate", true)).toBe(true);
+  });
+
+  it("não restaura numa navegação nova, que segue o hash do link", () => {
+    expect(shouldRestoreScroll("navigate", false)).toBe(false);
   });
 });
 
