@@ -30,7 +30,11 @@ export function ClientsBlock() {
           {CLIENTS.map((client, i) => {
             const item = (field: string) => `items.${client.key}.${field}`;
             return (
-              <article key={client.key} className="grid gap-3.5 bg-background p-3 xs:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+              // Tablet and phone show the first two cases; all four from desktop (`lg`) up.
+              <article
+                key={client.key}
+                className="grid gap-3.5 bg-background p-3 xs:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] max-lg:nth-[n+3]:hidden"
+              >
                 <RevealImage
                   effect="dither"
                   seed={71 + i * 13}

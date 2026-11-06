@@ -22,7 +22,7 @@ export function saveScrollAnchor(anchor: ScrollAnchor) {
   }
 }
 
-/** Reads the saved anchor once, so a later reload doesn't jump. */
+/** Reads the saved anchor once, so a later navigation doesn't reuse it. */
 export function consumeScrollAnchor(): ScrollAnchor | null {
   try {
     const value = sessionStorage.getItem(SCROLL_KEY);
@@ -35,6 +35,20 @@ export function consumeScrollAnchor(): ScrollAnchor | null {
   } catch {
     return null;
   }
+}
+
+/** The anchor for a scroll position: the last section that starts at or above it. */
+export function anchorAt(tops: { id: string; top: number }[], scrollY: number): ScrollAnchor | null {
+  const current = tops.findLast(({ top }) => top <= scrollY) ?? tops[0];
+  return current ? { section: current.id, offset: scrollY - current.top } : null;
+}
+
+/**
+ * A reload or a history step returns to where the visitor was, like the language switch. A new
+ * navigation doesn't: it starts at the top or at the link's hash.
+ */
+export function shouldRestoreScroll(navigationType: string, localeSwitch: boolean) {
+  return localeSwitch || navigationType === "reload" || navigationType === "back_forward";
 }
 
 export function scrollTargetFor(anchor: ScrollAnchor, sectionTop: number) {

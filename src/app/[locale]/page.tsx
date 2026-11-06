@@ -4,6 +4,7 @@ import { SiteFooter } from "@/features/contact/SiteFooter";
 import { HeroAct } from "@/features/hero/HeroAct";
 import { ProjectsAct } from "@/features/projects/ProjectsAct";
 import { StackAct } from "@/features/stack/StackAct";
+import { PageReady } from "@/lib/motion/PageReady";
 
 export default function Page() {
   return (
@@ -16,6 +17,7 @@ export default function Page() {
         <ContactAct />
       </main>
       <SiteFooter />
+      <PageReady />
     </>
   );
 }
