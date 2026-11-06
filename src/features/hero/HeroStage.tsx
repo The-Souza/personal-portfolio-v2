@@ -6,10 +6,12 @@ import { playGlitch, nextGlitchDelay } from "@/features/hero/glitch";
 import { createHeroGrid } from "@/features/hero/hero-grid";
 import { ACT_VARIANT_CONDITIONS, MEDIA } from "@/lib/motion/breakpoints";
 import { gsap, useGSAP } from "@/lib/motion/gsap";
+import { hasPlayed, markPlayed } from "@/lib/motion/played";
 import { SPRINGS } from "@/lib/motion/spring";
 import { scramble, splitWords } from "@/lib/motion/text";
 
 const CORNER_OFFSETS = { x: [-24, 24, -24, 24], y: [-24, -24, 24, 24] };
+const INTRO_KEY = "hero-intro";
 
 /**
  * Client shell for the hero (brief, act 01 · A): grid, entrance, name glitch and the scroll crack.
@@ -49,7 +51,9 @@ export function HeroStage({ children }: { children: ReactNode }) {
       const firstText = first.textContent ?? "";
       const lastText = last.textContent ?? "";
       const hiddenUntilIntro = [content, rail, target].filter(Boolean);
-      gsap.set(hiddenUntilIntro, { autoAlpha: 0 });
+      // After a reload or a language switch the entrance already played: show the hero as is.
+      const introPlayed = hasPlayed(INTRO_KEY);
+      if (!introPlayed) gsap.set(hiddenUntilIntro, { autoAlpha: 0 });
 
       // Glitch: on entrance, on mouse hover and every 6–11s while visible and the tab is active.
       let glitchTimer = 0;
@@ -85,7 +89,10 @@ export function HeroStage({ children }: { children: ReactNode }) {
           const crack = gsap.timeline({
             scrollTrigger: {
               trigger: root,
-              start: "top top",
+              // Starts when the hero's bottom reaches the screen's bottom: the same as "top top" when
+              // it fits the screen, and later when it is taller (stacked panels on a phone, a short
+              // landscape screen), so the whole hero is read before it blurs and About covers it.
+              start: "bottom bottom",
               end: pinned ? "+=100%" : "bottom top",
               pin: pinned,
               pinSpacing: false,
@@ -104,6 +111,7 @@ export function HeroStage({ children }: { children: ReactNode }) {
 
       // Brief, act 01: entrance timeline from the boot handover.
       const intro = contextSafe(() => {
+        markPlayed(INTRO_KEY);
         gsap.set(hiddenUntilIntro, { autoAlpha: 1 });
         grid.reveal();
         const timeline = gsap.timeline({ onComplete: setupScroll });
@@ -142,7 +150,12 @@ export function HeroStage({ children }: { children: ReactNode }) {
         );
       });
 
-      const stopWaiting = onBootHandover(intro);
+      const skipIntro = contextSafe(() => {
+        grid.show();
+        setupScroll();
+        scheduleGlitch();
+      });
+      const stopWaiting = onBootHandover(introPlayed ? skipIntro : intro);
 
       return () => {
         stopWaiting();

@@ -13,9 +13,11 @@ export function HeroAct() {
   return (
     <section id="hero" aria-label={t("aria")} className="relative z-1 overflow-x-clip bg-background">
       <HeroStage>
+        {/* From `rail` up the left margin clears the Rail (~38px wide from 14px), which would
+            otherwise cover the actions on short screens like 1040×742. */}
         <Container
           data-hero="content"
-          className="relative flex flex-wrap content-center items-center justify-between gap-x-12 gap-y-10 pt-24 pb-14"
+          className="relative flex flex-wrap content-center items-center justify-between gap-x-12 gap-y-10 pt-24 pb-14 rail:pl-16"
         >
           <div className="flex min-w-0 flex-[999_1_32.5rem] flex-col gap-6">
             <p data-hero="eyebrow" className="font-mono text-eyebrow text-primary-accessible uppercase">

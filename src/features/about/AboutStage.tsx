@@ -4,6 +4,7 @@ import { type ReactNode, useRef } from "react";
 import { hasEntered, markerFrame, parseCount } from "@/features/about/about-motion";
 import { MEDIA } from "@/lib/motion/breakpoints";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
+import { hasPlayed, markPlayed } from "@/lib/motion/played";
 import { SPRINGS } from "@/lib/motion/spring";
 import { type SplitResult, scramble, splitChars, splitWords } from "@/lib/motion/text";
 
@@ -23,12 +24,17 @@ export function AboutStage({ children }: { children: ReactNode }) {
       const splits: SplitResult[] = [];
       // Anything already past its trigger line at load (a reload or a language switch mid-page)
       // keeps the server-rendered state: hiding it now just to fade it back in would flash.
-      const entered = (el: HTMLElement, startRatio: number) =>
-        hasEntered(el.getBoundingClientRect().top, window.innerHeight, startRatio);
+      // So does anything that already played this session (see `played.ts`).
+      const skip = (key: string, el: HTMLElement, startRatio: number) => {
+        const done = hasPlayed(key) || hasEntered(el.getBoundingClientRect().top, window.innerHeight, startRatio);
+        if (done) markPlayed(key);
+        return done;
+      };
 
       // Each paragraph enters word by word when it reaches 82% of the viewport.
-      for (const paragraph of all("paragraph")) {
-        if (entered(paragraph, 0.82)) continue;
+      for (const [i, paragraph] of all("paragraph").entries()) {
+        const key = `about-paragraph-${i}`;
+        if (skip(key, paragraph, 0.82)) continue;
         const split = splitWords(paragraph);
         splits.push(split);
         gsap.set(split.parts, { opacity: 0 });
@@ -36,12 +42,14 @@ export function AboutStage({ children }: { children: ReactNode }) {
           trigger: paragraph,
           start: "top 82%",
           once: true,
-          onEnter: () =>
+          onEnter: () => {
+            markPlayed(key);
             gsap.fromTo(
               split.parts,
               { opacity: 0, y: "0.35em", filter: "blur(8px)" },
               { opacity: 1, y: 0, filter: "blur(0px)", stagger: 0.025, ...SPRINGS.REVEAL },
-            ),
+            );
+          },
         });
       }
 
@@ -76,9 +84,10 @@ export function AboutStage({ children }: { children: ReactNode }) {
       }
 
       // Milestone years assemble letter by letter, then settle at 40%.
-      for (const milestone of all("milestone")) {
+      for (const [i, milestone] of all("milestone").entries()) {
+        const key = `about-year-${i}`;
         const year = milestone.querySelector<HTMLElement>('[data-about="year"]');
-        if (!year || entered(milestone, 0.75)) continue;
+        if (!year || skip(key, milestone, 0.75)) continue;
         const split = splitChars(year);
         splits.push(split);
         // The letters carry the fade now, so the year itself goes back to full opacity.
@@ -88,23 +97,26 @@ export function AboutStage({ children }: { children: ReactNode }) {
           trigger: milestone,
           start: "top 75%",
           once: true,
-          onEnter: () =>
+          onEnter: () => {
+            markPlayed(key);
             gsap
               .timeline()
               .fromTo(split.parts, { opacity: 0, y: "0.3em" }, { opacity: 1, y: 0, stagger: 0.07, ...SPRINGS.FIGURE })
-              .to(split.parts, { opacity: 0.4, duration: 1.2, ease: "power2.inOut" }, "+=0.5"),
+              .to(split.parts, { opacity: 0.4, duration: 1.2, ease: "power2.inOut" }, "+=0.5");
+          },
         });
       }
 
       // Stats count up from 0 (1.2s, staggered 120ms); a non-number like v1.5.1 scrambles.
       const stats = one("stats");
-      if (stats && !entered(stats, 0.8)) {
+      if (stats && !skip("about-stats", stats, 0.8)) {
         const values = [...stats.querySelectorAll<HTMLElement>("[data-stat-value]")];
         ScrollTrigger.create({
           trigger: stats,
           start: "top 80%",
           once: true,
-          onEnter: () =>
+          onEnter: () => {
+            markPlayed("about-stats");
             values.forEach((value, i) => {
               const final = value.textContent ?? "";
               const target = parseCount(final);
@@ -122,7 +134,8 @@ export function AboutStage({ children }: { children: ReactNode }) {
                   value.textContent = String(Math.round(counter.n));
                 },
               });
-            }),
+            });
+          },
         });
       }
 
