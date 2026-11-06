@@ -75,6 +75,7 @@
     "privateRepo": "repositório privado",
     "live": "em produção",
     "imagePlaceholder": "imagem · vazia",
+    "ghost": "account management · v1 · versão anterior",
     "links": { "site": "Ver site", "repo": "Repositório", "v1": "v1: Account Management" },
     "items": {
       "nfe": {

@@ -6,8 +6,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Set by the inline script at the top of <body> (see boot-session.ts): JS will run. */
+@custom-variant js (&:is(.js *));
+
 /* Brief section 4.1: short screens, like a phone in landscape. */
 @custom-variant short (@media (max-height: 37.49rem));
+
+/* Brief, act 03: the horizontal project track (tablet and up, at least 600px tall, motion allowed). */
+@custom-variant track (@media (min-width: 45rem) and (min-height: 37.5rem) and (prefers-reduced-motion: no-preference));
 
 /* Breakpoints from the brief and the prototype; `lg` (64rem) already matches the brief. */
 @theme {
@@ -115,6 +121,10 @@
 /* Chanfro de 45° no canto inferior direito. Tamanho: [--cut:12px]. */
 @utility chamfer {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut, 12px)), calc(100% - var(--cut, 12px)) 100%, 0 100%);
+}
+/* Cyan glow on the active project card (brief, act 03). */
+@utility glow-active {
+  filter: drop-shadow(0 0 1.125rem color-mix(in srgb, var(--primary) 28%, transparent));
 }
 /* CRT scanlines for the boot screen: 2px dark lines every 4px (brief, act 00). */
 @utility scanlines {
