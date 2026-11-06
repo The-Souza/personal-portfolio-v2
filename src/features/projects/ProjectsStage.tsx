@@ -8,6 +8,7 @@ import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
 import { SPRINGS } from "@/lib/motion/spring";
 import { scramble } from "@/lib/motion/text";
+import { holdPageHeight } from "@/lib/motion/viewport";
 
 interface CardState {
   /** Session key in `played.ts`. */
@@ -115,6 +116,31 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
         gsap.set(viewport, { overflow: "hidden" });
         gsap.set(cards.map((state) => state.card), { opacity: INACTIVE_OPACITY });
         cards.forEach((state) => restore(state, false));
+
+        // A card taller than the space between the title and the progress bar (the clients block
+        // on screens like 768×768) has to scale down, keeping 16px above and below. It first gets
+        // wider, so its text wraps less and it gets shorter, until its on-screen width (after the
+        // scale) is back to what it was. The scale keeps its center, so the measures below hold.
+        // A binary search finds the widest layout whose scaled width doesn't pass the original:
+        // wider means shorter, so the on-screen width only grows with the layout width.
+        const room = viewport.clientHeight - 32;
+        for (const state of cards) {
+          const { card } = state;
+          const visualWidth = card.offsetWidth;
+          if (card.offsetHeight <= room) continue;
+          const scaleAt = (width: number) => {
+            gsap.set(card, { width, maxWidth: "none" });
+            return Math.min(1, room / card.offsetHeight);
+          };
+          let narrow = visualWidth;
+          let wide = visualWidth / scaleAt(visualWidth);
+          for (let pass = 0; pass < 8; pass++) {
+            const middle = (narrow + wide) / 2;
+            if (middle * scaleAt(middle) <= visualWidth) narrow = middle;
+            else wide = middle;
+          }
+          gsap.set(card, { scale: scaleAt(narrow), transformOrigin: "50% 50%" });
+        }
 
         const width = viewport.clientWidth;
         const height = window.innerHeight;
@@ -224,23 +250,31 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
       media.add(ACT_VARIANT_CONDITIONS, (context) => {
         const { full, narrow, short } = context.conditions ?? {};
         if (full) {
-          buildTrack();
-          // The stops depend on the viewport width, so a real width change rebuilds the track.
+          // Its own context, so a rebuild reverts only the layout: reverting the matchMedia
+          // context would also run this cleanup and drop the resize listener after one rebuild.
+          let layout = gsap.context(() => buildTrack());
+          // The stops depend on the viewport width, so a width change rebuilds the track.
           let lastWidth = window.innerWidth;
           let timer = 0;
           const onResize = () => {
             window.clearTimeout(timer);
             timer = window.setTimeout(() => {
-              if (Math.abs(window.innerWidth - lastWidth) < 40) return;
+              // Any width change: a few pixels can cross a breakpoint and reflow a card (the
+              // clients block drops to two cases below `lg`). Height-only changes (a phone's
+              // address bar) don't move the stops.
+              if (window.innerWidth === lastWidth) return;
               lastWidth = window.innerWidth;
-              context.revert();
-              context.add(() => buildTrack());
+              const release = holdPageHeight();
+              layout.revert();
+              layout = gsap.context(() => buildTrack());
+              release();
             }, 300);
           };
           window.addEventListener("resize", onResize);
           return () => {
             window.clearTimeout(timer);
             window.removeEventListener("resize", onResize);
+            layout.revert();
           };
         }
         if (narrow || short) {
@@ -252,6 +286,10 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
       });
 
       return () => {
+        // React can run this cleanup and the setup again without replacing the DOM (Next hides
+        // and shows the page segment after hydration); without the pin the page would shrink and
+        // clamp the scroll before the new pin is built.
+        requestAnimationFrame(holdPageHeight());
         media.revert();
         for (const state of cards) for (const { controller } of state.images) controller.destroy();
       };
