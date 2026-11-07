@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import "@/app/globals.css";
 
 /** Only what client components read; the acts render on the server and don't need to ship their texts. */
-const CLIENT_NAMESPACES = ["boot", "header", "hud", "copyEmail"] as const;
+const CLIENT_NAMESPACES = ["boot", "header", "hud", "copyEmail", "special", "error"] as const;
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
