@@ -8,23 +8,33 @@ export interface HudFrameProps {
   className?: string;
 }
 
-/** Moldura com dois cantos cortados a 45°. */
+/**
+ * Moldura com dois cantos cortados a 45°. O corte fica em `--frame-cut` (registrada com
+ * `@property` no globals.css), então mudá-la anima os dois cantos em 700ms.
+ */
 export function HudFrame({ children, cut = 16, className }: HudFrameProps) {
   return (
-    <div className={cn("relative isolate px-6 py-4 text-foreground", className)}>
-      <span aria-hidden="true" className="chamfer-2 absolute inset-0 -z-10 bg-field-border" style={{ "--cut": `${cut}px` } as CSSProperties} />
-      <span aria-hidden="true" className="chamfer-2 absolute inset-px -z-10 bg-background" style={{ "--cut": `${cut - 0.4}px` } as CSSProperties} />
+    <div
+      data-hud-frame
+      className={cn("relative isolate px-6 py-4 text-foreground transition-[--frame-cut] duration-700 ease-plate", className)}
+      style={{ "--frame-cut": `${cut}px` } as CSSProperties}
+    >
+      <span aria-hidden="true" className="chamfer-2 absolute inset-0 -z-10 bg-field-border [--cut:var(--frame-cut)]" />
+      <span aria-hidden="true" className="chamfer-2 absolute inset-px -z-10 bg-background [--cut:calc(var(--frame-cut)-0.025rem)]" />
       {children}
     </div>
   );
 }
 
-/** Linha interna da moldura: status à esquerda, marca à direita. */
+/**
+ * Linha interna da moldura em duas colunas: o status quebra dentro da sua, a marca fica
+ * inteira à direita.
+ */
 export function HudFrameRow({ children }: { children: ReactNode }) {
-  return <div className="flex items-end justify-between gap-6">{children}</div>;
+  return <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">{children}</div>;
 }
 
-/** Código/marca em display, ex.: "GV-026". */
+/** Código/marca em display, ex.: "GV-026". Nunca quebra, nem no hífen. */
 export function HudMark({ children }: { children: ReactNode }) {
-  return <span className="font-heading text-3xl font-bold leading-none tracking-wide uppercase">{children}</span>;
+  return <span className="justify-self-end font-heading text-3xl font-bold leading-none tracking-wide whitespace-nowrap uppercase">{children}</span>;
 }

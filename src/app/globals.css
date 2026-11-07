@@ -15,6 +15,14 @@
 /* Brief, act 03: the horizontal project track (tablet and up, at least 600px tall, motion allowed). */
 @custom-variant track (@media (min-width: 45rem) and (min-height: 37.5rem) and (prefers-reduced-motion: no-preference));
 
+/* The HudFrame cut (brief, act 05): registered so it can transition when the footer closes it.
+   `initial-value` must be absolute: with `rem` the browser drops the whole rule. */
+@property --frame-cut {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 16px;
+}
+
 /* Breakpoints from the brief and the prototype; `lg` (64rem) already matches the brief. */
 @theme {
   --breakpoint-xs: 30rem;
