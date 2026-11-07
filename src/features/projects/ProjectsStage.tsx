@@ -263,6 +263,13 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
           return () => {
             unregister();
             layout.revert();
+            // The active-card fades start in scroll callbacks, outside the context, so the revert
+            // misses them: without this the list (phone width) keeps the track's dimmed cards.
+            for (const { card } of cards) {
+              gsap.killTweensOf(card, "opacity");
+              card.style.opacity = "";
+              delete card.dataset.active;
+            }
           };
         }
         if (narrow || short) {
