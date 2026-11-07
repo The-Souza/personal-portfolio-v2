@@ -66,6 +66,21 @@ describe("ErrorView", () => {
     expect(screen.queryByRole("button", { name: /copiar digest/i })).not.toBeInTheDocument();
   });
 
+  it("sem digest (erro do navegador), mostra um traço e não oferece copiar", async () => {
+    const { ErrorView, attempts, renderWithIntl } = await load();
+    const browserError = new Error("quebrou no navegador");
+    attempts.recordAttempt("quebrou no navegador");
+    renderWithIntl(<ErrorView error={browserError} retry={() => {}} locale="pt" path="/pt" />);
+    expect(screen.getByText(/digest —/)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /copiar digest/i })).not.toBeInTheDocument();
+  });
+
+  it("mostra o arquivo do limite de erro no eyebrow", async () => {
+    const { ErrorView, renderWithIntl } = await load();
+    renderWithIntl(<ErrorView error={error} retry={() => {}} locale="pt" path="/pt" file="global-error.tsx" />);
+    expect(screen.getByText("// falha_de_sistema · global-error.tsx")).toBeInTheDocument();
+  });
+
   it("copia o digest", async () => {
     const { ErrorView, attempts, renderWithIntl } = await load();
     const writeText = vi.fn().mockResolvedValue(undefined);

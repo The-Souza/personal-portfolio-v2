@@ -209,7 +209,7 @@
   },
   "error": {
     "metaTitle": "Fault · something broke",
-    "eyebrow": "// system_fault · error.tsx",
+    "eyebrow": "// system_fault · {file}",
     "big": "Fault",
     "title": "Something broke on my end.",
     "lead": "It wasn't you. Try again, and if it keeps happening, let me know at {email} with the digest from the report.",
@@ -217,8 +217,8 @@
     "warning": "fault detected",
     "report": "// fault report",
     "barLabel": "Rendering",
-    "foot": "● fault · error.tsx · digest {digest}",
-    "noDigest": "no digest",
+    "foot": "● fault · {file} · digest {digest}",
+    "noDigest": "—",
     "lines": [
       { "prefix": ">", "text": "render {path}" },
       { "prefix": "//", "label": "fault:", "text": "unexpected error in component", "tone": "err" },

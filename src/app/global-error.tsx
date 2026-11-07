@@ -29,7 +29,7 @@ export default function GlobalError({ error, retry }: { error: unknown; retry: (
       <body className="min-h-dvh overflow-x-clip">
         <title>{errorTexts.metaTitle}</title>
         <NextIntlClientProvider locale={locale} messages={{ header, special, error: errorTexts }}>
-          <ErrorView error={error} retry={retry} locale={locale} path={path} />
+          <ErrorView error={error} retry={retry} locale={locale} path={path} file="global-error.tsx" />
         </NextIntlClientProvider>
       </body>
     </html>

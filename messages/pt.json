@@ -209,7 +209,7 @@
   },
   "error": {
     "metaTitle": "Falha · algo quebrou",
-    "eyebrow": "// falha_de_sistema · error.tsx",
+    "eyebrow": "// falha_de_sistema · {file}",
     "big": "Falha",
     "title": "Algo quebrou do meu lado.",
     "lead": "Não foi você. Tente de novo; se continuar, me avisa em {email} com o digest do relatório.",
@@ -217,8 +217,8 @@
     "warning": "falha detectada",
     "report": "// relatório de falha",
     "barLabel": "Renderização",
-    "foot": "● falha · error.tsx · digest {digest}",
-    "noDigest": "sem digest",
+    "foot": "● falha · {file} · digest {digest}",
+    "noDigest": "—",
     "lines": [
       { "prefix": ">", "text": "render {path}" },
       { "prefix": "//", "label": "falha:", "text": "erro inesperado no componente", "tone": "err" },

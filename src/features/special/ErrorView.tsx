@@ -26,7 +26,20 @@ type Stage = "report" | "waiting" | "retrying";
  * the typed report, the bar that locks at 62% and blinks, "Try again" (retry()), and the digest to
  * copy when it fails again.
  */
-export function ErrorView({ error, retry, locale, path }: { error: unknown; retry: () => void; locale: string; path: string }) {
+export function ErrorView({
+  error,
+  retry,
+  locale,
+  path,
+  file = "error.tsx",
+}: {
+  error: unknown;
+  retry: () => void;
+  locale: string;
+  path: string;
+  /** The boundary file shown in the eyebrow and the foot (global-error.tsx for root errors). */
+  file?: string;
+}) {
   const t = useTranslations("error");
   const special = useTranslations("special");
   const header = useTranslations("header");
@@ -35,7 +48,9 @@ export function ErrorView({ error, retry, locale, path }: { error: unknown; retr
   const barRef = useRef<HTMLDivElement>(null);
 
   const key = errorKey(error);
-  const digest = (error as { digest?: string } | null)?.digest ?? t("noDigest");
+  // Only server errors have one (a hash Next logs with the error); browser errors arrive without.
+  const realDigest = (error as { digest?: string } | null)?.digest;
+  const digest = realDigest ?? t("noDigest");
   const values = { path, digest };
   const line = (raw: unknown) => fillLine(raw as TerminalLine, values);
   // A retry that failed renders this page again: read once, at mount.
@@ -104,7 +119,7 @@ export function ErrorView({ error, retry, locale, path }: { error: unknown; retr
       <SpecialShell
         band="tape"
         homeHref={`/${locale}`}
-        foot={t("foot", { digest })}
+        foot={t("foot", { digest, file })}
         texts={{
           logoName: header("logoName"),
           logoSuffix: header("logoSuffix"),
@@ -115,7 +130,7 @@ export function ErrorView({ error, retry, locale, path }: { error: unknown; retr
         left={
           <>
             <p data-special-item className="font-mono text-eyebrow text-primary-accessible uppercase">
-              {t("eyebrow")}
+              {t("eyebrow", { file })}
             </p>
             <div data-big className="relative self-start">
               <p
@@ -149,7 +164,7 @@ export function ErrorView({ error, retry, locale, path }: { error: unknown; retr
             <div data-special-item>
               <BracketPanel tone="focus" filled eyebrow={t("report")}>
                 <TypedTerminal lines={lines} onDone={onTyped} className="mt-3.5 min-h-40" />
-                {failedAgain && (
+                {failedAgain && realDigest && (
                   <button
                     type="button"
                     onClick={copyDigest}
