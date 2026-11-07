@@ -22,6 +22,10 @@
   --breakpoint-tablet: 45rem;
   --breakpoint-about: 51.25rem;
   --breakpoint-rail: 56.25rem;
+
+  /* Line heights for display text sized with clamp(), which sets only the font size. */
+  --leading-impact: 0.92;
+  --leading-figure: 0.9;
 }
 
 @theme inline {
