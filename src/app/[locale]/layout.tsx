@@ -1,9 +1,6 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import { Boot } from "@/features/boot/Boot";
 import { BOOT_SKIP_SCRIPT } from "@/features/boot/boot-session";
-import { SiteHeader } from "@/features/header/SiteHeader";
-import { SideHud } from "@/features/hud/SideHud";
 import { ThemeProvider } from "@/features/theme/ThemeProvider";
 import { htmlLang } from "@/i18n/locale";
 import { routing } from "@/i18n/routing";
@@ -34,12 +31,8 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
         <script dangerouslySetInnerHTML={{ __html: BOOT_SKIP_SCRIPT }} />
         <NextIntlClientProvider messages={clientMessages}>
           <ThemeProvider>
-            <LenisProvider>
-              <Boot />
-              <SiteHeader />
-              <SideHud />
-              {children}
-            </LenisProvider>
+            {/* The boot, header and HUD live in the (site) group; the special pages skip them. */}
+            <LenisProvider>{children}</LenisProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
