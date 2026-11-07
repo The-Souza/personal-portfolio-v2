@@ -12,7 +12,7 @@ const reveal = "opacity-0 transition-[opacity,translate] duration-250 ease-plate
  * Brief 7.1: on hover and focus the name scrambles (0.5s), the brackets slide in,
  * a cursor blinks after `_dev` and the letters split in RGB for 120ms.
  */
-export function LogoLink({ name, suffix, label }: { name: string; suffix: string; label: string }) {
+export function LogoLink({ name, suffix, label, href = "#hero" }: { name: string; suffix: string; label: string; href?: string }) {
   const linkRef = useRef<HTMLAnchorElement>(null);
   const nameRef = useRef<HTMLSpanElement>(null);
   const scrambleRef = useRef<gsap.core.Tween | null>(null);
@@ -39,7 +39,7 @@ export function LogoLink({ name, suffix, label }: { name: string; suffix: string
   return (
     <a
       ref={linkRef}
-      href="#hero"
+      href={href}
       aria-label={label}
       onPointerEnter={(event) => {
         if (event.pointerType === "mouse") play();
