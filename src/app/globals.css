@@ -385,6 +385,21 @@
   ::-webkit-scrollbar-thumb:hover {
     background: var(--primary);
   }
+  /* While the boot veil is up (before it locks the scroll) and while a language switch restores
+     the position, the page is hidden but the bar isn't: it would flash, or show the scroll
+     jumping down and back. Transparent, so its gutter still holds the width. Only with JS
+     (`.js`): without it the veil is hidden and the bar must stay. */
+  html.js:has(#boot):not(.boot-skip),
+  html.locale-restoring {
+    scrollbar-color: transparent transparent;
+  }
+  html.js:has(#boot):not(.boot-skip)::-webkit-scrollbar-track,
+  html.js:has(#boot):not(.boot-skip)::-webkit-scrollbar-thumb,
+  html.locale-restoring::-webkit-scrollbar-track,
+  html.locale-restoring::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-color: transparent;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
