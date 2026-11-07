@@ -10,7 +10,7 @@ export interface SplitResult {
  * Moves the element's own nodes into an `sr-only` copy, so screen readers keep the real text
  * (and React keeps the nodes it rendered), and adds an aria-hidden copy split into spans.
  */
-function split(el: HTMLElement, pieces: string[], joiner: string, pieceClass: string): SplitResult {
+function splitInto(el: HTMLElement, build: (visual: HTMLSpanElement) => HTMLSpanElement[]): SplitResult {
   const original = [...el.childNodes];
 
   const copy = document.createElement("span");
@@ -19,14 +19,7 @@ function split(el: HTMLElement, pieces: string[], joiner: string, pieceClass: st
 
   const visual = document.createElement("span");
   visual.setAttribute("aria-hidden", "true");
-  const parts = pieces.map((piece, i) => {
-    const span = document.createElement("span");
-    span.className = pieceClass;
-    span.textContent = piece;
-    if (i > 0 && joiner) visual.append(joiner);
-    visual.append(span);
-    return span;
-  });
+  const parts = build(visual);
 
   el.append(copy, visual);
 
@@ -40,6 +33,24 @@ function split(el: HTMLElement, pieces: string[], joiner: string, pieceClass: st
   };
 }
 
+const piece = (text: string, className: string) => {
+  const span = document.createElement("span");
+  span.className = className;
+  span.textContent = text;
+  return span;
+};
+
+function split(el: HTMLElement, pieces: string[], joiner: string, pieceClass: string): SplitResult {
+  return splitInto(el, (visual) =>
+    pieces.map((text, i) => {
+      const span = piece(text, pieceClass);
+      if (i > 0 && joiner) visual.append(joiner);
+      visual.append(span);
+      return span;
+    }),
+  );
+}
+
 /** Never put `overflow: hidden` on the element: it clips descenders while words move. */
 export function splitWords(el: HTMLElement) {
   const words = (el.textContent ?? "").trim().split(/\s+/).filter(Boolean);
@@ -48,6 +59,24 @@ export function splitWords(el: HTMLElement) {
 
 export function splitChars(el: HTMLElement) {
   return split(el, [...(el.textContent ?? "")], "", "inline-block whitespace-pre");
+}
+
+/**
+ * Letters for text that wraps over several lines: each word is a block that never breaks, and
+ * plain spaces sit between words, so a line starting after a break isn't indented by one.
+ */
+export function splitWordChars(el: HTMLElement) {
+  const words = (el.textContent ?? "").trim().split(/\s+/).filter(Boolean);
+  return splitInto(el, (visual) =>
+    words.flatMap((word, i) => {
+      const block = piece("", "inline-block whitespace-nowrap");
+      const letters = [...word].map((letter) => piece(letter, "inline-block"));
+      block.append(...letters);
+      if (i > 0) visual.append(" ");
+      visual.append(block);
+      return letters;
+    }),
+  );
 }
 
 export const SCRAMBLE_GLYPHS = "▲■/_<>01#";

@@ -15,6 +15,14 @@
 /* Brief, act 03: the horizontal project track (tablet and up, at least 600px tall, motion allowed). */
 @custom-variant track (@media (min-width: 45rem) and (min-height: 37.5rem) and (prefers-reduced-motion: no-preference));
 
+/* The HudFrame cut (brief, act 05): registered so it can transition when the footer closes it.
+   `initial-value` must be absolute: with `rem` the browser drops the whole rule. */
+@property --frame-cut {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 16px;
+}
+
 /* Breakpoints from the brief and the prototype; `lg` (64rem) already matches the brief. */
 @theme {
   --breakpoint-xs: 30rem;
@@ -22,6 +30,10 @@
   --breakpoint-tablet: 45rem;
   --breakpoint-about: 51.25rem;
   --breakpoint-rail: 56.25rem;
+
+  /* Line heights for display text sized with clamp(), which sets only the font size. */
+  --leading-impact: 0.92;
+  --leading-figure: 0.9;
 }
 
 @theme inline {
@@ -351,6 +363,12 @@
     /* A pinned act rebuilt on resize removes its spacer for a moment; scroll anchoring would
        follow the content up and leave the page in an earlier act when the spacer comes back. */
     overflow-anchor: none;
+    /* A pin spacer still at the old width after a resize made the page wider than the screen; on
+       phones the browser then widened the layout to fit, the next refresh measured the pins at
+       that width, and the page stayed zoomed out with empty space on the right. Clipped, the page
+       never overflows, so the refresh measures the real width. `clip`, not `hidden`: no scroll
+       container, so sticky and the pins keep working. */
+    overflow-x: clip;
   }
   ::-webkit-scrollbar {
     width: 0.625rem;
@@ -366,6 +384,21 @@
   }
   ::-webkit-scrollbar-thumb:hover {
     background: var(--primary);
+  }
+  /* While the boot veil is up (before it locks the scroll) and while a language switch restores
+     the position, the page is hidden but the bar isn't: it would flash, or show the scroll
+     jumping down and back. Transparent, so its gutter still holds the width. Only with JS
+     (`.js`): without it the veil is hidden and the bar must stay. */
+  html.js:has(#boot):not(.boot-skip),
+  html.locale-restoring {
+    scrollbar-color: transparent transparent;
+  }
+  html.js:has(#boot):not(.boot-skip)::-webkit-scrollbar-track,
+  html.js:has(#boot):not(.boot-skip)::-webkit-scrollbar-thumb,
+  html.locale-restoring::-webkit-scrollbar-track,
+  html.locale-restoring::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-color: transparent;
   }
 }
 

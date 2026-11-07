@@ -53,7 +53,7 @@ export function AboutAct() {
                   <p
                     data-about="year"
                     aria-hidden="true"
-                    className="font-heading text-[clamp(3.5rem,7vw,6rem)] leading-[0.9] font-bold tracking-tight opacity-40"
+                    className="font-heading text-[clamp(3.5rem,7vw,6rem)] leading-figure font-bold tracking-tight opacity-40"
                   >
                     {milestone.year}
                   </p>

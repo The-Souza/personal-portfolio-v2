@@ -5,6 +5,7 @@ import { circuitPoints, circuitSpacing, cumulativeLengths } from "@/features/sta
 import { ACT_VARIANT_CONDITIONS } from "@/lib/motion/breakpoints";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
+import { registerRelayout } from "@/lib/motion/relayout";
 import { SPRINGS } from "@/lib/motion/spring";
 import { holdPageHeight, isOnScreenAtLoad } from "@/lib/motion/viewport";
 
@@ -134,7 +135,7 @@ export function StackStage({ children }: { children: ReactNode }) {
           return;
         }
         // Its own context, so a rebuild reverts only the layout: reverting the matchMedia
-        // context would also run this cleanup and drop the resize listener after one rebuild.
+        // context would also run this cleanup.
         let undo = () => {};
         const layOut = () =>
           gsap.context(() => {
@@ -143,26 +144,14 @@ export function StackStage({ children }: { children: ReactNode }) {
         let layout = layOut();
         ready();
 
-        // Step sizes depend on the viewport, so a width change rebuilds the circuit.
-        let lastWidth = window.innerWidth;
-        let timer = 0;
-        const onResize = () => {
-          window.clearTimeout(timer);
-          timer = window.setTimeout(() => {
-            // Any width change: a few pixels can cross a breakpoint and reflow a card.
-            if (window.innerWidth === lastWidth) return;
-            lastWidth = window.innerWidth;
-            const release = holdPageHeight();
-            undo();
-            layout.revert();
-            layout = layOut();
-            release();
-          }, 300);
-        };
-        window.addEventListener("resize", onResize);
+        // Step sizes depend on the viewport, so each relayout rebuilds the circuit.
+        const unregister = registerRelayout(root, () => {
+          undo();
+          layout.revert();
+          layout = layOut();
+        });
         return () => {
-          window.clearTimeout(timer);
-          window.removeEventListener("resize", onResize);
+          unregister();
           undo();
           layout.revert();
         };

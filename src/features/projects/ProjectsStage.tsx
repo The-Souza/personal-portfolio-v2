@@ -8,6 +8,7 @@ import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
 import { SPRINGS } from "@/lib/motion/spring";
 import { scramble } from "@/lib/motion/text";
+import { registerRelayout } from "@/lib/motion/relayout";
 import { holdPageHeight } from "@/lib/motion/viewport";
 
 interface CardState {
@@ -251,30 +252,24 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
         const { full, narrow, short } = context.conditions ?? {};
         if (full) {
           // Its own context, so a rebuild reverts only the layout: reverting the matchMedia
-          // context would also run this cleanup and drop the resize listener after one rebuild.
+          // context would also run this cleanup.
           let layout = gsap.context(() => buildTrack());
-          // The stops depend on the viewport width, so a width change rebuilds the track.
-          let lastWidth = window.innerWidth;
-          let timer = 0;
-          const onResize = () => {
-            window.clearTimeout(timer);
-            timer = window.setTimeout(() => {
-              // Any width change: a few pixels can cross a breakpoint and reflow a card (the
-              // clients block drops to two cases below `lg`). Height-only changes (a phone's
-              // address bar) don't move the stops.
-              if (window.innerWidth === lastWidth) return;
-              lastWidth = window.innerWidth;
-              const release = holdPageHeight();
-              layout.revert();
-              layout = gsap.context(() => buildTrack());
-              release();
-            }, 300);
-          };
-          window.addEventListener("resize", onResize);
-          return () => {
-            window.clearTimeout(timer);
-            window.removeEventListener("resize", onResize);
+          // The stops depend on the viewport width (a few pixels can cross a breakpoint and
+          // reflow a card), so each relayout rebuilds the track, in page order with the others.
+          const unregister = registerRelayout(root, () => {
             layout.revert();
+            layout = gsap.context(() => buildTrack());
+          });
+          return () => {
+            unregister();
+            layout.revert();
+            // The active-card fades start in scroll callbacks, outside the context, so the revert
+            // misses them: without this the list (phone width) keeps the track's dimmed cards.
+            for (const { card } of cards) {
+              gsap.killTweensOf(card, "opacity");
+              card.style.opacity = "";
+              delete card.dataset.active;
+            }
           };
         }
         if (narrow || short) {

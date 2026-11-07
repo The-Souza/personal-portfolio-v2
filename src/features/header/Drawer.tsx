@@ -144,7 +144,11 @@ export function Drawer({ open, visible, activeIndex, panelRef, onClose, onNaviga
         <div data-drawer-extra className="mt-auto">
           <BracketPanel className="font-mono text-xs leading-relaxed tracking-wider uppercase">
             <p>{t("status")}</p>
-            <p className="normal-case">{SITE.email}</p>
+            {/* One long word: on narrow phones it breaks after the @, and anywhere as a last resort. */}
+            <p className="normal-case wrap-anywhere">
+              {SITE.email.split("@")[0]}@<wbr />
+              {SITE.email.split("@")[1]}
+            </p>
           </BracketPanel>
         </div>
       </div>

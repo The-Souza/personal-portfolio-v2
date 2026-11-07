@@ -16,6 +16,7 @@ import { useActiveSection } from "@/features/hud/use-active-section";
 import { routing } from "@/i18n/routing";
 import { ScrollTrigger } from "@/lib/motion/gsap";
 import { onPageReady } from "@/lib/motion/page-ready";
+import { settleScrubs } from "@/lib/motion/scroll-keeper";
 import { cn } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import { type MouseEvent, useLayoutEffect } from "react";
@@ -62,7 +63,10 @@ export function LanguageSwitcher({ className }: { className?: string }) {
     window.addEventListener("pagehide", saveOnLeave);
     const restore = () => {
       const top = anchor && sectionTop(anchor.section);
-      if (anchor && top !== null) window.scrollTo(0, scrollTargetFor(anchor, top));
+      if (!anchor || top === null) return;
+      window.scrollTo(0, scrollTargetFor(anchor, top));
+      // Without this the Contact blade would sweep in again after the jump.
+      settleScrubs();
     };
 
     const reveal = () => document.documentElement.classList.remove("locale-restoring");

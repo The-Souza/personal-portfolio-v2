@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { glitchJitter, glitchSlice, nextGlitchDelay } from "@/features/hero/glitch";
+import { glitchJitter, glitchSlice, nextGlitchDelay } from "@/lib/motion/glitch";
 
 const fixed = (value: number) => () => value;
 
