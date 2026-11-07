@@ -34,7 +34,8 @@ export function nextGlitchDelay(random: Random = Math.random) {
 export function playGlitch(base: HTMLElement, host: HTMLElement, strength = 1) {
   const copies = (["text-hot", "text-primary"] as const).map((color) => {
     const copy = base.cloneNode(true) as HTMLElement;
-    copy.removeAttribute("data-hero");
+    // No `data-*` hooks on the copies, so the acts' queries never find them.
+    for (const name of copy.getAttributeNames()) if (name.startsWith("data-")) copy.removeAttribute(name);
     copy.setAttribute("aria-hidden", "true");
     copy.classList.add("pointer-events-none", "absolute", "inset-0", "opacity-0", color);
     host.append(copy);

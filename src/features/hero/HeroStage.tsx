@@ -2,7 +2,7 @@
 
 import { type ReactNode, useRef } from "react";
 import { onBootHandover } from "@/features/boot/boot-state";
-import { playGlitch, nextGlitchDelay } from "@/features/hero/glitch";
+import { nextGlitchDelay, playGlitch } from "@/lib/motion/glitch";
 import { createHeroGrid } from "@/features/hero/hero-grid";
 import { ACT_VARIANT_CONDITIONS, MEDIA } from "@/lib/motion/breakpoints";
 import { gsap, useGSAP } from "@/lib/motion/gsap";

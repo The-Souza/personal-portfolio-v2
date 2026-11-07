@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { SCRAMBLE_GLYPHS, scramble, scrambleFrame, splitChars, splitWords } from "@/lib/motion/text";
+import { SCRAMBLE_GLYPHS, scramble, scrambleFrame, splitChars, splitWordChars, splitWords } from "@/lib/motion/text";
 
 let el: HTMLParagraphElement;
 
@@ -51,6 +51,38 @@ describe("splitChars", () => {
     el.textContent = "2025";
     splitChars(el);
     expect(el.querySelector(".sr-only")?.textContent).toBe("2025");
+  });
+});
+
+describe("splitWordChars", () => {
+  it("divide em letras, sem os espaços", () => {
+    const { parts } = splitWordChars(el);
+    expect(parts.map((part) => part.textContent).join("")).toBe("Automatizooquetrava");
+  });
+
+  it("agrupa as letras de cada palavra num bloco que não quebra", () => {
+    const { parts } = splitWordChars(el);
+    const word = parts[0].parentElement;
+    expect(word?.textContent).toBe("Automatizo");
+    expect(word?.className).toContain("whitespace-nowrap");
+  });
+
+  it("separa as palavras com espaço comum, que some na quebra de linha", () => {
+    splitWordChars(el);
+    const visual = el.querySelector("[aria-hidden='true']");
+    expect(visual?.textContent).toBe("Automatizo o que trava");
+  });
+
+  it("mantém o texto original para leitores de tela", () => {
+    splitWordChars(el);
+    expect(el.querySelector(".sr-only")?.textContent).toBe("Automatizo o  que trava");
+  });
+
+  it("restaura o conteúdo original ao reverter", () => {
+    const original = el.firstChild;
+    splitWordChars(el).revert();
+    expect(el.childNodes).toHaveLength(1);
+    expect(el.firstChild).toBe(original);
   });
 });
 
