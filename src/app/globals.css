@@ -355,6 +355,12 @@
     /* A pinned act rebuilt on resize removes its spacer for a moment; scroll anchoring would
        follow the content up and leave the page in an earlier act when the spacer comes back. */
     overflow-anchor: none;
+    /* A pin spacer still at the old width after a resize made the page wider than the screen; on
+       phones the browser then widened the layout to fit, the next refresh measured the pins at
+       that width, and the page stayed zoomed out with empty space on the right. Clipped, the page
+       never overflows, so the refresh measures the real width. `clip`, not `hidden`: no scroll
+       container, so sticky and the pins keep working. */
+    overflow-x: clip;
   }
   ::-webkit-scrollbar {
     width: 0.625rem;
