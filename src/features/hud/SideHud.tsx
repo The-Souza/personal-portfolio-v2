@@ -20,7 +20,8 @@ export function SideHud() {
           <a
             key={id}
             href={`#${id}`}
-            aria-label={t("goTo", { act: t(`acts.${id}`) })}
+            // Starts with the visible number (WCAG 2.5.3): voice control users say what they see.
+            aria-label={t("goTo", { number: pad2(i + 1), act: t(`acts.${id}`) })}
             aria-current={i === index ? "true" : undefined}
             className="group flex items-center gap-2 py-1 font-mono text-xs leading-none tracking-widest text-muted-foreground aria-current:text-primary-accessible"
           >

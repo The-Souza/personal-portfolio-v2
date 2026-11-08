@@ -7,7 +7,7 @@
   },
   "header": {
     "aria": "Top",
-    "logoAria": "Guilherme, back to top",
+    "logoAria": "Guilherme_dev, back to top",
     "logoName": "Guilherme",
     "logoSuffix": "_dev",
     "sectionsAria": "Sections",
@@ -32,7 +32,7 @@
   },
   "hud": {
     "label": "Page acts",
-    "goTo": "Go to {act}",
+    "goTo": "{number} · Go to {act}",
     "reading": "act {number} · {act} · {percent}%",
     "acts": { "hero": "Hero", "about": "About", "projects": "Projects", "stack": "Stack", "contact": "Contact" }
   },
@@ -190,7 +190,7 @@
     "copyright": "© 2026 The Souza Tech"
   },
   "special": {
-    "logoLabel": "Guilherme, back to home",
+    "logoLabel": "Guilherme_dev, back to home",
     "place": "The Souza Tech · Osasco, Brazil",
     "mark": "GC-026",
     "home": "Back to home"

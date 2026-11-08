@@ -7,7 +7,7 @@
   },
   "header": {
     "aria": "Topo",
-    "logoAria": "Guilherme, voltar ao topo",
+    "logoAria": "Guilherme_dev, voltar ao topo",
     "logoName": "Guilherme",
     "logoSuffix": "_dev",
     "sectionsAria": "Seções",
@@ -32,7 +32,7 @@
   },
   "hud": {
     "label": "Atos da página",
-    "goTo": "Ir para {act}",
+    "goTo": "{number} · Ir para {act}",
     "reading": "ato {number} · {act} · {percent}%",
     "acts": { "hero": "Hero", "about": "Sobre", "projects": "Projetos", "stack": "Stack", "contact": "Contato" }
   },
@@ -190,7 +190,7 @@
     "copyright": "© 2026 The Souza Tech"
   },
   "special": {
-    "logoLabel": "Guilherme, voltar ao início",
+    "logoLabel": "Guilherme_dev, voltar ao início",
     "place": "The Souza Tech · Osasco, SP",
     "mark": "GC-026",
     "home": "Voltar pro início"
