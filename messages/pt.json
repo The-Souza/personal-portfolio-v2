@@ -182,5 +182,52 @@
     "nav": { "about": "Sobre", "projects": "Projetos", "stack": "Stack", "top": "Topo" },
     "opportunity": "Também estou aberto a oportunidades como desenvolvedor Frontend ou Fullstack.",
     "copyright": "© 2026 The Souza Tech"
+  },
+  "special": {
+    "logoLabel": "Guilherme, voltar ao início",
+    "place": "The Souza Tech · Osasco, SP",
+    "mark": "GC-026",
+    "home": "Voltar pro início"
+  },
+  "notFound": {
+    "metaTitle": "404 · rota fora do mapa",
+    "eyebrow": "// erro_404 · rota fora do mapa",
+    "title": "Essa rota saiu do mapa.",
+    "lead": "O endereço que você tentou não existe, ou mudou de lugar. Volte para a base ou vá direto para os projetos.",
+    "projects": "Ver projetos",
+    "warning": "sinal perdido",
+    "log": "// log da requisição",
+    "aim": "alvo",
+    "foot": "● erro_404 · not-found.tsx",
+    "lines": [
+      { "prefix": ">", "text": "get {path}" },
+      { "prefix": ">", "text": "status:", "status": "404", "tone": "err" },
+      { "prefix": "//", "label": "erro_404:", "text": "página não encontrada", "tone": "err" },
+      { "prefix": ">", "text": "rotas vivas: / · /#projects · /#contact" },
+      { "prefix": "//", "text": "sugestão: voltar pra base" }
+    ]
+  },
+  "error": {
+    "metaTitle": "Falha · algo quebrou",
+    "eyebrow": "// falha_de_sistema · {file}",
+    "big": "Falha",
+    "title": "Algo quebrou do meu lado.",
+    "lead": "Não foi você. Tente de novo; se continuar, me avisa em {email} com o digest do relatório.",
+    "retry": "Tentar de novo",
+    "warning": "falha detectada",
+    "report": "// relatório de falha",
+    "barLabel": "Renderização",
+    "foot": "● falha · {file} · digest {digest}",
+    "noDigest": "—",
+    "lines": [
+      { "prefix": ">", "text": "render {path}" },
+      { "prefix": "//", "label": "falha:", "text": "erro inesperado no componente", "tone": "err" },
+      { "prefix": ">", "text": "digest: {digest}" }
+    ],
+    "wait": { "prefix": ">", "text": "retry():", "status": "aguardando você" },
+    "retrying": { "prefix": ">", "text": "retry(): tentando…" },
+    "again": { "prefix": "//", "label": "falha:", "text": "de novo.", "tone": "err" },
+    "copyDigest": "Copiar digest",
+    "copiedDigest": "Copiado"
   }
 }

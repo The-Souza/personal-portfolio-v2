@@ -34,6 +34,8 @@
   /* Line heights for display text sized with clamp(), which sets only the font size. */
   --leading-impact: 0.92;
   --leading-figure: 0.9;
+  --leading-display: 0.95;
+  --leading-huge: 0.8;
 }
 
 @theme inline {
@@ -154,6 +156,16 @@
 /* CRT scanlines for the boot screen: 2px dark lines every 4px (brief, act 00). */
 @utility scanlines {
   background-image: repeating-linear-gradient(180deg, color-mix(in srgb, var(--background) 35%, transparent) 0 2px, transparent 2px 4px);
+}
+/* Special pages (brief, section 11), in the Alert theme: a checkered band on the 404, a striped
+   hazard tape (135°) on the error page. */
+@utility band-checker {
+  background-color: var(--foreground);
+  background-image: repeating-conic-gradient(var(--background) 0 25%, transparent 0 50%);
+  background-size: 1.5rem 1.5rem;
+}
+@utility band-tape {
+  background-image: repeating-linear-gradient(135deg, var(--foreground) 0 1rem, var(--background) 1rem 2rem);
 }
 /* Dois cantos cortados (superior esquerdo e inferior direito). */
 @utility chamfer-2 {
@@ -286,9 +298,11 @@
   --live-foreground: #07080c;
 }
 
-/* Alerta */
+/* Alerta. The special pages (404, error) carry it up to <html>: the reserved scrollbar gutter and
+   the bar itself are painted with the root's colors, which would stay Night's next to the page. */
 .alert,
-[data-theme="alert"] {
+[data-theme="alert"],
+html:has([data-special]) {
   --background: #e8e51c;
   --foreground: #0a0a0a;
   --card: #dcd915;
@@ -369,6 +383,11 @@
        never overflows, so the refresh measures the real width. `clip`, not `hidden`: no scroll
        container, so sticky and the pins keep working. */
     overflow-x: clip;
+  }
+  /* The special pages never lock the scroll, so they don't need the reserved gutter: without it a
+     page that fits the screen has no empty strip, and the band reaches the edge. */
+  html:has([data-special]) {
+    scrollbar-gutter: auto;
   }
   ::-webkit-scrollbar {
     width: 0.625rem;

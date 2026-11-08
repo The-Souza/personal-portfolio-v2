@@ -182,5 +182,52 @@
     "nav": { "about": "About", "projects": "Projects", "stack": "Stack", "top": "Top" },
     "opportunity": "Also open to Frontend or Fullstack developer roles.",
     "copyright": "© 2026 The Souza Tech"
+  },
+  "special": {
+    "logoLabel": "Guilherme, back to home",
+    "place": "The Souza Tech · Osasco, Brazil",
+    "mark": "GC-026",
+    "home": "Back to home"
+  },
+  "notFound": {
+    "metaTitle": "404 · route off the map",
+    "eyebrow": "// error_404 · route off the map",
+    "title": "This route fell off the map.",
+    "lead": "The address you tried doesn't exist, or it moved. Head back to base or go straight to the projects.",
+    "projects": "View projects",
+    "warning": "signal lost",
+    "log": "// request log",
+    "aim": "target",
+    "foot": "● error_404 · not-found.tsx",
+    "lines": [
+      { "prefix": ">", "text": "get {path}" },
+      { "prefix": ">", "text": "status:", "status": "404", "tone": "err" },
+      { "prefix": "//", "label": "error_404:", "text": "page not found", "tone": "err" },
+      { "prefix": ">", "text": "live routes: / · /#projects · /#contact" },
+      { "prefix": "//", "text": "tip: head back to base" }
+    ]
+  },
+  "error": {
+    "metaTitle": "Fault · something broke",
+    "eyebrow": "// system_fault · {file}",
+    "big": "Fault",
+    "title": "Something broke on my end.",
+    "lead": "It wasn't you. Try again, and if it keeps happening, let me know at {email} with the digest from the report.",
+    "retry": "Try again",
+    "warning": "fault detected",
+    "report": "// fault report",
+    "barLabel": "Rendering",
+    "foot": "● fault · {file} · digest {digest}",
+    "noDigest": "—",
+    "lines": [
+      { "prefix": ">", "text": "render {path}" },
+      { "prefix": "//", "label": "fault:", "text": "unexpected error in component", "tone": "err" },
+      { "prefix": ">", "text": "digest: {digest}" }
+    ],
+    "wait": { "prefix": ">", "text": "retry():", "status": "waiting for you" },
+    "retrying": { "prefix": ">", "text": "retry(): retrying…" },
+    "again": { "prefix": "//", "label": "fault:", "text": "again.", "tone": "err" },
+    "copyDigest": "Copy digest",
+    "copiedDigest": "Copied"
   }
 }
