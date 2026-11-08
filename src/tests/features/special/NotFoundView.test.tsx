@@ -12,7 +12,8 @@ vi.mock("next-intl/server", async () => {
   };
 });
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/pt/rota-que-nao-existe" }));
+// The address bar the visitor typed: the log reads it, not the route that rendered.
+window.history.replaceState(null, "", "/pt/rota-que-nao-existe");
 
 // jsdom has no ResizeObserver; the stage only uses it to place the slot.
 vi.stubGlobal(

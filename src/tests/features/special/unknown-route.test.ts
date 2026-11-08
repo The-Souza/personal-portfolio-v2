@@ -14,8 +14,8 @@ describe("unknownRouteTarget", () => {
     expect(unknownRouteTarget("/en/a/b/c", locales)).toBe(`/en/${NOT_FOUND_PATH}`);
   });
 
-  it("manda o próprio caminho do 404 para ele mesmo", () => {
-    expect(unknownRouteTarget(`/pt/${NOT_FOUND_PATH}`, locales)).toBe(`/pt/${NOT_FOUND_PATH}`);
+  it("deixa passar a própria rota do 404, que o proxy busca para devolver com status 404", () => {
+    expect(unknownRouteTarget(`/pt/${NOT_FOUND_PATH}`, locales)).toBeNull();
   });
 
   it("deixa com o next-intl um caminho sem idioma, que ele redireciona", () => {
