@@ -2,8 +2,8 @@
 
 import { useSyncExternalStore } from "react";
 import type { TerminalLine } from "@/components/Terminal";
-import { fillLine } from "@/features/special/special-motion";
-import { TypedTerminal } from "@/features/special/TypedTerminal";
+import { fillLine } from "@/features/special/shared/special-motion";
+import { TypedTerminal } from "@/features/special/shared/TypedTerminal";
 
 const noop = () => () => {};
 

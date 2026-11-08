@@ -1,6 +1,6 @@
 import { HudFrame, HudFrameRow, HudMark } from "@/components/HudFrame";
 import { NAV_IDS } from "@/content/acts";
-import { ClosingFrame } from "@/features/contact/ClosingFrame";
+import { ClosingFrame } from "@/features/footer/ClosingFrame";
 import { Container } from "@/features/shared/Container";
 import { useTranslations } from "next-intl";
 

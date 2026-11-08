@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { ACT_IDS } from "@/content/acts";
-import { onRelayout, onRelayoutStart } from "@/lib/motion/relayout";
-import { placeAt, scrollForPlace, settleScrubs, type SectionBox } from "@/lib/motion/scroll-keeper";
+import { onRelayout, onRelayoutStart } from "@/lib/scroll/relayout";
+import { placeAt, scrollForPlace, settleScrubs, type SectionBox } from "@/lib/scroll/scroll-keeper";
 
 function measure(): SectionBox[] {
   return ACT_IDS.flatMap((id) => {

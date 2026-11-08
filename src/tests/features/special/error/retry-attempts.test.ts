@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 async function load() {
   vi.resetModules();
-  return import("@/features/special/retry-attempts");
+  return import("@/features/special/error/retry-attempts");
 }
 
 describe("retry-attempts", () => {

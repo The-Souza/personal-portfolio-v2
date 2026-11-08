@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { holdPageHeight } from "@/lib/motion/viewport";
+import { holdPageHeight } from "@/lib/scroll/viewport";
 
 describe("holdPageHeight", () => {
   const root = document.documentElement;

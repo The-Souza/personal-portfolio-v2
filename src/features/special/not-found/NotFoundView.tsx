@@ -3,9 +3,9 @@ import { BracketPanel } from "@/components/BracketPanel";
 import { Button } from "@/components/Button";
 import { Target, WarningMark } from "@/components/HudMarkers";
 import type { TerminalLine } from "@/components/Terminal";
-import { NotFoundLog } from "@/features/special/NotFoundLog";
-import { NotFoundStage } from "@/features/special/NotFoundStage";
-import { SpecialShell } from "@/features/special/SpecialShell";
+import { NotFoundLog } from "@/features/special/not-found/NotFoundLog";
+import { NotFoundStage } from "@/features/special/not-found/NotFoundStage";
+import { SpecialShell } from "@/features/special/shared/SpecialShell";
 
 // Set as HTML, not as React children: the scramble writes into these spans directly.
 const digit = (value: string) => ({ __html: value });

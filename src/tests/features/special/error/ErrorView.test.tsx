@@ -6,8 +6,8 @@ const error = Object.assign(new Error("boom"), { digest: "3f9a2c71" });
 // Retries are counted per error in module state, so each test loads a fresh copy.
 async function load() {
   vi.resetModules();
-  const { ErrorView } = await import("@/features/special/ErrorView");
-  const attempts = await import("@/features/special/retry-attempts");
+  const { ErrorView } = await import("@/features/special/error/ErrorView");
+  const attempts = await import("@/features/special/error/retry-attempts");
   const { renderWithIntl } = await import("@/tests/helpers");
   return { ErrorView, attempts, renderWithIntl };
 }

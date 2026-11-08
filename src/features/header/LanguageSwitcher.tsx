@@ -15,8 +15,8 @@ import {
 import { useActiveSection } from "@/features/hud/use-active-section";
 import { routing } from "@/i18n/routing";
 import { ScrollTrigger } from "@/lib/motion/gsap";
-import { onPageReady } from "@/lib/motion/page-ready";
-import { settleScrubs } from "@/lib/motion/scroll-keeper";
+import { onPageReady } from "@/lib/scroll/page-ready";
+import { settleScrubs } from "@/lib/scroll/scroll-keeper";
 import { cn } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import { type MouseEvent, useLayoutEffect } from "react";

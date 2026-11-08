@@ -1,11 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { createTranslator, NextIntlClientProvider } from "next-intl";
 import { describe, expect, it, vi } from "vitest";
-import messages from "../../../../messages/pt.json";
+import messages from "../../../../../messages/pt.json";
 
 vi.mock("next-intl/server", async () => {
   const { createTranslator: create } = await import("next-intl");
-  const all = (await import("../../../../messages/pt.json")).default;
+  const all = (await import("../../../../../messages/pt.json")).default;
   return {
     getLocale: async () => "pt",
     getTranslations: async (namespace: string) => create({ locale: "pt", messages: all, namespace: namespace as never }),
@@ -26,7 +26,7 @@ vi.stubGlobal(
 );
 
 async function renderNotFound() {
-  const { NotFoundView } = await import("@/features/special/NotFoundView");
+  const { NotFoundView } = await import("@/features/special/not-found/NotFoundView");
   return render(<NextIntlClientProvider locale="pt" messages={messages}>{await NotFoundView()}</NextIntlClientProvider>);
 }
 

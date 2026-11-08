@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NOT_FOUND_PATH, unknownRouteTarget } from "@/features/special/unknown-route";
+import { NOT_FOUND_PATH, unknownRouteTarget } from "@/i18n/unknown-route";
 
 const locales = ["pt", "en"];
 

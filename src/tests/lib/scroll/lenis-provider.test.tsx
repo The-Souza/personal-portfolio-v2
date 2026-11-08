@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { LenisProvider, useLenis } from "@/lib/motion/lenis-provider";
+import { LenisProvider, useLenis } from "@/lib/scroll/lenis-provider";
 import { mockMediaQueries } from "@/tests/media-query";
 
 const reduced = (on: boolean) => (query: string) => query.includes("reduce") && on;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { languageAlternates, personJsonLd, siteUrl } from "@/lib/seo";
+import { languageAlternates, personJsonLd, siteUrl } from "@/features/seo/seo";
 
 describe("siteUrl", () => {
   it("usa a URL definida no ambiente, sem barra no fim", () => {

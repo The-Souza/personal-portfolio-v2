@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { placeAt, scrollForPlace } from "@/lib/motion/scroll-keeper";
+import { placeAt, scrollForPlace } from "@/lib/scroll/scroll-keeper";
 
 const sections = [
   { id: "hero", top: 0, height: 800 },

@@ -5,9 +5,9 @@ import { circuitPoints, circuitSpacing, cumulativeLengths } from "@/features/sta
 import { ACT_VARIANT_CONDITIONS } from "@/lib/motion/breakpoints";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
-import { registerRelayout } from "@/lib/motion/relayout";
 import { SPRINGS } from "@/lib/motion/spring";
-import { holdPageHeight, isOnScreenAtLoad } from "@/lib/motion/viewport";
+import { registerRelayout } from "@/lib/scroll/relayout";
+import { holdPageHeight, isOnScreenAtLoad } from "@/lib/scroll/viewport";
 
 const HOLD = 0.55;
 const FIRST_HOLD = 0.45;

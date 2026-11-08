@@ -7,10 +7,10 @@ import { ACT_VARIANT_CONDITIONS } from "@/lib/motion/breakpoints";
 import { playGlitch } from "@/lib/motion/glitch";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
-import { registerRelayout } from "@/lib/motion/relayout";
 import { SPRINGS } from "@/lib/motion/spring";
 import { splitWordChars } from "@/lib/motion/text";
-import { holdPageHeight } from "@/lib/motion/viewport";
+import { registerRelayout } from "@/lib/scroll/relayout";
+import { holdPageHeight } from "@/lib/scroll/viewport";
 
 const PLAYED_KEY = "contact-poster";
 /** Each title line shifts this much from the one above, to a random side, in em. */

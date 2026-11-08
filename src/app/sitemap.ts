@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
+import { languageAlternates, siteUrl } from "@/features/seo/seo";
 import { routing } from "@/i18n/routing";
-import { languageAlternates, siteUrl } from "@/lib/seo";
 
 /** One page per locale, each linked to the others (hreflang). */
 export default function sitemap(): MetadataRoute.Sitemap {

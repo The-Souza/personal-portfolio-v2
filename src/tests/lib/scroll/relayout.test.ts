@@ -15,7 +15,7 @@ const setWidth = (width: number) => {
 
 async function load() {
   vi.resetModules();
-  const relayout = await import("@/lib/motion/relayout");
+  const relayout = await import("@/lib/scroll/relayout");
   const { ScrollTrigger } = await import("@/lib/motion/gsap");
   return { ...relayout, refresh: vi.mocked(ScrollTrigger.refresh) };
 }

@@ -1,6 +1,6 @@
 import { MEDIA, resolveActVariant } from "@/lib/motion/breakpoints";
 import { ScrollTrigger } from "@/lib/motion/gsap";
-import { holdPageHeight } from "@/lib/motion/viewport";
+import { holdPageHeight } from "@/lib/scroll/viewport";
 
 /** After the last resize event of a round: the window has stopped changing. */
 const SETTLE_MS = 150;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { trustedOrigin } from "@/features/special/unknown-route";
+import { trustedOrigin } from "@/i18n/unknown-route";
 
 describe("trustedOrigin", () => {
   it("aceita o domínio do site", () => {

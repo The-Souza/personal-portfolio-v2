@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { aimReading, fillLine, isAimLineHidden, looseOffset } from "@/features/special/special-motion";
+import { aimReading, fillLine, isAimLineHidden, looseOffset } from "@/features/special/shared/special-motion";
 
 describe("looseOffset", () => {
   it("segue o cursor a 14% da distância", () => {

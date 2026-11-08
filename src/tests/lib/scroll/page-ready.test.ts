@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 describe("page-ready", () => {
   beforeEach(() => vi.resetModules());
 
-  const load = () => import("@/lib/motion/page-ready");
+  const load = () => import("@/lib/scroll/page-ready");
 
   it("avisa quem espera quando a página fica pronta", async () => {
     const { markPageReady, onPageReady } = await load();

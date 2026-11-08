@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { usePathname } from "next/navigation";
 import en from "../../messages/en.json";
 import pt from "../../messages/pt.json";
-import { ErrorView } from "@/features/special/ErrorView";
+import { ErrorView } from "@/features/special/error/ErrorView";
 import { htmlLang } from "@/i18n/locale";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";

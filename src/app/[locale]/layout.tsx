@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { BOOT_SKIP_SCRIPT } from "@/features/boot/boot-session";
+import { languageAlternates, siteUrl } from "@/features/seo/seo";
 import { ThemeProvider } from "@/features/theme/ThemeProvider";
 import { htmlLang } from "@/i18n/locale";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
-import { LenisProvider } from "@/lib/motion/lenis-provider";
-import { languageAlternates, siteUrl } from "@/lib/seo";
+import { LenisProvider } from "@/lib/scroll/lenis-provider";
 import { cn } from "@/lib/utils";
 import "@/app/globals.css";
 

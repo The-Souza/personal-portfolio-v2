@@ -1,8 +1,8 @@
 "use client";
 
 import { type ReactNode, useRef } from "react";
-import { aimReading, isAimLineHidden, looseOffset } from "@/features/special/special-motion";
-import { playSpecialEntrance } from "@/features/special/special-entrance";
+import { aimReading, isAimLineHidden, looseOffset } from "@/features/special/shared/special-motion";
+import { playSpecialEntrance } from "@/features/special/shared/special-entrance";
 import { gsap, useGSAP } from "@/lib/motion/gsap";
 import { SPRINGS } from "@/lib/motion/spring";
 import { scramble } from "@/lib/motion/text";

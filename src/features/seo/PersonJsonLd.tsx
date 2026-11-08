@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { personJsonLd, siteUrl } from "@/features/seo/seo";
 import { htmlLang } from "@/i18n/locale";
-import { personJsonLd, siteUrl } from "@/lib/seo";
 
 /** The home's structured data (brief, section 12): the person and The Souza Tech. */
 export async function PersonJsonLd() {

@@ -8,8 +8,8 @@ import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
 import { SPRINGS } from "@/lib/motion/spring";
 import { scramble } from "@/lib/motion/text";
-import { registerRelayout } from "@/lib/motion/relayout";
-import { holdPageHeight } from "@/lib/motion/viewport";
+import { registerRelayout } from "@/lib/scroll/relayout";
+import { holdPageHeight } from "@/lib/scroll/viewport";
 
 interface CardState {
   /** Session key in `played.ts`. */

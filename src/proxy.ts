@@ -1,7 +1,7 @@
 import createMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
-import { trustedOrigin, unknownRouteTarget } from "@/features/special/unknown-route";
 import { routing } from "@/i18n/routing";
+import { trustedOrigin, unknownRouteTarget } from "@/i18n/unknown-route";
 
 const intl = createMiddleware(routing);
 

@@ -1,4 +1,4 @@
-import { siteUrl } from "@/lib/seo";
+import { siteUrl } from "@/features/seo/seo";
 
 /** The route the 404 is rendered at, under each locale (`/pt/off-the-map`). */
 export const NOT_FOUND_PATH = "off-the-map";
