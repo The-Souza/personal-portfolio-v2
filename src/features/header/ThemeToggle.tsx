@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import { MEDIA } from "@/lib/motion/breakpoints";
 import { cn } from "@/lib/utils";
 
 /**
@@ -12,10 +13,27 @@ export function ThemeToggle({ className }: { className?: string }) {
   const t = useTranslations("header.theme");
   const { resolvedTheme, setTheme } = useTheme();
 
+  // Brief 7.4: the new theme sweeps in from the top through View Transitions (the animation is
+  // in globals.css); with reduced motion, or without support, it just switches.
+  const toggle = () => {
+    const next = resolvedTheme === "dark" ? "light" : "dark";
+    const reducedMotion = window.matchMedia(MEDIA.reducedMotion).matches;
+    if (reducedMotion || !document.startViewTransition) {
+      setTheme(next);
+      return;
+    }
+    document.startViewTransition(() => {
+      // The transition snapshots the page once this returns, but next-themes applies the class
+      // in an effect, after the render: set it here, the same way it will.
+      document.documentElement.classList.toggle("dark", next === "dark");
+      setTheme(next);
+    });
+  };
+
   return (
     <button
       type="button"
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      onClick={toggle}
       className={cn(
         "inline-flex items-center gap-2.5 border border-field-border px-2.5 py-2 font-mono text-xs leading-none tracking-widest text-foreground uppercase transition-colors duration-150 ease-entrance hover:border-primary hover:text-primary-accessible",
         className,

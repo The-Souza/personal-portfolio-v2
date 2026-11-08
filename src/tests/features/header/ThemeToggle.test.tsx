@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NextIntlClientProvider } from "next-intl";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ThemeToggle } from "@/features/header/ThemeToggle";
 import { ThemeProvider } from "@/features/theme/ThemeProvider";
 import messages from "../../../../messages/pt.json";
@@ -40,5 +40,54 @@ describe("ThemeToggle", () => {
     renderToggle();
     await user.click(screen.getByRole("button"));
     expect(localStorage.getItem("theme")).toBe("light");
+  });
+
+  describe("transição", () => {
+    afterEach(() => {
+      Reflect.deleteProperty(document, "startViewTransition");
+      vi.mocked(window.matchMedia).mockImplementation(defaultMatchMedia);
+    });
+
+    const defaultMatchMedia = vi.mocked(window.matchMedia).getMockImplementation()!;
+
+    const stubTransition = () => {
+      const classDuringUpdate: boolean[] = [];
+      const startViewTransition = vi.fn((update: () => void) => {
+        update();
+        classDuringUpdate.push(document.documentElement.classList.contains("dark"));
+        return { finished: Promise.resolve() };
+      });
+      Object.defineProperty(document, "startViewTransition", { configurable: true, value: startViewTransition });
+      return { startViewTransition, classDuringUpdate };
+    };
+
+    it("troca o tema dentro de uma View Transition, já com a classe nova no callback", async () => {
+      const user = userEvent.setup();
+      const { startViewTransition, classDuringUpdate } = stubTransition();
+      renderToggle();
+      await user.click(screen.getByRole("button"));
+      expect(startViewTransition).toHaveBeenCalledOnce();
+      expect(classDuringUpdate).toEqual([false]);
+    });
+
+    it("troca direto com movimento reduzido", async () => {
+      const user = userEvent.setup();
+      const { startViewTransition } = stubTransition();
+      vi.mocked(window.matchMedia).mockImplementation((query: string) => ({
+        ...defaultMatchMedia(query),
+        matches: query.includes("reduce"),
+      }));
+      renderToggle();
+      await user.click(screen.getByRole("button"));
+      expect(startViewTransition).not.toHaveBeenCalled();
+      expect(document.documentElement).not.toHaveClass("dark");
+    });
+
+    it("troca direto sem suporte a View Transitions", async () => {
+      const user = userEvent.setup();
+      renderToggle();
+      await user.click(screen.getByRole("button"));
+      expect(document.documentElement).not.toHaveClass("dark");
+    });
   });
 });

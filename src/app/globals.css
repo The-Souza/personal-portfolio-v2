@@ -421,6 +421,24 @@ html:has([data-special]) {
   }
 }
 
+/* Theme switch (brief 7.4): no crossfade; the new theme sweeps down over the old one. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  animation: theme-sweep 0.55s var(--ease-plate);
+}
+@keyframes theme-sweep {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
