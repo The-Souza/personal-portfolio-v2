@@ -3,6 +3,7 @@ import { ContactAct } from "@/features/contact/ContactAct";
 import { SiteFooter } from "@/features/contact/SiteFooter";
 import { HeroAct } from "@/features/hero/HeroAct";
 import { ProjectsAct } from "@/features/projects/ProjectsAct";
+import { PersonJsonLd } from "@/features/seo/PersonJsonLd";
 import { StackAct } from "@/features/stack/StackAct";
 import { PageReady } from "@/lib/motion/PageReady";
 import { ScrollKeeper } from "@/lib/motion/ScrollKeeper";
@@ -18,6 +19,7 @@ export default function Page() {
         <ContactAct />
       </main>
       <SiteFooter />
+      <PersonJsonLd />
       <ScrollKeeper />
       <PageReady />
     </>

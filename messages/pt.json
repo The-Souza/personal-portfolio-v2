@@ -1,4 +1,10 @@
 {
+  "meta": {
+    "title": "Guilherme Campos · Desenvolvedor Frontend e Fullstack",
+    "description": "Sócio-fundador da The Souza Tech. Sites, sistemas e automações com Next.js, React, TypeScript e Python, com testes e foco em performance e acessibilidade.",
+    "jobTitle": "Desenvolvedor frontend e fullstack",
+    "ogAlt": "Guilherme Campos, desenvolvedor frontend e fullstack · The Souza Tech"
+  },
   "header": {
     "aria": "Topo",
     "logoAria": "Guilherme, voltar ao topo",

@@ -1,11 +1,13 @@
+import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { BOOT_SKIP_SCRIPT } from "@/features/boot/boot-session";
 import { ThemeProvider } from "@/features/theme/ThemeProvider";
 import { htmlLang } from "@/i18n/locale";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
 import { LenisProvider } from "@/lib/motion/lenis-provider";
+import { languageAlternates, siteUrl } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import "@/app/globals.css";
 
@@ -14,6 +16,33 @@ const CLIENT_NAMESPACES = ["boot", "header", "hud", "copyEmail", "special", "err
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations("meta");
+  const base = siteUrl();
+  const title = t("title");
+  const description = t("description");
+  // Designed per language in public/, 1200×630.
+  const image = { url: `/og-${locale}.png`, width: 1200, height: 630, alt: t("ogAlt") };
+
+  return {
+    metadataBase: new URL(base),
+    title: { default: title, template: "%s · Guilherme Campos" },
+    description,
+    alternates: { canonical: `/${locale}`, languages: languageAlternates(base) },
+    openGraph: {
+      type: "website",
+      url: `/${locale}`,
+      siteName: "Guilherme Campos",
+      title,
+      description,
+      locale: htmlLang(locale).replace("-", "_"),
+      images: [image],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
+  };
 }
 
 export default async function LocaleLayout({ children }: LayoutProps<"/[locale]">) {
