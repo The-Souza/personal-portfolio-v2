@@ -22,7 +22,16 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
       )}
       <div className="chamfer relative grid bg-card [--cut:1.25rem] tablet:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
-        <RevealImage effect="mosaic" seed={project.seed} placeholderLabel={t("imagePlaceholder")} className="min-h-37.5 tablet:min-h-70" />
+        <RevealImage
+          effect="mosaic"
+          seed={project.seed}
+          placeholderLabel={t("imagePlaceholder")}
+          src={project.image}
+          // The image column: ~36vw of the track's card from tablet up, the full width in the phone list.
+          sizes="(min-width: 45rem) 36vw, 100vw"
+          alt={project.image ? t("imageAlt", { name: t(item("title")) }) : undefined}
+          className="min-h-37.5 tablet:min-h-70"
+        />
 
         <div className="flex min-w-0 flex-col gap-3 px-7 pt-6.5 pb-7">
           <p className="font-mono text-eyebrow text-primary-accessible uppercase">

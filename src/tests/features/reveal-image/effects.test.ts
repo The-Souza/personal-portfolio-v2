@@ -1,5 +1,24 @@
 import { describe, expect, it } from "vitest";
-import { BAYER_4, ditherThreshold, mosaicBlock } from "@/features/reveal-image/effects";
+import { BAYER_4, containRect, ditherThreshold, mosaicBlock } from "@/features/reveal-image/effects";
+
+describe("containRect", () => {
+  it("ocupa a área inteira quando as proporções são iguais", () => {
+    expect(containRect({ width: 1920, height: 1080 }, { width: 960, height: 540 })).toEqual({ dx: 0, dy: 0, dw: 960, dh: 540 });
+  });
+
+  it("numa área mais alta que a imagem, usa a largura toda e centraliza na altura", () => {
+    expect(containRect({ width: 1600, height: 900 }, { width: 800, height: 800 })).toEqual({ dx: 0, dy: 175, dw: 800, dh: 450 });
+  });
+
+  it("numa área mais larga que a imagem, usa a altura toda e centraliza na largura", () => {
+    expect(containRect({ width: 1600, height: 900 }, { width: 1000, height: 450 })).toEqual({ dx: 100, dy: 0, dw: 800, dh: 450 });
+  });
+
+  it("arredonda para pixels inteiros", () => {
+    // 500 - 273 = 227 of band, 113.5 above: rounds to 114.
+    expect(containRect({ width: 1919, height: 1049 }, { width: 500, height: 500 })).toEqual({ dx: 0, dy: 114, dw: 500, dh: 273 });
+  });
+});
 
 describe("mosaicBlock", () => {
   it("começa nos blocos de 64px", () => {
