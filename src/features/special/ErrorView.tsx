@@ -12,6 +12,8 @@ import { fillLine } from "@/features/special/special-motion";
 import { playSpecialEntrance } from "@/features/special/special-entrance";
 import { SpecialShell } from "@/features/special/SpecialShell";
 import { TypedTerminal } from "@/features/special/TypedTerminal";
+import { toClientReport } from "@/lib/errors/report";
+import { sendClientError } from "@/lib/errors/send";
 import { playGlitch } from "@/lib/motion/glitch";
 import { gsap, useGSAP } from "@/lib/motion/gsap";
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
@@ -65,7 +67,9 @@ export function ErrorView({
 
   useEffect(() => {
     console.error(error);
-  }, [error]);
+    // React caught it, so instrumentation-client never sees it: report it from here.
+    sendClientError(toClientReport(error, "boundary", path));
+  }, [error, path]);
 
   useGSAP(
     () => {
