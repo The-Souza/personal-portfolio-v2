@@ -1,10 +1,9 @@
-import { useTranslations } from "next-intl";
 import { PROJECTS } from "@/content/projects";
-import { ClientsBlock } from "@/features/projects/ClientsBlock";
 import { ProjectCard } from "@/features/projects/ProjectCard";
 import { ProjectsStage } from "@/features/projects/ProjectsStage";
 import { Container } from "@/features/shared/Container";
 import { SectionHeading } from "@/features/shared/SectionHeading";
+import { useTranslations } from "next-intl";
 
 /**
  * Brief, act 03 · A. The `track:` variant (tablet and up, at least 600px tall, motion allowed)
@@ -15,7 +14,11 @@ export function ProjectsAct() {
   const t = useTranslations("projects");
 
   return (
-    <section id="projects" aria-label={t("aria")} className="relative z-3 bg-background">
+    <section
+      id="projects"
+      aria-label={t("aria")}
+      className="relative z-3 bg-background"
+    >
       <ProjectsStage>
         <Container className="pt-22 pb-5">
           <SectionHeading eyebrow={t("eyebrow")} title={t("title")} />
@@ -33,14 +36,22 @@ export function ProjectsAct() {
             {PROJECTS.map((project) => (
               <ProjectCard key={project.key} project={project} />
             ))}
-            <ClientsBlock />
+            {/* <ClientsBlock /> */}
           </Container>
         </div>
-        <Container aria-hidden="true" className="hidden items-center gap-3 pb-6 font-mono text-xs text-foreground tabular-nums track:flex">
+        <Container
+          aria-hidden="true"
+          className="hidden items-center gap-3 pb-6 font-mono text-xs text-foreground tabular-nums track:flex"
+        >
           <div className="h-4.5 w-50 border border-field-border p-0.75">
-            <span data-projects-bar className="segments block h-full w-0 text-foreground" />
+            <span
+              data-projects-bar
+              className="segments block h-full w-0 text-foreground"
+            />
           </div>
-          <span data-projects-counter>01 / {String(PROJECTS.length + 1).padStart(2, "0")}</span>
+          <span data-projects-counter>
+            01 / {String(PROJECTS.length + 1).padStart(2, "0")}
+          </span>
         </Container>
       </ProjectsStage>
     </section>
