@@ -1,10 +1,4 @@
-"use client";
-
-import Lenis from "lenis";
-import "lenis/dist/lenis.css";
-import { type ReactNode, useEffect } from "react";
-import { gsap, ScrollTrigger } from "@/lib/motion/gsap";
-import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
+import type Lenis from "lenis";
 
 type ScrollTarget = string | HTMLElement | number;
 
@@ -35,6 +29,7 @@ const controls = {
   },
 };
 
+/** The page's scroll controls; they fall back to native scrolling when Lenis is off. */
 export function useLenis() {
   return controls;
 }
@@ -54,29 +49,16 @@ function onAnchorClick(event: MouseEvent) {
   history.replaceState(null, "", hash);
 }
 
-/** Brief section 6.1: Lenis runs on GSAP's ticker, so there is one loop; off with reduced motion. */
-export function LenisProvider({ children }: { children: ReactNode }) {
-  const reducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    if (reducedMotion) return;
-    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
-    const tick = (time: number) => lenis.raf(time * 1000);
-
-    lenis.on("scroll", ScrollTrigger.update);
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
-    document.addEventListener("click", onAnchorClick);
-    instance = lenis;
-    if (stopRequested) lenis.stop();
-
-    return () => {
-      document.removeEventListener("click", onAnchorClick);
-      gsap.ticker.remove(tick);
-      lenis.destroy();
-      instance = null;
-    };
-  }, [reducedMotion]);
-
-  return children;
+/**
+ * Hands the page's Lenis to the controls (LenisProvider creates it): applies a stop asked for
+ * before it existed and takes over internal links. Returns the disconnect.
+ */
+export function connectLenis(lenis: Lenis) {
+  instance = lenis;
+  if (stopRequested) lenis.stop();
+  document.addEventListener("click", onAnchorClick);
+  return () => {
+    document.removeEventListener("click", onAnchorClick);
+    instance = null;
+  };
 }

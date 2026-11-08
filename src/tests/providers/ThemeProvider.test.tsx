@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useTheme } from "next-themes";
 import { beforeEach, describe, expect, it } from "vitest";
-import { ThemeProvider } from "@/features/theme/ThemeProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 function Switch() {
   const { setTheme } = useTheme();

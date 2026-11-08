@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
-import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { BOOT_SKIP_SCRIPT } from "@/features/boot/boot-session";
 import { languageAlternates, siteUrl } from "@/features/seo/seo";
-import { ThemeProvider } from "@/features/theme/ThemeProvider";
 import { htmlLang } from "@/i18n/locale";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
-import { LenisProvider } from "@/lib/scroll/lenis-provider";
 import { cn } from "@/lib/utils";
+import { AppProviders } from "@/providers/AppProviders";
 import "@/app/globals.css";
 
 /** Only what client components read; the acts render on the server and don't need to ship their texts. */
@@ -58,12 +56,8 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
         <noscript dangerouslySetInnerHTML={{ __html: "<style>#boot{display:none}</style>" }} />
         {/* Runs before the veil below is painted; a constant string, no user input. */}
         <script dangerouslySetInnerHTML={{ __html: BOOT_SKIP_SCRIPT }} />
-        <NextIntlClientProvider messages={clientMessages}>
-          <ThemeProvider>
-            {/* The boot, header and HUD live in the (site) group; the special pages skip them. */}
-            <LenisProvider>{children}</LenisProvider>
-          </ThemeProvider>
-        </NextIntlClientProvider>
+        {/* The boot, header and HUD live in the (site) group; the special pages skip them. */}
+        <AppProviders messages={clientMessages}>{children}</AppProviders>
       </body>
     </html>
   );

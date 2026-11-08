@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useLenis } from "@/lib/scroll/lenis-provider";
+import { useLenis } from "@/lib/scroll/lenis";
 
 const DESKTOP_MIN_WIDTH = 1024;
 const FOCUSABLE = "a[href], button";

@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ThemeToggle } from "@/features/header/ThemeToggle";
-import { ThemeProvider } from "@/features/theme/ThemeProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import messages from "../../../../messages/pt.json";
 
 function renderToggle() {

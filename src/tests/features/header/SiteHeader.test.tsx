@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it } from "vitest";
 import { SiteHeader } from "@/features/header/SiteHeader";
-import { ThemeProvider } from "@/features/theme/ThemeProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import { mockMediaQueries } from "@/tests/media-query";
 import messages from "../../../../messages/pt.json";
 
