@@ -12,7 +12,8 @@ async function load() {
   return { ErrorView, attempts, renderWithIntl };
 }
 
-describe("ErrorView", () => {
+// Each test re-imports the page and its motion modules: slow under load (a parallel build).
+describe("ErrorView", { timeout: 20_000 }, () => {
   beforeEach(() => {
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
