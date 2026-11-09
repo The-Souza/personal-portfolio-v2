@@ -11,6 +11,7 @@ import { SPRINGS } from "@/lib/motion/spring";
 import { splitWordChars } from "@/lib/motion/text";
 import { registerLanding } from "@/lib/scroll/landing";
 import { registerRelayout } from "@/lib/scroll/relayout";
+import { settleScrubs } from "@/lib/scroll/scroll-keeper";
 import { holdPageHeight } from "@/lib/scroll/viewport";
 
 const PLAYED_KEY = "contact-poster";
@@ -136,9 +137,18 @@ export function ContactStage({ children }: { children: ReactNode }) {
           if (event.pointerType === "mouse") glitch(1.1);
         };
         title.addEventListener("pointerenter", onTitleEnter);
+        // Tabbing into the poster before it entered would focus buttons still hidden on the dark
+        // stage: the page goes where the blade is done, which plays the entrance.
+        const onFocus = () => {
+          if (!reveal && !poster.style.clipPath) return;
+          window.scrollTo(0, trigger.end);
+          settleScrubs();
+        };
+        root.addEventListener("focusin", onFocus);
         live = true;
 
         return () => {
+          root.removeEventListener("focusin", onFocus);
           unregisterLanding();
           rewrap.disconnect();
           title.removeEventListener("pointerenter", onTitleEnter);

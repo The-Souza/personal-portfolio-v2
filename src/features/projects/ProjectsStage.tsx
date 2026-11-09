@@ -9,6 +9,7 @@ import { hasPlayed, markPlayed } from "@/lib/motion/played";
 import { SPRINGS } from "@/lib/motion/spring";
 import { scramble } from "@/lib/motion/text";
 import { registerRelayout } from "@/lib/scroll/relayout";
+import { settleScrubs } from "@/lib/scroll/scroll-keeper";
 import { holdPageHeight } from "@/lib/scroll/viewport";
 
 interface CardState {
@@ -25,7 +26,8 @@ interface CardState {
   lit: boolean;
 }
 
-const INACTIVE_OPACITY = 0.4;
+/** The cards away from the center recede, but stay readable (4.5:1 on their faintest text). */
+const INACTIVE_OPACITY = 0.8;
 
 /**
  * Client shell for Projects (brief, act 03 · A): the pinned horizontal track on wide screens,
@@ -175,8 +177,11 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
         if (firstLines.length) {
           timeline.fromTo(firstLines, { opacity: 0, x: -8 }, { opacity: 1, x: 0, stagger: hold * 0.18, duration: hold * 0.2, ease: "none" }, 0);
         }
+        // Where each card sits at the center, for the keyboard (see `onFocus`).
+        timeline.addLabel("card-0", hold);
         for (let i = 1; i < stops.length; i++) {
           timeline.to(track, { x: stops[i], duration: Math.max(Math.abs(stops[i] - stops[i - 1]), height * 0.2), ease: "power1.inOut" });
+          timeline.addLabel(`card-${i}`);
           timeline.to({}, { duration: dwell });
         }
 
@@ -212,6 +217,29 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
         trigger.refresh();
         timeline.progress(trigger.progress);
         if (trigger.progress > 0) update(true);
+
+        // Tabbing into a card: the browser would scroll the clipped viewport sideways to show the
+        // link, around the pin, leaving the card dim and the track offset for good. Instead the page
+        // scrolls to where that card is centered and the card shows at once, as on a mid-track load.
+        const keepTrack = () => {
+          if (viewport.scrollLeft !== 0) viewport.scrollLeft = 0;
+        };
+        const onFocus = (event: FocusEvent) => {
+          keepTrack();
+          const card = (event.target as Element | null)?.closest("[data-project-card]");
+          const index = cards.findIndex((state) => state.card === card);
+          if (index < 0) return;
+          window.scrollTo(0, trigger.labelToScroll(`card-${index}`));
+          settleScrubs();
+          timeline.progress(trigger.progress);
+          update(true);
+        };
+        viewport.addEventListener("scroll", keepTrack);
+        root.addEventListener("focusin", onFocus);
+        return () => {
+          viewport.removeEventListener("scroll", keepTrack);
+          root.removeEventListener("focusin", onFocus);
+        };
       };
 
       const buildList = () => {
