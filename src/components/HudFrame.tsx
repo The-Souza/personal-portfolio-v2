@@ -3,14 +3,14 @@ import { cn } from "@/lib/utils";
 
 export interface HudFrameProps {
   children: ReactNode;
-  /** Tamanho do corte nos cantos superior esquerdo e inferior direito, em px. Padrão 16. */
+  /** Size of the cut on the top-left and bottom-right corners, in px. Default 16. */
   cut?: number;
   className?: string;
 }
 
 /**
- * Moldura com dois cantos cortados a 45°. O corte fica em `--frame-cut` (registrada com
- * `@property` no globals.css), então mudá-la anima os dois cantos em 700ms.
+ * Frame with two corners cut at 45°. The cut lives in `--frame-cut` (registered with
+ * `@property` in globals.css), so changing it animates both corners over 700ms.
  */
 export function HudFrame({ children, cut = 16, className }: HudFrameProps) {
   return (
@@ -27,14 +27,14 @@ export function HudFrame({ children, cut = 16, className }: HudFrameProps) {
 }
 
 /**
- * Linha interna da moldura em duas colunas: o status quebra dentro da sua, a marca fica
- * inteira à direita.
+ * The frame's inner row, in two columns: the status wraps inside its own, the mark stays
+ * whole on the right.
  */
 export function HudFrameRow({ children }: { children: ReactNode }) {
   return <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">{children}</div>;
 }
 
-/** Código/marca em display, ex.: "GV-026". Nunca quebra, nem no hífen. */
+/** Code/mark in the display face, e.g. "GV-026". Never wraps, not even at the hyphen. */
 export function HudMark({ children }: { children: ReactNode }) {
   return <span className="justify-self-end font-heading text-3xl font-bold leading-none tracking-wide whitespace-nowrap uppercase">{children}</span>;
 }

@@ -11,22 +11,22 @@ export interface ButtonProps extends Omit<
   "children"
 > {
   children: ReactNode;
-  /** Com href vira <a> (ou o componente de `as`, ex.: next/link). */
+  /** With href it becomes an <a> (or the `as` component, e.g. next/link). */
   href?: string;
-  /** "outline" (padrão): corpo `card`, contorno `primary`. "solid": preenchido em `primary`, flood em `live`. */
+  /** "outline" (default): `card` body, `primary` outline. "solid": filled with `primary`, `live` flood. */
   variant?: "outline" | "solid";
-  /** Mostra a seta → no fim. Padrão true. */
+  /** Shows the → arrow at the end. Default true. */
   arrow?: boolean;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
-  /** Componente de link, ex.: `Link` do next/link. */
+  /** Link component, e.g. `Link` from next/link. */
   as?: ElementType;
-  /** Repassados ao link, ex.: `target="_blank"` para sites externos. */
+  /** Passed on to the link, e.g. `target="_blank"` for external sites. */
   target?: string;
   rel?: string;
 }
 
-/** CTA chanfrado com flood que entra da esquerda no hover. */
+/** Chamfered CTA with a flood that comes in from the left on hover. */
 export function Button({
   children,
   href,

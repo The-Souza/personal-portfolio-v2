@@ -1,7 +1,7 @@
 /* Cyberpunk — globals.css (Tailwind v4)
-   Gerado de tokens.json. Os papéis seguem os nomes do shadcn/ui, então os seus
-   componentes shadcn também herdam o tema. Mantenha os seus outros @import
-   (tw-animate-css, shadcn/tailwind.css) logo abaixo do tailwindcss. */
+   Generated from tokens.json. The roles follow shadcn/ui's names, so shadcn components
+   inherit the theme too. Keep any other @import (tw-animate-css, shadcn/tailwind.css)
+   right below tailwindcss. */
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
@@ -132,7 +132,7 @@
   }
 }
 
-/* Chanfro de 45° no canto inferior direito. Tamanho: [--cut:12px]. */
+/* 45° chamfer on the bottom-right corner. Size: [--cut:12px]. */
 @utility chamfer {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut, 12px)), calc(100% - var(--cut, 12px)) 100%, 0 100%);
 }
@@ -172,11 +172,11 @@
   background-image: radial-gradient(circle, var(--border) 1px, transparent 1.4px);
   background-size: 0.875rem 0.875rem;
 }
-/* Dois cantos cortados (superior esquerdo e inferior direito). */
+/* Two cut corners (top left and bottom right). */
 @utility chamfer-2 {
   clip-path: polygon(var(--cut, 16px) 0, 100% 0, 100% calc(100% - var(--cut, 16px)), calc(100% - var(--cut, 16px)) 100%, 0 100%, 0 var(--cut, 16px));
 }
-/* Quatro cantos em colchete de 10px. Cor: [--bc:var(--foreground)]. */
+/* Four 10px bracket corners. Color: [--bc:var(--foreground)]. */
 @utility brackets {
   --b: var(--bc, var(--field-border));
   background-image:
@@ -186,11 +186,11 @@
   background-position: top left, top left, top right, top right, bottom left, bottom left, bottom right, bottom right;
   background-size: 10px 1px, 1px 10px, 10px 1px, 1px 10px, 10px 1px, 1px 10px, 10px 1px, 1px 10px;
 }
-/* Preenchimento segmentado da barra de progresso (usa currentColor). */
+/* Segmented fill of the progress bar (uses currentColor). */
 @utility segments {
   background-image: repeating-linear-gradient(90deg, currentColor 0 7px, transparent 7px 10px);
 }
-/* Retícula de 16px. */
+/* 16px reticle. */
 @utility reticle {
   --b: var(--foreground);
   width: 16px; height: 16px;
@@ -202,7 +202,7 @@
   background-position: top left, top left, top right, top right, bottom left, bottom left, bottom right, bottom right, center;
   background-size: 5px 2px, 2px 5px, 5px 2px, 2px 5px, 5px 2px, 2px 5px, 5px 2px, 2px 5px, 4px 4px;
 }
-/* Alvo em X de 72px. */
+/* 72px X target. */
 @utility target {
   --b: var(--foreground);
   width: 72px; height: 72px;
@@ -216,7 +216,7 @@
   background-size: 44px 44px, 44px 44px, 14px 2px, 2px 14px, 14px 2px, 2px 14px, 14px 2px, 2px 14px, 14px 2px, 2px 14px;
 }
 
-/* Dia */
+/* Day */
 :root,
 [data-theme="day"] {
   --background: #f7fafb;
@@ -260,7 +260,7 @@
   --radius: 0rem;
 }
 
-/* Noite */
+/* Night */
 .dark,
 [data-theme="night"] {
   --background: #07080c;
@@ -303,7 +303,7 @@
   --live-foreground: #07080c;
 }
 
-/* Alerta. The special pages (404, error) carry it up to <html>: the reserved scrollbar gutter and
+/* Alert. The special pages (404, error) carry it up to <html>: the reserved scrollbar gutter and
    the bar itself are painted with the root's colors, which would stay Night's next to the page. */
 .alert,
 [data-theme="alert"],

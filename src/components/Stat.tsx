@@ -1,17 +1,17 @@
 import { cn } from "@/lib/utils";
 
 export interface StatProps {
-  /** Uma palavra: "Projetos", "Anos". */
+  /** One word: "Projetos", "Anos". */
   label: string;
-  /** Só números reais. */
+  /** Real numbers only. */
   value: string | number;
-  /** Unidade pequena em `primary-accessible`, ex.: "%". */
+  /** Small unit in `primary-accessible`, e.g. "%". */
   unit?: string;
-  /** Linha curta de contexto abaixo do label, em `muted-foreground`. */
+  /** Short line of context below the label, in `muted-foreground`. */
   note?: string;
 }
 
-/** Um número grande com label em mono. Use dentro de StatGroup. */
+/** A big number with a mono label. Use it inside StatGroup. */
 export function Stat({ label, value, unit, note }: StatProps) {
   return (
     <div className="flex flex-col gap-2">
@@ -26,12 +26,12 @@ export function Stat({ label, value, unit, note }: StatProps) {
 }
 
 export interface StatGroupProps {
-  /** Até três itens. */
+  /** Up to three items. */
   items: StatProps[];
   className?: string;
 }
 
-/** Grupo de até três Stats lado a lado. */
+/** Up to three Stats side by side. */
 export function StatGroup({ items, className }: StatGroupProps) {
   return (
     <dl className={cn("mt-6 grid grid-cols-[repeat(3,auto)] justify-start gap-x-8 gap-y-4", className)}>

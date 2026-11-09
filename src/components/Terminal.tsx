@@ -2,28 +2,28 @@ import { cn } from "@/lib/utils";
 import type { CSSProperties, ReactNode } from "react";
 
 export interface TerminalLine {
-  /** ">" ou ">>" (prompt) · "//" (comentário) · "cursor" (linha ativa). */
+  /** ">" or ">>" (prompt) · "//" (comment) · "cursor" (active line). */
   prefix?: ">" | ">>" | "//" | "cursor";
-  /** Rótulo colorido antes do texto, ex.: "erro_404:". */
+  /** Colored label before the text, e.g. "erro_404:". */
   label?: string;
   text: ReactNode;
-  /** Estado colorido depois do texto, ex.: "ok". */
+  /** Colored status after the text, e.g. "ok". */
   status?: string;
-  /** Cor de label/status: ok = `primary-accessible`, err = `hot-accessible`. */
+  /** Label/status color: ok = `primary-accessible`, err = `hot-accessible`. */
   tone?: "ok" | "err";
 }
 
 export interface TerminalProps {
-  /** 4 a 10 linhas. */
+  /** 4 to 10 lines. */
   lines: TerminalLine[];
-  /** Faz o cursor piscar (animate-blink-cursor; parado com reduced motion). */
+  /** Blinks the cursor (animate-blink-cursor; still with reduced motion). */
   blink?: boolean;
-  /** true quando é só textura: esconde de leitores de tela. */
+  /** true when it's only texture: hides it from screen readers. */
   decorative?: boolean;
   className?: string;
 }
 
-/** Bloco de log em mono com prompt e comentários. */
+/** Mono log block with prompts and comments. */
 export function Terminal({
   lines,
   blink,
@@ -71,13 +71,13 @@ export function Terminal({
 }
 
 export interface ProgressBarProps {
-  /** 0 a 100. */
+  /** 0 to 100. */
   value: number;
   label: string;
   className?: string;
 }
 
-/** Barra de progresso segmentada. */
+/** Segmented progress bar. */
 export function ProgressBar({ value, label, className }: ProgressBarProps) {
   const v = Math.max(0, Math.min(100, value));
   return (

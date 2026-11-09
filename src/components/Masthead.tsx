@@ -4,28 +4,28 @@ import { cn } from "@/lib/utils";
 export interface NavLink {
   label: string;
   href: string;
-  /** Página atual: recebe aria-current="page". */
+  /** Current page: gets aria-current="page". */
   current?: boolean;
 }
 
 export interface MastheadProps {
-  /** Nome no logo-texto, ex.: "Guilherme". */
+  /** Name in the text logo, e.g. "Guilherme". */
   name: string;
-  /** Sufixo em `primary-accessible`, ex.: "_dev". */
+  /** Suffix in `primary-accessible`, e.g. "_dev". */
   suffix?: string;
   homeHref?: string;
-  /** 3 a 5 links. */
+  /** 3 to 5 links. */
   links: NavLink[];
-  /** Link em colchetes à direita: [ Contato → ]. */
+  /** Bracketed link on the right: [ Contato → ]. */
   contact?: { label: string; href: string };
-  /** Componente de link, ex.: `Link` do next/link. */
+  /** Link component, e.g. `Link` from next/link. */
   linkAs?: ElementType;
   className?: string;
 }
 
 const link = "text-label uppercase text-foreground transition-colors duration-150 ease-entrance hover:text-primary-accessible aria-[current=page]:text-primary-accessible focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
-/** Barra do topo: logo-texto, navegação e link [ Contato → ]. */
+/** Top bar: text logo, navigation and a [ Contato → ] link. */
 export function Masthead({ name, suffix, homeHref = "/", links, contact, linkAs: L = "a", className }: MastheadProps) {
   return (
     <header className={cn("flex items-center justify-between gap-6 border-b border-border p-6", className)}>

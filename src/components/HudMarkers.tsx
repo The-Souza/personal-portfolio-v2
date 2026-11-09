@@ -1,16 +1,16 @@
 import type { ReactNode } from "react";
 
-/** Retícula de 16px — pontuação antes de um título. */
+/** 16px reticle — punctuation before a title. */
 export function Reticle() {
   return <span aria-hidden="true" className="reticle inline-block" />;
 }
 
-/** Alvo em X de 72px — num canto da composição. */
+/** 72px X target — in a corner of the composition. */
 export function Target() {
   return <span aria-hidden="true" className="target inline-block" />;
 }
 
-/** Losango de aviso com texto curto em duas linhas. */
+/** Warning diamond with a short text over two lines. */
 export function WarningMark({ children }: { children: ReactNode }) {
   return (
     <span className="inline-flex items-center gap-2 font-heading text-xs font-semibold leading-none tracking-wider uppercase text-foreground">
@@ -25,7 +25,7 @@ export function WarningMark({ children }: { children: ReactNode }) {
   );
 }
 
-/** Trilho vertical — só textura, nunca informação. */
+/** Vertical rail — texture only, never information. */
 export function Rail({ children }: { children: ReactNode }) {
   return (
     <span

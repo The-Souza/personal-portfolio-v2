@@ -1,9 +1,9 @@
 import { clsx, type ClassValue } from "clsx";
 import { extendTailwindMerge } from "tailwind-merge";
 
-/* A escala de tipo do design system (text-label, text-body…) precisa ser
-   registrada; senão o tailwind-merge acha que `text-label` e `text-foreground`
-   são a mesma propriedade e descarta o tamanho. */
+/* The design system's type scale (text-label, text-body…) has to be registered;
+   otherwise tailwind-merge takes `text-label` and `text-foreground` for the same
+   property and drops the size. */
 const twMerge = extendTailwindMerge({
   extend: {
     theme: {

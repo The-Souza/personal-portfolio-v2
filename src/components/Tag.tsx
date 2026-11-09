@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 export interface TagProps {
   children: ReactNode;
-  /** live: ponto `live` (online / em produção) · accent · hot (máx. uma por tela) · plain: sem ponto. */
+  /** live: `live` dot (online / in production) · accent · hot (at most one per screen) · plain: no dot. */
   variant?: "default" | "live" | "accent" | "hot" | "plain";
   className?: string;
 }
@@ -23,7 +23,7 @@ const dot = {
   plain: "",
 };
 
-/** Etiqueta em mono com ponto quadrado. */
+/** Mono tag with a square dot. */
 export function Tag({ children, variant = "default", className }: TagProps) {
   return (
     <span
@@ -44,7 +44,7 @@ export function Tag({ children, variant = "default", className }: TagProps) {
   );
 }
 
-/** Agrupa Tags com quebra de linha. */
+/** Groups Tags, wrapping onto new lines. */
 export function TagGroup({
   children,
   className,
