@@ -12,6 +12,11 @@ import { holdPageHeight, isOnScreenAtLoad } from "@/lib/scroll/viewport";
 const HOLD = 0.55;
 const FIRST_HOLD = 0.45;
 const AI_LINES_KEY = "stack-ai-lines";
+/**
+ * A node the trace has passed recedes, but stays readable: at 0.8 its faintest text (muted on
+ * void) still passes 4.5:1, which it lost at 0.4 (about 2:1).
+ */
+const PASSED_OPACITY = 0.8;
 
 /**
  * Client shell for Stack (brief, act 04 · C): the pinned stair circuit, with the camera, the
@@ -90,13 +95,15 @@ export function StackStage({ children }: { children: ReactNode }) {
         const focus = ([x, y]: [number, number]) => ({ x: viewport.width / 2 - x, y: spacing.fy - y });
         gsap.set(board, focus(points[0]));
         gsap.set(dot, { display: "block", x: points[0][0], y: points[0][1], xPercent: -50, yPercent: -50 });
-        // The cards stay opaque, so the dot disappears behind them; only their content fades.
-        nodes.slice(1).forEach((node) => gsap.set(body(node), { opacity: 0.22 }));
+        // The cards stay opaque, so the dot disappears behind them; only their content is hidden
+        // until the trace arrives (faded, it was text below 4.5:1). The frames and the dashed
+        // trace still show the circuit ahead.
+        nodes.slice(1).forEach((node) => gsap.set(body(node), { opacity: 0 }));
 
         const timeline = gsap.timeline();
         let at = FIRST_HOLD;
         for (let k = 1; k < points.length; k++) {
-          timeline.to(body(nodes[k - 1]), { opacity: 0.4, duration: 0.3 }, at + 0.05);
+          timeline.to(body(nodes[k - 1]), { opacity: PASSED_OPACITY, duration: 0.3 }, at + 0.05);
           timeline.to(board, { ...focus(points[k]), duration: 1, ease: "power2.inOut" }, at);
           timeline.to(live, { strokeDashoffset: total - lengths[k], duration: 1, ease: "power2.inOut" }, at);
           timeline.to(dot, { x: points[k][0], y: points[k][1], duration: 1, ease: "power2.inOut" }, at);
