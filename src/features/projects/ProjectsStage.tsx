@@ -166,7 +166,10 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
 
         // One pinned ScrollTrigger drives a timeline measured in pixels: a hold on the first card
         // (its terminal lines appear), then for each card a move that centers it and a dwell.
-        const timeline = gsap.timeline({ onUpdate: () => update() });
+        // Reverting the timeline (a relayout, or useGSAP's own cleanup when Next hides and shows the
+        // page) renders it back to the start, which runs this `onUpdate`: at progress 0 there's
+        // nothing to update, and the card at the center would be revealed by the teardown itself.
+        const timeline = gsap.timeline({ onUpdate: () => timeline.progress() > 0 && update() });
         timeline.to({}, { duration: hold }, 0);
         const firstLines = cards[0]?.lines ?? [];
         if (firstLines.length) {
@@ -189,19 +192,20 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
           },
         });
 
-        // The first card opens with the section, before the pin starts.
+        // The first card opens and lights up with the section, before the pin starts. Its image
+        // waits for the pin like the others (`update` reveals it once the track starts to move):
+        // revealed on the way in, the mosaic was over before the card settled on screen.
         const first = cards[0];
         const sectionTop = root.getBoundingClientRect().top;
         if (first) {
           if (sectionTop < height * 0.7) wipeIn(first, true);
           else ScrollTrigger.create({ trigger: root, start: "top 70%", once: true, onEnter: () => wipeIn(first, false) });
-          const light = (instant: boolean) => {
+          const light = () => {
             setActive(0);
             active = 0;
-            reveal(first, instant, false);
           };
-          if (sectionTop < height * 0.35) light(true);
-          else ScrollTrigger.create({ trigger: root, start: "top 35%", once: true, onEnter: () => light(false) });
+          if (sectionTop < height * 0.35) light();
+          else ScrollTrigger.create({ trigger: root, start: "top 35%", once: true, onEnter: light });
         }
 
         // Loaded mid-track (reload, language switch, #hash): jump to the current state, no replay.
