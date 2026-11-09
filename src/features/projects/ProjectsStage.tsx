@@ -270,6 +270,10 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
               card.style.opacity = "";
               delete card.dataset.active;
             }
+            // Reverting the hold timeline can leave the first card's terminal lines at their hidden
+            // start, and a setup that runs again (React's dev double run) would take that as their
+            // original state: the list would then keep the terminal empty.
+            gsap.set(cards[0]?.lines ?? [], { clearProps: "opacity,transform" });
           };
         }
         if (narrow || short) {
