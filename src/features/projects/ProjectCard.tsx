@@ -1,37 +1,39 @@
-import { useTranslations } from "next-intl";
-import { Tag, TagGroup } from "@/components/Tag";
 import { Terminal, type TerminalLine } from "@/components/Terminal";
 import type { Project } from "@/content/projects";
-import { RevealImage } from "@/features/reveal-image/RevealImage";
+import { ProjectMedia } from "@/features/projects/ProjectMedia";
 import { ActionLink } from "@/features/shared/ActionLink";
+import { useTranslations } from "next-intl";
 
 /** Active state (set by ProjectsStage): bright corners and a cyan glow. */
-export const CARD_ACTIVE = "data-[active=true]:[--bc:var(--foreground)] data-[active=true]:glow-active";
+export const CARD_ACTIVE =
+  "data-[active=true]:[--bc:var(--foreground)] data-[active=true]:glow-active";
 
 export function ProjectCard({ project }: { project: Project }) {
   const t = useTranslations("projects");
   const item = (field: string) => `items.${project.key}.${field}`;
-  const terminal = t.has(item("terminal")) ? (t.raw(item("terminal")) as TerminalLine[]) : null;
+  const terminal = t.has(item("terminal"))
+    ? (t.raw(item("terminal")) as TerminalLine[])
+    : null;
 
   return (
-    <article data-project-card className={`brackets relative isolate w-full max-w-245 p-2.5 track:w-[84vw] track:flex-none ${CARD_ACTIVE}`}>
+    <article
+      data-project-card
+      className={`brackets relative isolate w-full max-w-245 p-2.5 track:w-[84vw] track:flex-none ${CARD_ACTIVE}`}
+    >
       {project.ghost && (
         // The v1 ghost sits behind the card and only shows after the reveal glitch.
-        <div data-ghost aria-hidden="true" className="pointer-events-none absolute inset-2.5 -z-10 border border-hot p-3 opacity-0">
-          <p className="font-mono text-xs tracking-widest text-hot-accessible uppercase">{t("ghost")}</p>
+        <div
+          data-ghost
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-2.5 -z-10 border border-hot p-3 opacity-0"
+        >
+          <p className="font-mono text-xs tracking-widest text-hot-accessible uppercase">
+            {t("ghost")}
+          </p>
         </div>
       )}
-      <div className="chamfer relative grid bg-card [--cut:1.25rem] tablet:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
-        <RevealImage
-          effect="mosaic"
-          seed={project.seed}
-          placeholderLabel={t("imagePlaceholder")}
-          src={project.image}
-          // The image column: ~36vw of the track's card from tablet up, the full width in the phone list.
-          sizes="(min-width: 45rem) 36vw, 100vw"
-          alt={project.image ? t("imageAlt", { name: t(item("title")) }) : undefined}
-          className="min-h-37.5 tablet:min-h-70"
-        />
+      <div className="chamfer relative grid bg-card [--cut:1.25rem] rail:grid-cols-2">
+        <ProjectMedia project={project} />
 
         <div className="flex min-w-0 flex-col gap-3 px-7 pt-6.5 pb-7">
           <p className="font-mono text-eyebrow text-primary-accessible uppercase">
@@ -46,34 +48,39 @@ export function ProjectCard({ project }: { project: Project }) {
           </h3>
           <p className="text-sm leading-normal">{t(item("description"))}</p>
           <p className="text-sm text-muted-foreground">
-            <b className="mr-1.5 font-mono text-xs font-medium tracking-widest text-primary-accessible uppercase">{t("result")}</b>
+            <b className="mr-1.5 font-mono text-xs font-medium tracking-widest text-primary-accessible uppercase">
+              {t("result")}
+            </b>
             {t(item("result"))}
           </p>
           {terminal && (
             <div data-project-terminal>
-              <Terminal lines={terminal} className="bg-background px-3 py-2.5 text-xs" />
+              <Terminal
+                lines={terminal}
+                className="bg-background px-3 py-2.5 text-xs"
+              />
             </div>
           )}
-          <TagGroup>
-            {project.live && <Tag variant="live">{t("live")}</Tag>}
-            {project.tags.map((tag) => (
-              <Tag key={tag}>{tag}</Tag>
-            ))}
-          </TagGroup>
-          <div className="mt-1 flex flex-wrap items-center gap-x-5 gap-y-2">
+          <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-1">
             {project.links.map((link) => (
               <ActionLink key={link.href} href={link.href} external>
                 {t(`links.${link.label}`)}
               </ActionLink>
             ))}
             {project.privateRepo && (
-              <span className="font-mono text-xs tracking-wider text-muted-foreground uppercase">{t("privateRepo")}</span>
+              <span className="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+                {t("privateRepo")}
+              </span>
             )}
           </div>
         </div>
 
         {/* Curtain that opens before the reveal; collapsed in the server HTML so nothing is hidden without JS. */}
-        <span data-wipe aria-hidden="true" className="pointer-events-none absolute inset-0 z-2 origin-right scale-x-0 bg-background" />
+        <span
+          data-wipe
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-2 origin-right scale-x-0 bg-background"
+        />
       </div>
     </article>
   );

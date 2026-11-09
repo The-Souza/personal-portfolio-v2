@@ -131,6 +131,7 @@
     "live": "em produção",
     "imagePlaceholder": "imagem · vazia",
     "imageAlt": "Tela do projeto {name}",
+    "stackLabel": "// stack",
     "ghost": "account management · v1 · versão anterior",
     "links": {
       "site": "Ver site",

@@ -167,6 +167,11 @@
 @utility band-tape {
   background-image: repeating-linear-gradient(135deg, var(--foreground) 0 1rem, var(--background) 1rem 2rem);
 }
+/* Dot grid behind the project card's stack panel. */
+@utility dot-grid {
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1.4px);
+  background-size: 0.875rem 0.875rem;
+}
 /* Dois cantos cortados (superior esquerdo e inferior direito). */
 @utility chamfer-2 {
   clip-path: polygon(var(--cut, 16px) 0, 100% 0, 100% calc(100% - var(--cut, 16px)), calc(100% - var(--cut, 16px)) 100%, 0 100%, 0 var(--cut, 16px));

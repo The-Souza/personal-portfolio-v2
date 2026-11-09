@@ -131,6 +131,7 @@
     "live": "in production",
     "imagePlaceholder": "image · empty",
     "imageAlt": "Screenshot of the {name} project",
+    "stackLabel": "// stack",
     "ghost": "account management · v1 · previous version",
     "links": {
       "site": "Visit site",
