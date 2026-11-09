@@ -9,6 +9,7 @@ import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
 import { SPRINGS } from "@/lib/motion/spring";
 import { splitWordChars } from "@/lib/motion/text";
+import { registerLanding } from "@/lib/scroll/landing";
 import { registerRelayout } from "@/lib/scroll/relayout";
 import { holdPageHeight } from "@/lib/scroll/viewport";
 
@@ -85,6 +86,8 @@ export function ContactStage({ children }: { children: ReactNode }) {
         const trigger = tween.scrollTrigger as ScrollTrigger;
         trigger.refresh();
         tween.progress(trigger.progress);
+        // Links to #contact land where the blade is done, not on the dark stage before it.
+        const unregisterLanding = registerLanding("contact", () => trigger.end);
 
         // The lines shift by word blocks, to random sides drawn once, so a rewrap (measured again
         // on resize) keeps the same pattern.
@@ -131,6 +134,7 @@ export function ContactStage({ children }: { children: ReactNode }) {
         live = true;
 
         return () => {
+          unregisterLanding();
           rewrap.disconnect();
           title.removeEventListener("pointerenter", onTitleEnter);
           // Set by hand on every update, so the context can't revert them.

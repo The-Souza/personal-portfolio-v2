@@ -1,4 +1,5 @@
 import type Lenis from "lenis";
+import { landingFor } from "@/lib/scroll/landing";
 
 type ScrollTarget = string | HTMLElement | number;
 
@@ -8,6 +9,12 @@ let instance: Lenis | null = null;
 // The boot asks to stop before the provider's effect creates Lenis (children's effects run
 // first), so the request is kept and applied when the instance appears.
 let stopRequested = false;
+
+/** A `#section` target goes to the section's landing point when it registered one. */
+function withLanding(target: ScrollTarget): ScrollTarget {
+  if (typeof target !== "string" || !target.startsWith("#")) return target;
+  return landingFor(decodeURIComponent(target.slice(1))) ?? target;
+}
 
 const controls = {
   /** Locks scrolling, e.g. while the drawer or the boot is on screen. */
@@ -19,7 +26,8 @@ const controls = {
     stopRequested = false;
     instance?.start();
   },
-  scrollTo: (target: ScrollTarget) => {
+  scrollTo: (requested: ScrollTarget) => {
+    const target = withLanding(requested);
     if (instance) {
       instance.scrollTo(target);
       return;
@@ -41,11 +49,12 @@ function onAnchorClick(event: MouseEvent) {
   const link = (event.target as Element | null)?.closest?.('a[href^="#"]');
   const hash = link?.getAttribute("href");
   if (!hash || hash === "#") return;
-  const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+  const id = decodeURIComponent(hash.slice(1));
+  const target = document.getElementById(id);
   if (!target) return;
 
   event.preventDefault();
-  instance.scrollTo(target);
+  instance.scrollTo(landingFor(id) ?? target);
   history.replaceState(null, "", hash);
 }
 
