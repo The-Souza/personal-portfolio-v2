@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BAYER_4, containRect, ditherThreshold, mosaicBlock } from "@/features/reveal-image/effects";
+import { BAYER_4, containRect, ditherThreshold, mosaicBlock, mosaicGridLines } from "@/features/reveal-image/effects";
 
 describe("containRect", () => {
   it("ocupa a área inteira quando as proporções são iguais", () => {
@@ -32,6 +32,24 @@ describe("mosaicBlock", () => {
   it("termina na imagem nítida", () => {
     expect(mosaicBlock(1)).toBe(1);
     expect(mosaicBlock(1.4)).toBe(1);
+  });
+});
+
+describe("mosaicGridLines", () => {
+  it("marca a divisa entre cada par de blocos", () => {
+    expect(mosaicGridLines(256, 64)).toEqual([64, 128, 192]);
+  });
+
+  it("inclui a divisa do último bloco cortado pela borda", () => {
+    expect(mosaicGridLines(150, 64)).toEqual([64, 128]);
+  });
+
+  it("não marca nada quando há um bloco só", () => {
+    expect(mosaicGridLines(40, 64)).toEqual([]);
+  });
+
+  it("não marca nada na imagem nítida", () => {
+    expect(mosaicGridLines(256, 1)).toEqual([]);
   });
 });
 

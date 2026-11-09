@@ -12,6 +12,14 @@ export function mosaicBlock(progress: number) {
   return MOSAIC_STEPS[step];
 }
 
+/** Where the borders between mosaic blocks fall along one side; none once the image is sharp. */
+export function mosaicGridLines(size: number, block: number) {
+  const lines: number[] = [];
+  if (block <= 1) return lines;
+  for (let at = block; at < size; at += block) lines.push(at);
+  return lines;
+}
+
 /** When a dither cell turns on (0–1): the Bayer 4×4 level plus a little noise. */
 export function ditherThreshold(column: number, row: number, random: () => number = Math.random) {
   return (BAYER_4[(row % 4) * 4 + (column % 4)] + random()) / 17;
@@ -51,10 +59,12 @@ export function createReveal(canvas: HTMLCanvasElement, effect: RevealEffect, se
   let height = 0;
   let progress = 0;
   let cells: { x: number; y: number; threshold: number }[] = [];
+  let gridColor = "";
 
   const paintSource = () => {
     const sourceContext = source.getContext("2d");
     if (!sourceContext) return;
+    gridColor = getComputedStyle(canvas).getPropertyValue("--primary").trim();
     if (image?.complete && image.naturalWidth) {
       const box = containRect({ width: image.naturalWidth, height: image.naturalHeight }, { width, height });
       sourceContext.clearRect(0, 0, width, height);
@@ -97,6 +107,12 @@ export function createReveal(canvas: HTMLCanvasElement, effect: RevealEffect, se
     small.getContext("2d")?.drawImage(source, 0, 0, columns, rows);
     context.globalAlpha = progress === 0 ? 0.45 : 1;
     context.drawImage(small, 0, 0, columns, rows, 0, 0, columns * block, rows * block);
+    // A dark screenshot averages into blocks the color of the card: the grid keeps the effect
+    // visible on any image.
+    context.globalAlpha = progress === 0 ? 0.12 : 0.22;
+    context.fillStyle = gridColor;
+    for (const x of mosaicGridLines(width, block)) context.fillRect(x, 0, 1, height);
+    for (const y of mosaicGridLines(height, block)) context.fillRect(0, y, width, 1);
     context.globalAlpha = 1;
   };
 
