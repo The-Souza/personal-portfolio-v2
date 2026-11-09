@@ -37,6 +37,16 @@ export function consumeScrollAnchor(): ScrollAnchor | null {
   }
 }
 
+/** The act a page was opened at (`/pt#contact`), or null when the hash isn't one of them. */
+export function hashSection(hash: string, ids: readonly string[]) {
+  try {
+    const id = decodeURIComponent(hash.replace(/^#/, ""));
+    return ids.includes(id) ? id : null;
+  } catch {
+    return null;
+  }
+}
+
 /** The anchor for a scroll position: the last section that starts at or above it. */
 export function anchorAt(tops: { id: string; top: number }[], scrollY: number): ScrollAnchor | null {
   const current = tops.findLast(({ top }) => top <= scrollY) ?? tops[0];

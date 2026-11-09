@@ -5,6 +5,7 @@ import { requestBootSkip } from "@/features/boot/boot-session";
 import {
   anchorAt,
   consumeScrollAnchor,
+  hashSection,
   localeHref,
   type ScrollAnchor,
   saveScrollAnchor,
@@ -15,6 +16,7 @@ import {
 import { useActiveSection } from "@/features/hud/use-active-section";
 import { routing } from "@/i18n/routing";
 import { ScrollTrigger } from "@/lib/motion/gsap";
+import { landingFor } from "@/lib/scroll/landing";
 import { onPageReady } from "@/lib/scroll/page-ready";
 import { settleScrubs } from "@/lib/scroll/scroll-keeper";
 import { cn } from "@/lib/utils";
@@ -61,10 +63,21 @@ export function LanguageSwitcher({ className }: { className?: string }) {
       if (current) saveScrollAnchor(current);
     };
     window.addEventListener("pagehide", saveOnLeave);
+    // A new navigation to `/pt#contact` has the same problem: the browser jumps to the hash on
+    // the server HTML, before the pins exist, and lands acts too early. It goes where a click
+    // on the link would (the section's landing point, e.g. Contact's finished poster).
+    const hashId = anchor ? null : hashSection(window.location.hash, ACT_IDS);
+    const target = () => {
+      if (anchor) {
+        const top = sectionTop(anchor.section);
+        return top === null ? null : scrollTargetFor(anchor, top);
+      }
+      return hashId ? (landingFor(hashId) ?? sectionTop(hashId)) : null;
+    };
     const restore = () => {
-      const top = anchor && sectionTop(anchor.section);
-      if (!anchor || top === null) return;
-      window.scrollTo(0, scrollTargetFor(anchor, top));
+      const y = target();
+      if (y === null) return;
+      window.scrollTo(0, y);
       // Without this the Contact blade would sweep in again after the jump.
       settleScrubs();
     };
@@ -73,7 +86,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
 
     // Before paint, so the acts below (later in the tree) measure what is already on screen.
     restore();
-    if (!anchor) {
+    if (!anchor && !hashId) {
       const frame = requestAnimationFrame(reveal);
       return () => {
         window.removeEventListener("pagehide", saveOnLeave);

@@ -2,11 +2,37 @@ import { beforeEach, describe, expect, it } from "vitest";
 import {
   anchorAt,
   consumeScrollAnchor,
+  hashSection,
   localeHref,
   saveScrollAnchor,
   scrollTargetFor,
   shouldRestoreScroll,
 } from "@/features/header/locale-switch";
+
+describe("hashSection", () => {
+  const ids = ["hero", "about", "projects", "stack", "contact"];
+
+  it("devolve a seção do hash", () => {
+    expect(hashSection("#contact", ids)).toBe("contact");
+  });
+
+  it("devolve null sem hash ou com só o #", () => {
+    expect(hashSection("", ids)).toBeNull();
+    expect(hashSection("#", ids)).toBeNull();
+  });
+
+  it("devolve null para um hash que não é um ato da página", () => {
+    expect(hashSection("#main", ids)).toBeNull();
+  });
+
+  it("decodifica o hash antes de comparar", () => {
+    expect(hashSection("#%63ontact", ids)).toBe("contact");
+  });
+
+  it("não quebra com um hash malformado", () => {
+    expect(hashSection("#%E0%A4%A", ids)).toBeNull();
+  });
+});
 
 describe("localeHref", () => {
   it("aponta para a raiz do idioma sem hash", () => {
