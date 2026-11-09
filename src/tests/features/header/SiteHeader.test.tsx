@@ -29,6 +29,15 @@ async function openDrawer() {
   return user;
 }
 
+describe("Pular para o conteúdo", () => {
+  it("é o primeiro link da página e aponta para o conteúdo principal", () => {
+    renderHeader();
+    const [first] = screen.getAllByRole("link");
+    expect(first).toHaveTextContent("Pular para o conteúdo");
+    expect(first).toHaveAttribute("href", "#main");
+  });
+});
+
 describe("Drawer", () => {
   afterEach(() => {
     document.documentElement.style.overflow = "";

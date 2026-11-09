@@ -11,7 +11,8 @@ import { ScrollKeeper } from "@/lib/scroll/ScrollKeeper";
 export default function Page() {
   return (
     <>
-      <main>
+      {/* The skip link's target: takes the focus from the header, without a ring of its own. */}
+      <main id="main" tabIndex={-1} className="outline-none">
         <HeroAct />
         <AboutAct />
         <ProjectsAct />

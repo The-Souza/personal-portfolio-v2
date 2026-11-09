@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
-import { NAV_IDS } from "@/content/acts";
+import { ACT_IDS, NAV_IDS } from "@/content/acts";
 import { isBootDone, onBootHandover } from "@/features/boot/boot-state";
 import { Drawer } from "@/features/header/Drawer";
 import { LanguageSwitcher } from "@/features/header/LanguageSwitcher";
@@ -35,6 +35,14 @@ export function SiteHeader() {
 
   return (
     <>
+      {/* Outside the header, which slides in after the boot: the first Tab must always find it. */}
+      <a
+        href="#main"
+        // The padding goes with `focus:`: `not-sr-only` resets it to 0.
+        className="sr-only z-50 bg-primary font-mono text-label text-primary-foreground uppercase focus:not-sr-only focus:fixed focus:top-2 focus:left-3 focus:px-4 focus:py-3"
+      >
+        {t("skip")}
+      </a>
       <header
         ref={headerRef}
         aria-label={t("aria")}
@@ -50,7 +58,9 @@ export function SiteHeader() {
               <a
                 key={id}
                 href={`#${id}`}
-                className="text-sm tracking-wider text-muted-foreground uppercase transition-colors duration-150 ease-entrance hover:text-primary-accessible"
+                // The act on screen, as in the drawer and the side HUD.
+                aria-current={ACT_IDS[index] === id ? "true" : undefined}
+                className="text-sm tracking-wider text-muted-foreground uppercase transition-colors duration-150 ease-entrance hover:text-primary-accessible aria-current:text-primary-accessible"
               >
                 {t(`nav.${id}`)}
               </a>

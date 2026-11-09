@@ -7,6 +7,7 @@
   },
   "header": {
     "aria": "Topo",
+    "skip": "Pular para o conteúdo",
     "logoAria": "Guilherme_dev, voltar ao topo",
     "logoName": "Guilherme",
     "logoSuffix": "_dev",

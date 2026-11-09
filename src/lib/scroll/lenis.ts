@@ -56,6 +56,9 @@ function onAnchorClick(event: MouseEvent) {
   event.preventDefault();
   instance.scrollTo(landingFor(id) ?? target);
   history.replaceState(null, "", hash);
+  // The browser's own jump would also move the focus there; preventing it keeps the focus on the
+  // link, and a skip link would skip nothing. Targets that take focus (tabindex) get it back.
+  if (target.hasAttribute("tabindex")) target.focus({ preventScroll: true });
 }
 
 /**
