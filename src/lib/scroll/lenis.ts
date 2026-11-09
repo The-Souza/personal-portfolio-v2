@@ -59,6 +59,15 @@ function onAnchorClick(event: MouseEvent) {
 }
 
 /**
+ * A hash typed into the address bar of the open page (or a history step between hashes) makes
+ * the browser jump to the section's top; a section with a landing point goes there instead.
+ */
+function onHashChange() {
+  const landing = landingFor(decodeURIComponent(window.location.hash.slice(1)));
+  if (instance && landing !== null) instance.scrollTo(landing, { immediate: true });
+}
+
+/**
  * Hands the page's Lenis to the controls (LenisProvider creates it): applies a stop asked for
  * before it existed and takes over internal links. Returns the disconnect.
  */
@@ -66,8 +75,10 @@ export function connectLenis(lenis: Lenis) {
   instance = lenis;
   if (stopRequested) lenis.stop();
   document.addEventListener("click", onAnchorClick);
+  window.addEventListener("hashchange", onHashChange);
   return () => {
     document.removeEventListener("click", onAnchorClick);
+    window.removeEventListener("hashchange", onHashChange);
     instance = null;
   };
 }

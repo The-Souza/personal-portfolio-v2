@@ -115,8 +115,13 @@ export function ContactStage({ children }: { children: ReactNode }) {
         // Hidden only on the client, and only when the entrance is still ahead: a title already
         // past the cut at load stays visible.
         const entered = hasPlayed(PLAYED_KEY) || isTitleReady(bladeAt(trigger.progress));
-        if (entered) markPlayed(PLAYED_KEY);
-        else {
+        if (entered) {
+          markPlayed(PLAYED_KEY);
+          // The entrance starts from the blade's onUpdate, so it belongs to the layout context: a
+          // relayout reverting it mid-way (one fires right after a #contact load) leaves the items
+          // at their hidden start. A poster that already entered shows them, whatever came before.
+          gsap.set(items, { opacity: 1, y: 0 });
+        } else {
           gsap.set([...split.parts, ...items], { opacity: 0 });
           reveal = () => {
             reveal = null;
