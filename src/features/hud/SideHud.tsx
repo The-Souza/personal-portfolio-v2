@@ -1,20 +1,27 @@
 "use client";
 
 import { ACT_IDS } from "@/content/acts";
+import { useOverPoster } from "@/features/hud/over-poster";
 import { useActiveSection } from "@/features/hud/use-active-section";
 import { pad2 } from "@/lib/format";
+import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
 /** Side rail with one mark per act, from 720px up. */
 export function SideHud() {
   const t = useTranslations("hud");
   const { index, progress } = useActiveSection();
+  // Over the Alert poster the HUD takes its tokens (black on yellow), like the poster's own text.
+  const over = useOverPoster();
 
   return (
     <>
       <nav
         aria-label={t("label")}
-        className="fixed top-1/2 right-0 z-35 hidden -translate-y-1/2 flex-col items-end gap-1.5 pr-3.5 tablet:flex"
+        className={cn(
+          "fixed top-1/2 right-0 z-35 hidden -translate-y-1/2 flex-col items-end gap-1.5 pr-3.5 tablet:flex",
+          over.marks && "alert",
+        )}
       >
         {ACT_IDS.map((id, i) => (
           <a
@@ -35,7 +42,10 @@ export function SideHud() {
       </nav>
       <p
         aria-hidden="true"
-        className="fixed right-0 bottom-0 z-35 hidden pr-3.5 pb-3.5 font-mono text-xs leading-none tracking-widest text-muted-foreground uppercase tabular-nums mix-blend-difference tablet:block"
+        className={cn(
+          "fixed right-0 bottom-0 z-35 hidden pr-3.5 pb-3.5 font-mono text-xs leading-none tracking-widest text-muted-foreground uppercase tabular-nums tablet:block",
+          over.reading ? "alert" : "mix-blend-difference",
+        )}
       >
         {t("reading", {
           number: pad2(index + 1),
