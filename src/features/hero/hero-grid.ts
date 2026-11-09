@@ -16,6 +16,11 @@ export function formatReadout(x: number, y: number) {
   return `X ${pad(x)} · Y ${pad(y)}`;
 }
 
+/** The reticle follows a real mouse only: not touch or pen, nor a screen without a fine pointer. */
+export function tracksPointer(pointerType: string, hasFinePointer: boolean) {
+  return pointerType === "mouse" && hasFinePointer;
+}
+
 /** Dots on the cursor's row or column, up to 180px away, become the reticle arms. */
 export function isArmDot(dot: Dot, cursor: Dot) {
   return (
@@ -126,6 +131,9 @@ export function createHeroGrid(canvas: HTMLCanvasElement, host: HTMLElement) {
   // Layout size, not getBoundingClientRect(): the crack scales the hero, and a measure taken
   // mid-scale would keep a shrunken grid until the next reload.
   const resize = () => {
+    // A resize (a rotated phone, DevTools switching to a device) fires no pointerleave: the last
+    // mouse position would freeze the reticle and its readout on the new screen.
+    pointer = null;
     dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
     width = canvas.clientWidth;
     height = canvas.clientHeight;
@@ -134,9 +142,9 @@ export function createHeroGrid(canvas: HTMLCanvasElement, host: HTMLElement) {
     request();
   };
 
+  const finePointer = window.matchMedia("(pointer: fine)");
   const onMove = (event: PointerEvent) => {
-    if (event.pointerType !== "mouse") return;
-    pointer = { clientX: event.clientX, clientY: event.clientY };
+    pointer = tracksPointer(event.pointerType, finePointer.matches) ? { clientX: event.clientX, clientY: event.clientY } : null;
     request();
   };
   const onLeave = () => {
@@ -157,6 +165,7 @@ export function createHeroGrid(canvas: HTMLCanvasElement, host: HTMLElement) {
   const themeObserver = new MutationObserver(request);
   themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
   host.addEventListener("pointermove", onMove);
+  host.addEventListener("pointerdown", onMove);
   host.addEventListener("pointerleave", onLeave);
   window.addEventListener("scroll", onScroll, { passive: true });
 
@@ -184,6 +193,7 @@ export function createHeroGrid(canvas: HTMLCanvasElement, host: HTMLElement) {
       visibilityObserver.disconnect();
       themeObserver.disconnect();
       host.removeEventListener("pointermove", onMove);
+      host.removeEventListener("pointerdown", onMove);
       host.removeEventListener("pointerleave", onLeave);
       window.removeEventListener("scroll", onScroll);
     },
