@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/Button";
 import { WarningMark } from "@/components/HudMarkers";
 import { SITE } from "@/content/site";
+import { mailtoUrl, whatsappUrl } from "@/features/contact/contact-links";
 import { ContactStage } from "@/features/contact/ContactStage";
 import { CopyEmail } from "@/features/contact/CopyEmail";
 import { ActionLink } from "@/features/shared/ActionLink";
@@ -37,13 +38,21 @@ export function ContactAct() {
               <p data-contact-item className="max-w-[56ch] text-lead text-muted-foreground">
                 {t("lead")}
               </p>
-              <div data-contact-item>
-                <Button href={SITE.companyUrl} variant="solid" target="_blank" rel="noopener noreferrer">
+              {/* Two direct channels, so the conversation starts here instead of on another site. */}
+              <div data-contact-item className="flex flex-wrap items-center gap-4">
+                <Button href={whatsappUrl(SITE.whatsapp, t("whatsappMessage"))} variant="solid" target="_blank" rel="noopener noreferrer">
                   {t("cta")}
                 </Button>
+                <Button href={mailtoUrl(SITE.email, t("emailSubject"))}>{t("email")}</Button>
               </div>
+              <p data-contact-item className="max-w-[56ch] text-sm text-muted-foreground">
+                {t("reassurance")}
+              </p>
               <div data-contact-item className="flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-sm tracking-wider">
                 <CopyEmail email={SITE.email} />
+                <ActionLink href={SITE.companyUrl} external bare>
+                  {t("site")}
+                </ActionLink>
                 <ActionLink href={SITE.linkedinUrl} external bare>
                   {t("linkedin")}
                 </ActionLink>

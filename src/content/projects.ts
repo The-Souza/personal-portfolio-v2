@@ -22,6 +22,8 @@ export interface Project {
   address: string;
   /** BillWise's "v1 · previous version" ghost layer that glitches on reveal. */
   ghost?: boolean;
+  /** "status" when the closing line is where the project stands, not a measured result. */
+  outcome?: "result" | "status";
 }
 
 export const PROJECTS: Project[] = [
@@ -75,6 +77,7 @@ export const PROJECTS: Project[] = [
     image: { src: "/images/projects/the-souza-tech.png", width: 1907, height: 1078 },
     address: "thesouzatech.com.br",
     privateRepo: true,
+    outcome: "status",
     tags: [
       "Next.js 16",
       "Tailwind CSS v4",
@@ -93,6 +96,7 @@ export const PROJECTS: Project[] = [
     image: { src: "/images/projects/the-souza-transportes.png", width: 1907, height: 1078 },
     address: "thesouzatransportes.com.br",
     privateRepo: true,
+    outcome: "status",
     tags: ["Next.js 16", "Tailwind CSS v4", "GSAP", "Lenis", "Vitest"],
     links: [{ label: "site", href: "https://thesouzatransportes.com.br" }],
   },

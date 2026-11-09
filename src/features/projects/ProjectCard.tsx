@@ -49,7 +49,7 @@ export function ProjectCard({ project }: { project: Project }) {
           <p className="text-sm leading-normal">{t(item("description"))}</p>
           <p className="text-sm text-muted-foreground">
             <b className="mr-1.5 font-mono text-xs font-medium tracking-widest text-primary-accessible uppercase">
-              {t("result")}
+              {t(project.outcome ?? "result")}
             </b>
             {t(item("result"))}
           </p>
