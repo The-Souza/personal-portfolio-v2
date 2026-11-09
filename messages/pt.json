@@ -46,7 +46,7 @@
     "goTo": "{number} · Ir para {act}",
     "reading": "ato {number} · {act} · {percent}%",
     "acts": {
-      "hero": "Hero",
+      "hero": "Início",
       "about": "Sobre",
       "projects": "Projetos",
       "stack": "Stack",
@@ -154,7 +154,7 @@
       "billwise": {
         "category": "fullstack",
         "title": "BillWise Dashboard",
-        "description": "Gestão financeira com workspaces compartilhados e isolados, permissões por perfil, parcelamentos, orçamentos, analytics, recorrências com cron, importação CSV/XLSX e Turnstile.",
+        "description": "Gestão financeira pessoal com workspaces compartilhados e isolados, permissões por perfil, parcelamentos, orçamentos, analytics, recorrências com cron, importação CSV/XLSX e Turnstile.",
         "result": "Em produção e usado pela família. 723 testes, TDD, CI no GitHub Actions e Git Flow."
       },
       "souzaTech": {
@@ -167,7 +167,7 @@
         "category": "site institucional",
         "title": "The Souza Transportes",
         "description": "Narrativa animada na rolagem, respeito a prefers-reduced-motion, conteúdo visível sem JavaScript, vídeo que não carrega em conexões lentas e cotação pelo WhatsApp com mensagem pré-preenchida.",
-        "result": "Projeto do grupo, com imagens geradas por IA."
+        "result": "Projeto para o grupo Souza, com imagens geradas por IA."
       }
     }
   },
@@ -313,7 +313,7 @@
     "eyebrow": "// falha_de_sistema · {file}",
     "big": "Falha",
     "title": "Algo quebrou do meu lado.",
-    "lead": "Não foi você. Tente de novo; se continuar, me avisa em {email} com o digest do relatório.",
+    "lead": "Não foi você. Tente de novo; se continuar, me avise em {email} com o digest do relatório.",
     "retry": "Tentar de novo",
     "warning": "falha detectada",
     "report": "// relatório de falha",

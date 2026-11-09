@@ -46,7 +46,7 @@
     "goTo": "{number} · Go to {act}",
     "reading": "act {number} · {act} · {percent}%",
     "acts": {
-      "hero": "Hero",
+      "hero": "Home",
       "about": "About",
       "projects": "Projects",
       "stack": "Stack",
@@ -85,7 +85,7 @@
     },
     "paragraphs": [
       "I started at CREA-SP, modernizing a large institutional system without breaking what already worked.",
-      "Later I spent a few days helping at my mother's trucking company, now my business partner, and built an app that cut the time to send proof-of-delivery photos from hours to minutes, with hundreds a day in peak season.",
+      "Later I spent a few days helping at my mother's trucking company (she's now my business partner) and built an app that cut the time to send proof-of-delivery photos from hours to minutes, with hundreds a day in peak season.",
       "That project made me see automation as a service and led to The Souza Tech, where I handle the code, the deployment and the direct conversation with clients."
     ],
     "milestones": [
@@ -167,7 +167,7 @@
         "category": "corporate website",
         "title": "The Souza Transportes",
         "description": "Scroll-driven animated story, respects prefers-reduced-motion, content visible without JavaScript, video that skips slow connections and WhatsApp quotes with a prefilled message.",
-        "result": "A group project, with AI-generated images."
+        "result": "A project for the Souza group, with AI-generated images."
       }
     }
   },
