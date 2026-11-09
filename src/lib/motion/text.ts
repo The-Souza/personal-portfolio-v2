@@ -117,5 +117,9 @@ export function scramble(el: HTMLElement, final: string, { duration = 0.8, delay
     onComplete: () => {
       el.textContent = final;
     },
+    // Killed or reverted mid-way (a relayout reverts its context): never leave glyphs behind.
+    onInterrupt: () => {
+      el.textContent = final;
+    },
   });
 }
