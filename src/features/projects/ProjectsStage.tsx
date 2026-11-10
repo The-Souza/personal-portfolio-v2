@@ -168,12 +168,14 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
 
         // One pinned ScrollTrigger drives a timeline measured in pixels: a hold on the first card
         // (its terminal lines appear), then for each card a move that centers it and a dwell.
+        // The first line stays out of it: a visitor stopped at the pin's start saw an empty
+        // terminal on the lit card.
         // Reverting the timeline (a relayout, or useGSAP's own cleanup when Next hides and shows the
         // page) renders it back to the start, which runs this `onUpdate`: at progress 0 there's
         // nothing to update, and the card at the center would be revealed by the teardown itself.
         const timeline = gsap.timeline({ onUpdate: () => timeline.progress() > 0 && update() });
         timeline.to({}, { duration: hold }, 0);
-        const firstLines = cards[0]?.lines ?? [];
+        const firstLines = cards[0]?.lines.slice(1) ?? [];
         if (firstLines.length) {
           timeline.fromTo(firstLines, { opacity: 0, x: -8 }, { opacity: 1, x: 0, stagger: hold * 0.18, duration: hold * 0.2, ease: "none" }, 0);
         }
