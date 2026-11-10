@@ -39,9 +39,11 @@ export function HeroAct() {
             <p data-hero="bio" className="max-w-[56ch] text-lead text-muted-foreground">
               {t("bio")}
             </p>
+            {/* The page's one action carries the button; the proof stays a step away. On phones
+                the header has no Contato, so this is the contact entry until the last act. */}
             <div data-hero="actions" className="flex flex-wrap items-center gap-x-7 gap-y-5">
-              <Button href="#projects">{t("viewProjects")}</Button>
-              <ActionLink href="#contact">{t("contact")}</ActionLink>
+              <Button href="#contact">{t("contact")}</Button>
+              <ActionLink href="#projects">{t("viewProjects")}</ActionLink>
             </div>
           </div>
 

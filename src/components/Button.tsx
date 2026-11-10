@@ -57,7 +57,8 @@ export function Button({
       <span className="chamfer block bg-primary p-px">
         <span
           className={cn(
-            "chamfer relative flex h-12.5 items-center gap-3 overflow-hidden px-6 text-base",
+            // A minimum, not a fixed height: a long label wraps on a 320px phone and needs the room.
+            "chamfer relative flex min-h-12.5 items-center gap-3 overflow-hidden px-6 py-2 text-base",
             solid
               ? "bg-primary text-primary-foreground in-[.alert]:group-hover:text-foreground in-[.alert]:group-focus-visible:text-foreground"
               : "bg-card text-primary-accessible group-hover:text-primary-foreground group-focus-visible:text-primary-foreground",
