@@ -363,6 +363,18 @@ html:has([data-special]) {
     @apply bg-background text-foreground font-sans;
     font-optical-sizing: auto;
   }
+  /* Prose pulls a word down beside a lone last one; headings even out their lines. The hero's
+     h1 is left out: its name breaks by hand. */
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
   /* Brief section 5: a visible 2px ring with a 2px offset on every interactive element. */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring;
