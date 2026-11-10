@@ -32,7 +32,7 @@ export function StackAct() {
           <Container data-stack-head className="pt-30">
             <SectionHeading eyebrow={t("eyebrow")} title={t("title")} />
           </Container>
-          <div data-stack-stage>
+          <div data-stack-stage className="tablet:hud-fade">
             <Container
               data-stack-board
               className="relative grid grid-cols-[repeat(auto-fill,minmax(min(100%,21.25rem),1fr))] gap-x-8 gap-y-10 pt-10 pb-30"

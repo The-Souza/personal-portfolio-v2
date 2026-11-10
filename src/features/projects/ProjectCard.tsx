@@ -15,10 +15,12 @@ export function ProjectCard({ project }: { project: Project }) {
     ? (t.raw(item("terminal")) as TerminalLine[])
     : null;
 
+  // On the track a centered card leaves 6.5rem on each side, where the side HUD and its fade sit
+  // (see `hud-fade`): at 84vw a tablet's card ran under the marks.
   return (
     <article
       data-project-card
-      className={`brackets relative isolate w-full max-w-245 p-2.5 track:w-[84vw] track:flex-none ${CARD_ACTIVE}`}
+      className={`brackets relative isolate w-full max-w-245 p-2.5 track:w-[min(84vw,100vw-13rem)] track:flex-none ${CARD_ACTIVE}`}
     >
       {project.ghost && (
         // The v1 ghost sits behind the card and only shows after the reveal glitch.

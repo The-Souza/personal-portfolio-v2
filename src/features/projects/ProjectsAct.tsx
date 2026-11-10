@@ -27,14 +27,15 @@ export function ProjectsAct() {
             from the first paint. overflow-x alone would turn overflow-y to auto too. */}
         <div
           data-projects-viewport
-          className="track:flex track:flex-1 track:items-center track:overflow-x-auto track:overflow-y-hidden track:js:overflow-hidden"
+          className="track:flex track:flex-1 track:items-center track:overflow-x-auto track:overflow-y-hidden track:hud-fade track:js:overflow-hidden"
         >
           {/* From 2xl the cards hit their max width (61.25rem), so the ends pad half the leftover:
               the first and last cards sit centered, where the track lights and reveals them. With
-              8vw they never reached the center on wide screens. */}
+              8vw they never reached the center on wide screens. The right end never pads less than
+              6.5rem, where the HUD fade ends, so the last card rests clear of it. */}
           <Container
             data-projects-track
-            className="relative flex flex-col items-center gap-12 pt-6 pb-30 track:w-max track:max-w-none track:flex-row track:gap-[5vw] track:px-[8vw] track:py-0 2xl:track:px-[calc(50vw-30.625rem)]"
+            className="relative flex flex-col items-center gap-12 pt-6 pb-30 track:w-max track:max-w-none track:flex-row track:gap-[5vw] track:pl-[8vw] track:pr-[max(8vw,6.5rem)] track:py-0 2xl:track:px-[calc(50vw-30.625rem)]"
           >
             {PROJECTS.map((project) => (
               <ProjectCard key={project.key} project={project} />

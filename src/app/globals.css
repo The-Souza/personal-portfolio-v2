@@ -168,6 +168,13 @@
   background-image: repeating-linear-gradient(135deg, var(--foreground) 0 1rem, var(--background) 1rem 2rem);
 }
 /* Dot grid behind the project card's stack panel. */
+/* The side HUD's column (tablet and up). Content that moves across the screen (the projects track,
+   the stack circuit) dissolves before reaching it, so the marks always sit on the background;
+   the still acts clear it with the Container's right padding instead. */
+@utility hud-fade {
+  mask-image: linear-gradient(to left, transparent 4.5rem, black 6.5rem);
+}
+
 @utility dot-grid {
   background-image: radial-gradient(circle, var(--border) 1px, transparent 1.4px);
   background-size: 0.875rem 0.875rem;
