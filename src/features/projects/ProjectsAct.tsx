@@ -29,9 +29,12 @@ export function ProjectsAct() {
           data-projects-viewport
           className="track:flex track:flex-1 track:items-center track:overflow-x-auto track:overflow-y-hidden track:js:overflow-hidden"
         >
+          {/* From 2xl the cards hit their max width (61.25rem), so the ends pad half the leftover:
+              the first and last cards sit centered, where the track lights and reveals them. With
+              8vw they never reached the center on wide screens. */}
           <Container
             data-projects-track
-            className="relative flex flex-col items-center gap-12 pt-6 pb-30 track:w-max track:max-w-none track:flex-row track:gap-[5vw] track:px-[8vw] track:py-0"
+            className="relative flex flex-col items-center gap-12 pt-6 pb-30 track:w-max track:max-w-none track:flex-row track:gap-[5vw] track:px-[8vw] track:py-0 2xl:track:px-[calc(50vw-30.625rem)]"
           >
             {PROJECTS.map((project) => (
               <ProjectCard key={project.key} project={project} />
