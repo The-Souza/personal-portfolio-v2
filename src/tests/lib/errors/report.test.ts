@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { clientErrorSchema, logLine, toClientReport } from "@/lib/errors/report";
+import { logLine, toClientReport } from "@/lib/errors/report";
+import { clientErrorSchema } from "@/lib/errors/schema";
 
 describe("toClientReport", () => {
   it("monta o relato de um Error com mensagem, pilha, origem e rota", () => {

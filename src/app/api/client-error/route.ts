@@ -1,4 +1,5 @@
-import { clientErrorSchema, logLine } from "@/lib/errors/report";
+import { logLine } from "@/lib/errors/report";
+import { clientErrorSchema } from "@/lib/errors/schema";
 
 /** Larger than any report the client builds (see the limits in report.ts). */
 const MAX_BODY = 8192;
