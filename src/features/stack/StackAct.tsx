@@ -63,7 +63,8 @@ export function StackAct() {
                     <Terminal lines={aiLines} blink />
                   </div>
                   <p className="text-sm text-muted-foreground">{t("ai.note")}</p>
-                  <p className="font-mono text-xs leading-relaxed tracking-wider text-muted-foreground uppercase">{t("ai.practices")}</p>
+                  {/* A list as long as a sentence, so no uppercase (DESIGN.md keeps it to labels). */}
+                  <p className="font-mono text-xs leading-relaxed tracking-wide text-muted-foreground">{t("ai.practices")}</p>
                 </BracketPanel>
               </div>
 
