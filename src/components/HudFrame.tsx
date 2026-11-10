@@ -16,7 +16,7 @@ export function HudFrame({ children, cut = 16, className }: HudFrameProps) {
   return (
     <div
       data-hud-frame
-      className={cn("relative isolate px-6 py-4 text-foreground transition-[--frame-cut] duration-700 ease-plate", className)}
+      className={cn("relative isolate px-4 py-4 phone:px-6 text-foreground transition-[--frame-cut] duration-700 ease-plate", className)}
       style={{ "--frame-cut": `${cut}px` } as CSSProperties}
     >
       <span aria-hidden="true" className="chamfer-2 absolute inset-0 -z-10 bg-field-border [--cut:var(--frame-cut)]" />
@@ -27,14 +27,15 @@ export function HudFrame({ children, cut = 16, className }: HudFrameProps) {
 }
 
 /**
- * The frame's inner row, in two columns: the status wraps inside its own, the mark stays
- * whole on the right.
+ * The frame's inner row: the status on the left, the mark on the right. It breaks by content,
+ * not by a breakpoint: when the status lines don't fit whole beside the mark, the mark drops
+ * below them (on a 320px phone), instead of squeezing the status into lines with orphans.
  */
 export function HudFrameRow({ children }: { children: ReactNode }) {
-  return <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">{children}</div>;
+  return <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-3 phone:gap-x-6">{children}</div>;
 }
 
 /** Code/mark in the display face, e.g. "GV-026". Never wraps, not even at the hyphen. */
 export function HudMark({ children }: { children: ReactNode }) {
-  return <span className="justify-self-end font-heading text-3xl font-bold leading-none tracking-wide whitespace-nowrap uppercase">{children}</span>;
+  return <span className="ml-auto font-heading text-[clamp(1.5rem,3.25vw+0.75rem,1.875rem)] font-bold leading-none tracking-wide whitespace-nowrap uppercase">{children}</span>;
 }

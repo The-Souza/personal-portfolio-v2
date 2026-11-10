@@ -34,7 +34,8 @@ export function SiteFooter() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm tracking-wider uppercase transition-colors duration-150 ease-entrance hover:text-muted-foreground"
+                // The padding takes the tap target to 44px without moving the row.
+                className="-my-3 py-3 text-sm tracking-wider uppercase transition-colors duration-150 ease-entrance hover:text-muted-foreground"
               >
                 {link.label}
               </a>
