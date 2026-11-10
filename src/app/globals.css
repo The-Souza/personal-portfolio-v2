@@ -417,6 +417,12 @@ html:has([data-special]) {
   html.locale-restoring {
     scrollbar-color: transparent transparent;
   }
+  /* The boot is always Night (it carries `.dark`), but being fixed it stops short of the reserved
+     gutter, which shows the root's own background: on Day, a light strip beside the dark veil.
+     Night's background on <html> fills it; the body paints its own box, so the page keeps its theme. */
+  html.js:has(#boot):not(.boot-skip) {
+    background-color: #07080c;
+  }
   html.js:has(#boot):not(.boot-skip)::-webkit-scrollbar-track,
   html.js:has(#boot):not(.boot-skip)::-webkit-scrollbar-thumb,
   html.locale-restoring::-webkit-scrollbar-track,
