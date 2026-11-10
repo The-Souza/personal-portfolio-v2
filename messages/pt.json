@@ -98,7 +98,7 @@
       },
       {
         "year": "2026",
-        "code": "// marco_02 · transportadora · jun",
+        "code": "// marco_02 · transportadora · jun",
         "title": "O app das fotos",
         "description": "Consulta de notas em lote, leitura do número por OCR e envio pela API. O envio das fotos passou de horas para minutos."
       },
@@ -127,6 +127,7 @@
     "aria": "Projetos",
     "eyebrow": "// projetos · 04",
     "title": "Projetos",
+    "code": "projeto_{number}",
     "result": "Resultado",
     "status": "Status",
     "privateRepo": "repositório privado",
@@ -240,7 +241,7 @@
           "text": "gemini:",
           "status": "vídeo, imagem, pesquisa"
         },
-        { "prefix": ">", "text": "textos:", "status": "claude + gemini" },
+        { "prefix": ">", "text": "revisão de texto:", "status": "claude + gemini" },
         { "prefix": "//", "text": "as decisões continuam sendo minhas" },
         {
           "prefix": ">",

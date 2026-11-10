@@ -9,7 +9,8 @@ import { useTranslations } from "next-intl";
 export const CARD_ACTIVE =
   "data-[active=true]:[--bc:var(--foreground)] data-[active=true]:glow-active";
 
-export function ProjectCard({ project }: { project: Project }) {
+/** `number` is the card's place on the track ("01"); its system id is translated per locale. */
+export function ProjectCard({ project, number }: { project: Project; number: string }) {
   const t = useTranslations("projects");
   const item = (field: string) => `items.${project.key}.${field}`;
   const terminal = t.has(item("terminal"))
@@ -42,7 +43,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
         <div className="flex min-w-0 flex-col gap-3 px-7 pt-6.5 pb-7 rail:col-start-2 rail:row-span-2 rail:row-start-1">
           <p className="font-mono text-eyebrow text-primary-accessible uppercase">
-            {project.code} · {t(item("category"))}
+            {t("code", { number })} · {t(item("category"))}
           </p>
           <h3 className="font-heading text-heading text-balance">
             <span className="sr-only">{t(item("title"))}</span>

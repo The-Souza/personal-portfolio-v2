@@ -9,7 +9,6 @@ export interface ProjectImage {
 export interface Project {
   /** Key of the project's texts in `messages.projects.items`. */
   key: string;
-  code: string;
   tags: string[];
   links: { label: ProjectLinkLabel; href: string }[];
   live?: boolean;
@@ -29,7 +28,6 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     key: "nfe",
-    code: "projeto_01",
     seed: 11,
     image: { src: "/images/projects/consulta-nfe-cte.png", width: 1919, height: 1049 },
     address: "consulta-nfe-cte.exe",
@@ -47,7 +45,6 @@ export const PROJECTS: Project[] = [
   },
   {
     key: "billwise",
-    code: "projeto_02",
     seed: 23,
     image: { src: "/images/projects/billwise-dashboard.png", width: 1920, height: 1080 },
     address: "billwise-dashboard.vercel.app",
@@ -72,7 +69,6 @@ export const PROJECTS: Project[] = [
   },
   {
     key: "souzaTech",
-    code: "projeto_03",
     seed: 37,
     image: { src: "/images/projects/the-souza-tech.png", width: 1907, height: 1078 },
     address: "thesouzatech.com.br",
@@ -91,7 +87,6 @@ export const PROJECTS: Project[] = [
   },
   {
     key: "souzaTransportes",
-    code: "projeto_04",
     seed: 41,
     image: { src: "/images/projects/the-souza-transportes.png", width: 1907, height: 1078 },
     address: "thesouzatransportes.com.br",

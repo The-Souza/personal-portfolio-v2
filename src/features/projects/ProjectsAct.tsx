@@ -2,6 +2,7 @@ import { PROJECTS } from "@/content/projects";
 import { ProjectCard } from "@/features/projects/ProjectCard";
 import { ProjectsStage } from "@/features/projects/ProjectsStage";
 import { counterLabel } from "@/features/projects/track";
+import { pad2 } from "@/lib/format";
 import { Container } from "@/features/shared/Container";
 import { SectionHeading } from "@/features/shared/SectionHeading";
 import { useTranslations } from "next-intl";
@@ -38,8 +39,8 @@ export function ProjectsAct() {
             data-projects-track
             className="relative flex flex-col items-center gap-12 pt-6 pb-30 track:w-max track:max-w-none track:flex-row track:gap-[5vw] track:pl-[8vw] track:pr-[max(8vw,6.5rem)] track:py-0 2xl:track:px-[calc(50vw-30.625rem)]"
           >
-            {PROJECTS.map((project) => (
-              <ProjectCard key={project.key} project={project} />
+            {PROJECTS.map((project, i) => (
+              <ProjectCard key={project.key} project={project} number={pad2(i + 1)} />
             ))}
             {/* <ClientsBlock /> */}
           </Container>

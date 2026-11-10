@@ -98,7 +98,7 @@
       },
       {
         "year": "2026",
-        "code": "// milestone_02 · trucking company · jun",
+        "code": "// milestone_02 · trucking company · jun",
         "title": "The photo app",
         "description": "Batch invoice lookup, OCR for the invoice number and batch upload through the API. Sending the photos went from hours to minutes."
       },
@@ -127,6 +127,7 @@
     "aria": "Projects",
     "eyebrow": "// projects · 04",
     "title": "Projects",
+    "code": "project_{number}",
     "result": "Result",
     "status": "Status",
     "privateRepo": "private repository",
@@ -240,7 +241,7 @@
           "text": "gemini:",
           "status": "video, image, research"
         },
-        { "prefix": ">", "text": "writing:", "status": "claude + gemini" },
+        { "prefix": ">", "text": "copy editing:", "status": "claude + gemini" },
         { "prefix": "//", "text": "the decisions are still mine" },
         {
           "prefix": ">",
