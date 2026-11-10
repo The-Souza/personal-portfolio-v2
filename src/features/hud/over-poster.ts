@@ -7,23 +7,31 @@ export function coversPoint(poster: { top: number; bottom: number }, y: number, 
   return !clipped && poster.top <= y && poster.bottom >= y;
 }
 
+/** Whether any of the Alert surfaces (the Contact poster, the footer) sits under a point. */
+export function anyCovers(surfaces: { top: number; bottom: number; clipped: boolean }[], y: number) {
+  return surfaces.some((surface) => coversPoint(surface, y, surface.clipped));
+}
+
 /**
- * Which parts of the side HUD sit over the Alert poster: the act marks at mid-screen and the
- * reading at the bottom. Fixed outside the poster, they would keep the Night colors on yellow.
+ * Which parts of the side HUD sit over an Alert surface (the Contact poster or the footer): the
+ * act marks at mid-screen and the reading at the bottom. Fixed outside them, they would keep the
+ * page theme's colors on yellow.
  */
 export function useOverPoster() {
   const [over, setOver] = useState({ marks: false, reading: false });
 
   useEffect(() => {
     const poster = document.querySelector<HTMLElement>("[data-contact-poster]");
-    if (!poster) return;
+    const footer = document.querySelector<HTMLElement>("footer.alert");
     let frame = 0;
     const check = () => {
       frame = 0;
-      const rect = poster.getBoundingClientRect();
-      const clipped = poster.style.clipPath !== "";
-      const marks = coversPoint(rect, window.innerHeight / 2, clipped);
-      const reading = coversPoint(rect, window.innerHeight - 16, clipped);
+      const surfaces = [];
+      // The poster counts only once the blade stops cutting it.
+      if (poster) surfaces.push({ ...poster.getBoundingClientRect().toJSON(), clipped: poster.style.clipPath !== "" });
+      if (footer) surfaces.push({ ...footer.getBoundingClientRect().toJSON(), clipped: false });
+      const marks = anyCovers(surfaces, window.innerHeight / 2);
+      const reading = anyCovers(surfaces, window.innerHeight - 16);
       setOver((current) => (current.marks === marks && current.reading === reading ? current : { marks, reading }));
     };
     const schedule = () => {
@@ -31,7 +39,7 @@ export function useOverPoster() {
     };
     // The blade is scrubbed, so its cut keeps changing for a moment after the scroll stops.
     const blade = new MutationObserver(schedule);
-    blade.observe(poster, { attributes: true, attributeFilter: ["style"] });
+    if (poster) blade.observe(poster, { attributes: true, attributeFilter: ["style"] });
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
     schedule();

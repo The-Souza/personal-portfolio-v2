@@ -45,7 +45,8 @@ export function SideHud() {
         aria-hidden="true"
         className={cn(
           "fixed right-0 bottom-0 z-35 hidden pr-3.5 pb-3.5 font-mono text-xs leading-none tracking-widest text-muted-foreground uppercase tabular-nums tablet:block",
-          over.reading ? "alert" : "mix-blend-difference",
+          // Token colors, not a blend mode: `mix-blend-difference` read 2.44:1 on Day's background.
+          over.reading && "alert",
         )}
       >
         {t("reading", {
