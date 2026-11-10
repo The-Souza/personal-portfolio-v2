@@ -16,7 +16,7 @@ export interface TerminalLine {
 export interface TerminalProps {
   /** 4 to 10 lines. */
   lines: TerminalLine[];
-  /** Blinks the cursor (animate-blink-cursor; still with reduced motion). */
+  /** Blinks the cursor a few times, then leaves it lit (animate-blink-cursor; still with reduced motion). */
   blink?: boolean;
   /** true when it's only texture: hides it from screen readers. */
   decorative?: boolean;

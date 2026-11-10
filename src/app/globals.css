@@ -115,11 +115,10 @@
   --text-code: 13px;
   --text-code--line-height: 1.5;
   --text-code--font-weight: 400;
-  --shadow-glow-accent: 0 0 0 1px rgba(2, 210, 227, 0.35), 0 0 24px rgba(2, 210, 227, 0.28);
-  --shadow-glow-hot: 0 0 0 1px rgba(255, 42, 109, 0.35), 0 0 24px rgba(255, 42, 109, 0.28);
   --ease-entrance: cubic-bezier(0.2, 0, 0, 1);
   --ease-plate: cubic-bezier(0.33, 0, 0, 1);
-  --animate-blink-cursor: blink-cursor 1.2s step-end infinite;
+  /* Four blinks (4.8s), then the cursor stays lit: under the 5s of WCAG 2.2.2 (Pause, Stop, Hide). */
+  --animate-blink-cursor: blink-cursor 1.2s step-end 4;
   @keyframes blink-cursor {
     0%,
     49% {
