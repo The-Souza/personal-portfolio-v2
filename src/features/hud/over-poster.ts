@@ -1,23 +1,59 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type RefObject, useEffect, useState } from "react";
 
-/** Whether the finished Contact poster sits under a point of the screen (a y in viewport px). */
-export function coversPoint(poster: { top: number; bottom: number }, y: number, clipped: boolean) {
-  return !clipped && poster.top <= y && poster.bottom >= y;
+/** The cut's left side as [top, base] in % of the poster's width (see `bladeClip`); null: no cut. */
+type Clip = [number, number] | null;
+
+interface Surface {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  clip: Clip;
 }
 
-/** Whether any of the Alert surfaces (the Contact poster, the footer) sits under a point. */
-export function anyCovers(surfaces: { top: number; bottom: number; clipped: boolean }[], y: number) {
-  return surfaces.some((surface) => coversPoint(surface, y, surface.clipped));
+interface Box {
+  left: number;
+  top: number;
+  bottom: number;
+}
+
+/** Reads the blade's `clip-path`. A shape it doesn't know covers nothing. */
+export function parseBladeClip(clipPath: string): Clip {
+  if (!clipPath) return null;
+  const match = /^polygon\(\s*(-?[\d.]+)%\s+0(?:px)?,.*,\s*(-?[\d.]+)%\s+100%\s*\)$/.exec(clipPath);
+  return match ? [Number(match[1]), Number(match[2])] : [100, 100];
 }
 
 /**
- * Which parts of the side HUD sit over an Alert surface (the Contact poster or the footer): the
- * act marks at mid-screen and the reading at the bottom. Fixed outside them, they would keep the
- * page theme's colors on yellow.
+ * Whether a surface covers a box of the HUD whole. With the blade cut, the yellow starts at the
+ * cut's left side, which runs from `top`% at the poster's top to `base`% at its bottom: the box is
+ * covered when it starts right of that side at every height it spans.
  */
-export function useOverPoster() {
+export function coversBox(surface: Surface, box: Box) {
+  if (box.top < surface.top || box.bottom > surface.top + surface.height) return false;
+  if (!surface.clip) return true;
+  const [top, base] = surface.clip;
+  const edgeAt = (y: number) => surface.left + (surface.width * (top + ((base - top) * (y - surface.top)) / surface.height)) / 100;
+  return box.left >= Math.max(edgeAt(box.top), edgeAt(box.bottom));
+}
+
+export function anyCovers(surfaces: Surface[], box: Box) {
+  return surfaces.some((surface) => coversBox(surface, box));
+}
+
+const surfaceOf = (element: HTMLElement, clip: Clip): Surface => {
+  const { left, top, width, height } = element.getBoundingClientRect();
+  return { left, top, width, height, clip };
+};
+
+/**
+ * Which parts of the side HUD sit over an Alert surface (the Contact poster, also while its blade
+ * sweeps in, or the footer): the act marks and the reading. Fixed outside them, they would keep
+ * the page theme's colors on yellow.
+ */
+export function useOverPoster(marksRef: RefObject<HTMLElement | null>, readingRef: RefObject<HTMLElement | null>) {
   const [over, setOver] = useState({ marks: false, reading: false });
 
   useEffect(() => {
@@ -26,12 +62,12 @@ export function useOverPoster() {
     let frame = 0;
     const check = () => {
       frame = 0;
-      const surfaces = [];
-      // The poster counts only once the blade stops cutting it.
-      if (poster) surfaces.push({ ...poster.getBoundingClientRect().toJSON(), clipped: poster.style.clipPath !== "" });
-      if (footer) surfaces.push({ ...footer.getBoundingClientRect().toJSON(), clipped: false });
-      const marks = anyCovers(surfaces, window.innerHeight / 2);
-      const reading = anyCovers(surfaces, window.innerHeight - 16);
+      const surfaces: Surface[] = [];
+      if (poster) surfaces.push(surfaceOf(poster, parseBladeClip(poster.style.clipPath)));
+      if (footer) surfaces.push(surfaceOf(footer, null));
+      const covered = (element: HTMLElement | null) => !!element && anyCovers(surfaces, element.getBoundingClientRect());
+      const marks = covered(marksRef.current);
+      const reading = covered(readingRef.current);
       setOver((current) => (current.marks === marks && current.reading === reading ? current : { marks, reading }));
     };
     const schedule = () => {
@@ -49,7 +85,7 @@ export function useOverPoster() {
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
     };
-  }, []);
+  }, [marksRef, readingRef]);
 
   return over;
 }

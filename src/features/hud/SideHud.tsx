@@ -6,17 +6,21 @@ import { useActiveSection } from "@/features/hud/use-active-section";
 import { pad2 } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { useRef } from "react";
 
 /** Side rail with one mark per act, from 720px up. */
 export function SideHud() {
   const t = useTranslations("hud");
   const { index, progress } = useActiveSection();
+  const marksRef = useRef<HTMLElement>(null);
+  const readingRef = useRef<HTMLParagraphElement>(null);
   // Over the Alert poster the HUD takes its tokens (black on yellow), like the poster's own text.
-  const over = useOverPoster();
+  const over = useOverPoster(marksRef, readingRef);
 
   return (
     <>
       <nav
+        ref={marksRef}
         aria-label={t("label")}
         // On touch screens (tablets) the gap moves into the links, which grow to 44px tall.
         className={cn(
@@ -42,6 +46,7 @@ export function SideHud() {
         ))}
       </nav>
       <p
+        ref={readingRef}
         aria-hidden="true"
         className={cn(
           "fixed right-0 bottom-0 z-35 hidden pr-3.5 pb-3.5 font-mono text-xs leading-none tracking-widest text-muted-foreground uppercase tabular-nums tablet:block",
