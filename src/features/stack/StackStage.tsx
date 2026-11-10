@@ -17,6 +17,11 @@ const AI_LINES_KEY = "stack-ai-lines";
  * void) still passes 4.5:1, which it lost at 0.4 (about 2:1).
  */
 const PASSED_OPACITY = 0.8;
+/**
+ * Scroll per card, in screens. The brief's 72% held the act for five screens, over a third of the
+ * page; at this rate the seven cards take about two.
+ */
+const SCROLL_PER_CARD = 0.3;
 
 /**
  * Client shell for Stack (brief, act 04 · C): the pinned stair circuit, with the camera, the
@@ -117,7 +122,7 @@ export function StackStage({ children }: { children: ReactNode }) {
           animation: timeline,
           trigger: pinTarget,
           start: "top top",
-          end: `+=${nodes.length * 72}%`,
+          end: `+=${Math.round(nodes.length * SCROLL_PER_CARD * 100)}%`,
           pin: true,
           scrub: 0.8,
         });
@@ -133,11 +138,34 @@ export function StackStage({ children }: { children: ReactNode }) {
         };
       };
 
+      // Phones in portrait: no pin, the server grid (one column there) as a list whose cards bring
+      // in their tags as they enter. The circuit's camera moves a full screen per card, which on a
+      // phone read as a long detour through six lists of tags.
+      const buildList = () => {
+        const height = window.innerHeight;
+        for (const node of allNodes) {
+          if (node.getBoundingClientRect().top < height * 0.85) continue;
+          const items = [...node.querySelectorAll<HTMLElement>("li, span.inline-flex, [data-stack-terminal] p")];
+          gsap.set(items, { opacity: 0, y: 8 });
+          ScrollTrigger.create({
+            trigger: node,
+            start: "top 85%",
+            once: true,
+            onEnter: () => gsap.to(items, { opacity: 1, y: 0, stagger: 0.04, ...SPRINGS.ITEM }),
+          });
+        }
+      };
+
       const media = gsap.matchMedia();
       media.add(ACT_VARIANT_CONDITIONS, (context) => {
         const { full, narrow, short } = context.conditions ?? {};
         if (!full && !narrow && !short) {
           // Reduced motion: the grid from the server HTML, as is.
+          ready();
+          return;
+        }
+        if (narrow) {
+          buildList();
           ready();
           return;
         }
