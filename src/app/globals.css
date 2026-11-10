@@ -182,6 +182,11 @@
 @utility recede {
   opacity: calc(1 - var(--dim, 0) * (1 - var(--recede)));
 }
+/* A figure that lights up and then settles to the theme's `--figure-rest`. It rests there by
+   default (server HTML, an entrance already played); GSAP sets `--settle` to 0 and tweens it back. */
+@utility settle {
+  opacity: calc(1 - var(--settle, 1) * (1 - var(--figure-rest)));
+}
 @utility recede-content {
   & > * {
     filter: opacity(calc(1 - var(--dim, 0) * (1 - var(--recede))));
@@ -281,6 +286,8 @@
   /* How far a receding element dims (see `recede`): the lowest opacity at which its faintest text
      still passes 4.5:1. Day's accent ink on a card has little headroom (4.88:1 at full). */
   --recede: 0.96;
+  /* Where the About milestone years rest (see `settle`): large text, so the floor is 3:1. */
+  --figure-rest: 0.48;
 }
 
 /* Night */
@@ -326,6 +333,7 @@
   --live-foreground: #07080c;
   /* Muted ink on a card is the limit: 4.5:1 down to 0.81. */
   --recede: 0.82;
+  --figure-rest: 0.4;
 }
 
 /* Alert. The special pages (404, error) carry it up to <html>: the reserved scrollbar gutter and
