@@ -17,6 +17,8 @@ import { holdPageHeight } from "@/lib/scroll/viewport";
 const PLAYED_KEY = "contact-poster";
 /** Each title line shifts this much from the one above, to a random side, in em. */
 const LINE_STEP = 0.3;
+/** The `phone` breakpoint (35rem) in globals.css. */
+const PHONE_UP = "(min-width: 35rem)";
 
 /**
  * Client shell for Contact (brief, act 05 · B): the pinned stage where the poster enters as a
@@ -36,7 +38,10 @@ export function ContactStage({ children }: { children: ReactNode }) {
       const title = root?.querySelector<HTMLElement>("[data-contact-title]");
       const text = root?.querySelector<HTMLElement>("[data-contact-title-text]");
       if (!root || !stage || !poster || !edge || !title || !text) return;
-      const items = [...root.querySelectorAll<HTMLElement>("[data-contact-item]")];
+      // The first item (the eyebrow and the ⚠ mark, top right) is never hidden: it is what the blade
+      // uncovers first, so the yellow carries a signal while the title still waits for the cut.
+      // Hidden too, the poster swept in empty for over a screen of scroll.
+      const [, ...items] = root.querySelectorAll<HTMLElement>("[data-contact-item]");
       // Outside any context on purpose: fired from scroll callbacks that can run while another
       // act's context is being built, `contextSafe` would nest the contexts in a loop. The glitch
       // removes its copies when it ends; the cleanup ends a running one early.
@@ -110,7 +115,9 @@ export function ContactStage({ children }: { children: ReactNode }) {
           });
           const container = title.parentElement ?? title;
           const padding = parseFloat(getComputedStyle(container).paddingLeft) + parseFloat(getComputedStyle(container).paddingRight);
-          const step = parseFloat(getComputedStyle(title).fontSize) * LINE_STEP;
+          // Below `phone` the title breaks into four or five short lines, and shifting each one
+          // read as broken type ("I AUTOMATE / WHAT / HOLDS YOUR…"): there they stay aligned.
+          const step = window.matchMedia(PHONE_UP).matches ? parseFloat(getComputedStyle(title).fontSize) * LINE_STEP : 0;
           const offsets = lineOffsets(widths, container.clientWidth - padding, step, picks);
           words.forEach((word, i) => gsap.set(word, { x: offsets[lines[i]] }));
         };
