@@ -68,13 +68,18 @@ export function ContactStage({ children }: { children: ReactNode }) {
           if (reveal && isTitleReady(blade.s)) reveal();
         };
 
+        // The pin holds the stage for one screen, but the blade starts as the stage comes up from
+        // the bottom: started with the pin, the stage rose as a full screen of black after the
+        // Stack. Both end together (the blade's 200% from one screen above the pin's start).
+        if (pinned) ScrollTrigger.create({ trigger: stage, start: "top top", end: "+=100%", pin: true });
         const tween = gsap.to(blade, {
           s: BLADE.to,
           ease: "none",
           onUpdate: apply,
           scrollTrigger: {
             trigger: stage,
-            ...(pinned ? { start: "top top", end: "+=100%", pin: true } : { start: "top bottom", end: "top 15%" }),
+            start: "top bottom",
+            end: pinned ? "+=200%" : "top 15%",
             scrub: 0.6,
             // Only for a visitor scrolling past: a page loaded beyond the stage would fire it
             // inside this setup, nesting the glitch's context in the one being built.
