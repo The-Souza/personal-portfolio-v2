@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { inertOutside } from "@/features/header/inert-outside";
 import { useLenis } from "@/lib/scroll/lenis";
 
 const DESKTOP_MIN_WIDTH = 1024;
@@ -12,11 +13,20 @@ export function useDrawer() {
   const [visible, setVisible] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  // Clears the inert page behind the drawer; called before focus goes back to the Menu button,
+  // which sits in the (inert) header, since the effect cleanup only runs after the render.
+  const releasePageRef = useRef<(() => void) | null>(null);
   const lenis = useLenis();
+
+  const releasePage = () => {
+    releasePageRef.current?.();
+    releasePageRef.current = null;
+  };
 
   const close = (returnFocus = true) => {
     // Started here, not only in the effect cleanup, so a menu item's anchor scroll runs right away.
     lenis.start();
+    releasePage();
     setOpen(false);
     if (returnFocus) triggerRef.current?.focus();
   };
@@ -29,10 +39,20 @@ export function useDrawer() {
     lenis.stop();
 
     const panel = panelRef.current;
+    // The page behind stays out of reach, screen readers' virtual cursor included (the focus trap
+    // below only covers Tab). From the drawer's root, so its overlay still closes it on click.
+    const drawerRoot = panel?.parentElement;
+    const releaseThisPage = drawerRoot ? inertOutside(drawerRoot) : null;
+    releasePageRef.current = releaseThisPage;
+    const release = () => {
+      releaseThisPage?.();
+      releasePageRef.current = null;
+    };
     const initial = panel?.querySelector<HTMLElement>('[aria-current="true"]') ?? panel?.querySelector<HTMLElement>(FOCUSABLE);
     initial?.focus();
 
     const closeAndReturnFocus = () => {
+      release();
       setOpen(false);
       triggerRef.current?.focus();
     };
@@ -63,6 +83,7 @@ export function useDrawer() {
     document.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", onResize);
     return () => {
+      release();
       root.style.overflow = previousOverflow;
       lenis.start();
       document.removeEventListener("keydown", onKeyDown);
