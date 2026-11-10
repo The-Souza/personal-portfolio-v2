@@ -109,8 +109,11 @@ export function StackStage({ children }: { children: ReactNode }) {
           timeline.to(board, { ...focus(points[k]), duration: 1, ease: "power2.inOut" }, at);
           timeline.to(live, { strokeDashoffset: total - lengths[k], duration: 1, ease: "power2.inOut" }, at);
           timeline.to(dot, { x: points[k][0], y: points[k][1], duration: 1, ease: "power2.inOut" }, at);
-          timeline.to(body(nodes[k]), { opacity: 1, duration: 0.25 }, at + 0.85);
-          timeline.from(nodes[k].querySelectorAll("li, span.inline-flex, [data-stack-terminal] p"), { opacity: 0, y: 8, stagger: 0.04, duration: 0.25 }, at + 0.9);
+          // The card fills in while the camera lands (it arrives at `at + 1`), so the hold that
+          // follows always shows full-strength text: with a per-tag stagger, a card of 11 tags
+          // finished deep in the hold, and a visitor stopping there saw tags at 1.7:1.
+          timeline.to(body(nodes[k]), { opacity: 1, duration: 0.25 }, at + 0.6);
+          timeline.from(nodes[k].querySelectorAll("li, span.inline-flex, [data-stack-terminal] p"), { opacity: 0, y: 8, stagger: { amount: 0.15 }, duration: 0.2 }, at + 0.65);
           at += 1 + HOLD;
         }
         timeline.to({}, { duration: 0.1 }, at - 0.1);
