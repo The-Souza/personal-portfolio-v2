@@ -45,14 +45,15 @@ export function SpecialShell({
         aria-hidden="true"
         className={cn("h-6 flex-none origin-left", band === "checker" ? "band-checker" : "band-tape")}
       />
-      <div className={cn(WIDTH, "flex min-h-16 items-center")}>
+      {/* Header and footer landmarks, so nothing on the page sits outside one. */}
+      <header className={cn(WIDTH, "flex min-h-16 items-center")}>
         <LogoLink name={texts.logoName} suffix={texts.logoSuffix} label={texts.logoLabel} href={homeHref} />
-      </div>
+      </header>
       <main className={cn(WIDTH, "flex flex-1 flex-wrap items-center gap-x-12 gap-y-10 pt-6 pb-10")}>
         <div className="flex min-w-0 flex-[999_1_32.5rem] flex-col gap-5">{left}</div>
         <div className="flex min-w-0 flex-[1_1_21.25rem] flex-col gap-6">{right}</div>
       </main>
-      <div data-special-item className={cn(WIDTH, "pb-8")}>
+      <footer data-special-item className={cn(WIDTH, "pb-8")}>
         <HudFrame>
           <HudFrameRow>
             <p className="font-mono text-xs leading-relaxed tracking-wider uppercase">
@@ -63,7 +64,7 @@ export function SpecialShell({
             <HudMark>{texts.mark}</HudMark>
           </HudFrameRow>
         </HudFrame>
-      </div>
+      </footer>
     </div>
   );
 }
