@@ -35,7 +35,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       type="button"
       onClick={toggle}
       className={cn(
-        "inline-flex items-center gap-2.5 border border-field-border px-2.5 py-2 font-mono text-xs leading-none tracking-widest text-foreground uppercase transition-colors duration-150 ease-entrance hover:border-primary hover:text-primary-accessible",
+        "tap-area inline-flex items-center gap-2.5 border border-field-border px-2.5 py-2 font-mono text-xs leading-none tracking-widest text-foreground uppercase transition-colors duration-150 ease-entrance hover:border-primary hover:text-primary-accessible",
         className,
       )}
     >

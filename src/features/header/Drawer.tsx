@@ -99,7 +99,7 @@ export function Drawer({ open, visible, activeIndex, panelRef, onClose, onNaviga
           <button
             type="button"
             onClick={() => onClose()}
-            className="border border-field-border px-3 py-2.25 font-mono text-xs leading-none tracking-widest uppercase transition-colors duration-150 ease-entrance hover:border-primary hover:text-primary-accessible"
+            className="tap-area border border-field-border px-3 py-2.25 font-mono text-xs leading-none tracking-widest uppercase transition-colors duration-150 ease-entrance hover:border-primary hover:text-primary-accessible"
           >
             <span aria-hidden="true">[ </span>
             {t("menuClose")}

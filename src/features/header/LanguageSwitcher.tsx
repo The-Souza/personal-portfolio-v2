@@ -143,7 +143,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
           hrefLang={locale}
           aria-current={locale === current ? "true" : undefined}
           onClick={(event) => handleClick(event, locale)}
-          className="px-2.25 py-2 font-mono text-xs leading-none tracking-widest text-muted-foreground uppercase transition-colors duration-150 ease-entrance hover:text-primary-accessible aria-current:bg-primary aria-current:text-primary-foreground"
+          className="tap-area px-2.25 py-2 font-mono text-xs leading-none tracking-widest text-muted-foreground uppercase transition-colors duration-150 ease-entrance hover:text-primary-accessible aria-current:bg-primary aria-current:text-primary-foreground"
         >
           {locale}
         </a>
