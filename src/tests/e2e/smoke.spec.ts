@@ -23,7 +23,9 @@ test("uma rota que não existe mostra o 404 com status real, sem erro e no mesmo
   const errors = collectErrors(page);
   const response = await page.goto("/pt/rota-que-nao-existe");
   expect(response?.status()).toBe(404);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Essa rota saiu do mapa.");
+  // The entrance splits the title into an sr-only copy plus aria-hidden words, so its text
+  // content doubles once hydrated; the accessible name is what reads.
+  await expect(page.getByRole("heading", { level: 1 })).toHaveAccessibleName("Essa rota saiu do mapa.");
   // The proxy serves the 404 route's HTML; the address bar keeps what the visitor typed.
   await page.waitForTimeout(2000);
   expect(new URL(page.url()).pathname).toBe("/pt/rota-que-nao-existe");
