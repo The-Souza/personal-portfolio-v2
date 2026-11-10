@@ -50,7 +50,8 @@ export function ContactAct() {
               <p data-contact-item className="max-w-[56ch] text-sm text-muted-foreground">
                 {t("reassurance")}
               </p>
-              <div data-contact-item className="flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-sm tracking-wider">
+              {/* On touch screens the rows open up so the links' 44px tap areas (`tap-area`) don't overlap. */}
+              <div data-contact-item className="flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-sm tracking-wider pointer-coarse:gap-y-7.5">
                 <CopyEmail email={SITE.email} />
                 <ActionLink href={SITE.companyUrl} external bare>
                   {t("site")}

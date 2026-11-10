@@ -12,7 +12,7 @@ export function CopyEmail({ email }: { email: string }) {
       <span ref={textRef} className="select-all">
         {email}
       </span>
-      <button type="button" onClick={copy} className="border-b border-current font-mono text-xs leading-none tracking-wider uppercase">
+      <button type="button" onClick={copy} className="tap-area border-b border-current font-mono text-xs leading-none tracking-wider uppercase">
         <span aria-hidden="true">[ </span>
         {t("copy")}
         <span aria-hidden="true"> ]</span>

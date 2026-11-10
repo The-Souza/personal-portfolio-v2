@@ -175,6 +175,20 @@
   mask-image: linear-gradient(to left, transparent 4.5rem, black 6.5rem);
 }
 
+/* On touch screens, grows a small control's tap target to 44px tall without moving anything: an
+   invisible box centered on it (the inset is a percentage of the control's own height). */
+@utility tap-area {
+  @media (pointer: coarse) {
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      inset-block: min(0px, calc((100% - 2.75rem) / 2));
+    }
+  }
+}
+
 /* Receding states (a track card away from the center, a stack node the trace has passed). GSAP
    tweens `--dim` from 0 to 1; the floor is the theme's `--recede`, so a theme switch re-dims at
    once and the text keeps 4.5:1 in each theme. `recede-content` dims the children only, through

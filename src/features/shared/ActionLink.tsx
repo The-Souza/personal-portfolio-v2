@@ -21,7 +21,7 @@ export function ActionLink({ href, children, external, bare, className }: Action
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
       className={cn(
-        "text-label whitespace-nowrap text-primary-accessible uppercase transition-colors duration-150 ease-entrance hover:text-foreground in-[.alert]:hover:text-muted-foreground",
+        "tap-area text-label whitespace-nowrap text-primary-accessible uppercase transition-colors duration-150 ease-entrance hover:text-foreground in-[.alert]:hover:text-muted-foreground",
         className,
       )}
     >

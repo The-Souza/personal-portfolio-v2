@@ -76,7 +76,7 @@ export function SiteHeader() {
               aria-expanded={open}
               aria-controls="site-drawer"
               onClick={openDrawer}
-              className="inline-flex items-center gap-2.5 border border-field-border px-3 py-2.25 font-mono text-xs leading-none tracking-widest text-foreground uppercase transition-colors duration-150 ease-entrance hover:border-primary hover:text-primary-accessible lg:hidden"
+              className="tap-area inline-flex items-center gap-2.5 border border-field-border px-3 py-2.25 font-mono text-xs leading-none tracking-widest text-foreground uppercase transition-colors duration-150 ease-entrance hover:border-primary hover:text-primary-accessible lg:hidden"
             >
               {t("menu")}
               <span aria-hidden="true" className="flex flex-col gap-0.75">

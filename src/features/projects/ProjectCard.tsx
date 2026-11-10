@@ -66,7 +66,8 @@ export function ProjectCard({ project }: { project: Project }) {
               />
             </div>
           )}
-          <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-1">
+          {/* Rows open up on touch screens, so the links' 44px tap areas don't overlap. */}
+          <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-1 pointer-coarse:gap-y-7.5">
             {project.links.map((link) => (
               <ActionLink key={link.href} href={link.href} external>
                 {t(`links.${link.label}`)}
