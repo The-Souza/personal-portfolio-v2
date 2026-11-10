@@ -11,7 +11,7 @@ export function ClientsBlock() {
     <section
       data-project-card
       aria-label={t("aria")}
-      className={`brackets relative w-full max-w-270 p-2.5 track:w-[88vw] track:flex-none ${CARD_ACTIVE}`}
+      className={`brackets recede relative w-full max-w-270 p-2.5 track:w-[88vw] track:flex-none ${CARD_ACTIVE}`}
     >
       <div className="chamfer relative flex flex-col gap-4.5 bg-card p-6.5 [--cut:1.25rem]">
         <div className="flex flex-wrap items-center justify-between gap-2.5">

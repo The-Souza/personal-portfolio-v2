@@ -175,6 +175,19 @@
   mask-image: linear-gradient(to left, transparent 4.5rem, black 6.5rem);
 }
 
+/* Receding states (a track card away from the center, a stack node the trace has passed). GSAP
+   tweens `--dim` from 0 to 1; the floor is the theme's `--recede`, so a theme switch re-dims at
+   once and the text keeps 4.5:1 in each theme. `recede-content` dims the children only, through
+   `filter` so it multiplies with the opacity GSAP sets on them. */
+@utility recede {
+  opacity: calc(1 - var(--dim, 0) * (1 - var(--recede)));
+}
+@utility recede-content {
+  & > * {
+    filter: opacity(calc(1 - var(--dim, 0) * (1 - var(--recede))));
+  }
+}
+
 @utility dot-grid {
   background-image: radial-gradient(circle, var(--border) 1px, transparent 1.4px);
   background-size: 0.875rem 0.875rem;
@@ -265,6 +278,9 @@
   --live: #d1f700;
   --live-foreground: #07080c;
   --radius: 0rem;
+  /* How far a receding element dims (see `recede`): the lowest opacity at which its faintest text
+     still passes 4.5:1. Day's accent ink on a card has little headroom (4.88:1 at full). */
+  --recede: 0.96;
 }
 
 /* Night */
@@ -308,6 +324,8 @@
   --hot-accessible: #ff5c8d;
   --live: #d1f700;
   --live-foreground: #07080c;
+  /* Muted ink on a card is the limit: 4.5:1 down to 0.81. */
+  --recede: 0.82;
 }
 
 /* Alert. The special pages (404, error) carry it up to <html>: the reserved scrollbar gutter and

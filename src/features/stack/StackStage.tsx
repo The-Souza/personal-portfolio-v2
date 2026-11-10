@@ -13,11 +13,6 @@ const HOLD = 0.55;
 const FIRST_HOLD = 0.45;
 const AI_LINES_KEY = "stack-ai-lines";
 /**
- * A node the trace has passed recedes, but stays readable: at 0.8 its faintest text (muted on
- * void) still passes 4.5:1, which it lost at 0.4 (about 2:1).
- */
-const PASSED_OPACITY = 0.8;
-/**
  * Scroll per card, in screens. The brief's 72% held the act for five screens, over a third of the
  * page; at this rate the seven cards take about two.
  */
@@ -104,11 +99,13 @@ export function StackStage({ children }: { children: ReactNode }) {
         // until the trace arrives (faded, it was text below 4.5:1). The frames and the dashed
         // trace still show the circuit ahead.
         nodes.slice(1).forEach((node) => gsap.set(body(node), { opacity: 0 }));
+        // A node the trace has passed recedes to the theme's floor (`recede-content` in StackAct).
+        gsap.set(nodes, { "--dim": 0 });
 
         const timeline = gsap.timeline();
         let at = FIRST_HOLD;
         for (let k = 1; k < points.length; k++) {
-          timeline.to(body(nodes[k - 1]), { opacity: PASSED_OPACITY, duration: 0.3 }, at + 0.05);
+          timeline.to(nodes[k - 1], { "--dim": 1, duration: 0.3 }, at + 0.05);
           timeline.to(board, { ...focus(points[k]), duration: 1, ease: "power2.inOut" }, at);
           timeline.to(live, { strokeDashoffset: total - lengths[k], duration: 1, ease: "power2.inOut" }, at);
           timeline.to(dot, { x: points[k][0], y: points[k][1], duration: 1, ease: "power2.inOut" }, at);

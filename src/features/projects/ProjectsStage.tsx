@@ -26,9 +26,6 @@ interface CardState {
   lit: boolean;
 }
 
-/** The cards away from the center recede, but stay readable (4.5:1 on their faintest text). */
-const INACTIVE_OPACITY = 0.8;
-
 /**
  * Client shell for Projects (brief, act 03 · A): the pinned horizontal track on wide screens,
  * the vertical list on phones and short screens, the image reveals, the title scramble and
@@ -109,7 +106,8 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
         cards.forEach((state, i) => {
           const active = i === activeIndex;
           state.card.dataset.active = String(active);
-          gsap.to(state.card, { opacity: active ? 1 : INACTIVE_OPACITY, duration: 0.25, overwrite: "auto" });
+          // The cards away from the center recede down to the theme's floor (`recede` in globals.css).
+          gsap.to(state.card, { "--dim": active ? 0 : 1, duration: 0.25, overwrite: "auto" });
         });
         if (counter && activeIndex >= 0) counter.textContent = counterLabel(activeIndex, cards.length);
       };
@@ -117,7 +115,7 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
       const buildTrack = () => {
         // Both axes: the track moves by transform, so nothing in here should scroll on its own.
         gsap.set(viewport, { overflow: "hidden" });
-        gsap.set(cards.map((state) => state.card), { opacity: INACTIVE_OPACITY });
+        gsap.set(cards.map((state) => state.card), { "--dim": 1 });
         cards.forEach((state) => restore(state, false));
 
         // A card taller than the space between the title and the progress bar (the clients block
@@ -300,8 +298,8 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
             // The active-card fades start in scroll callbacks, outside the context, so the revert
             // misses them: without this the list (phone width) keeps the track's dimmed cards.
             for (const { card } of cards) {
-              gsap.killTweensOf(card, "opacity");
-              card.style.opacity = "";
+              gsap.killTweensOf(card, "--dim");
+              card.style.removeProperty("--dim");
               delete card.dataset.active;
             }
             // Reverting the hold timeline can leave the first card's terminal lines at their hidden

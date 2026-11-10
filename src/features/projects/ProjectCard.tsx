@@ -20,7 +20,7 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <article
       data-project-card
-      className={`brackets relative isolate w-full max-w-245 p-2.5 track:w-[min(84vw,100vw-13rem)] track:flex-none ${CARD_ACTIVE}`}
+      className={`brackets recede relative isolate w-full max-w-245 p-2.5 track:w-[min(84vw,100vw-13rem)] track:flex-none ${CARD_ACTIVE}`}
     >
       {project.ghost && (
         // The v1 ghost sits behind the card and only shows after the reveal glitch.

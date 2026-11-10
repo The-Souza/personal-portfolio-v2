@@ -8,7 +8,7 @@ import { SectionHeading } from "@/features/shared/SectionHeading";
 import { StackStage } from "@/features/stack/StackStage";
 import { pad2 } from "@/lib/format";
 
-const NODE_CLASS = "flex flex-col gap-4 bg-background p-7 in-data-compact:gap-2.5 in-data-compact:px-4.5 in-data-compact:py-4";
+const NODE_CLASS = "recede-content flex flex-col gap-4 bg-background p-7 in-data-compact:gap-2.5 in-data-compact:px-4.5 in-data-compact:py-4";
 const TITLE_CLASS = "font-heading text-heading in-data-compact:text-2xl";
 
 /**
