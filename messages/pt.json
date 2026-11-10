@@ -29,8 +29,8 @@
     "theme": {
       "night": "Noite",
       "day": "Dia",
-      "toNight": "Mudar para o tema Noite",
-      "toDay": "Mudar para o tema Dia"
+      "toNight": "Dia, mudar para o tema Noite",
+      "toDay": "Noite, mudar para o tema Dia"
     }
   },
   "boot": {
@@ -271,6 +271,9 @@
     "copy": "Copiar e-mail",
     "copied": "> copiado: ok",
     "selected": "> selecionado: ctrl+c"
+  },
+  "shared": {
+    "newTab": "(abre em nova aba)"
   },
   "footer": {
     "navAria": "Rodapé",

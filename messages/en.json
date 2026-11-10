@@ -29,8 +29,8 @@
     "theme": {
       "night": "Night",
       "day": "Day",
-      "toNight": "Switch to the Night theme",
-      "toDay": "Switch to the Day theme"
+      "toNight": "Day, switch to the Night theme",
+      "toDay": "Night, switch to the Day theme"
     }
   },
   "boot": {
@@ -271,6 +271,9 @@
     "copy": "Copy email",
     "copied": "> copied: ok",
     "selected": "> selected: ctrl+c"
+  },
+  "shared": {
+    "newTab": "(opens in a new tab)"
   },
   "footer": {
     "navAria": "Footer",

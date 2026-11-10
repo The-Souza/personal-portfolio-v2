@@ -2,6 +2,7 @@ import { Terminal, type TerminalLine } from "@/components/Terminal";
 import type { Project } from "@/content/projects";
 import { ProjectMedia, ProjectStack } from "@/features/projects/ProjectMedia";
 import { ActionLink } from "@/features/shared/ActionLink";
+import { NewTabHint } from "@/features/shared/NewTabHint";
 import { useTranslations } from "next-intl";
 
 /** Active state (set by ProjectsStage): bright corners and a cyan glow. */
@@ -69,6 +70,7 @@ export function ProjectCard({ project }: { project: Project }) {
             {project.links.map((link) => (
               <ActionLink key={link.href} href={link.href} external>
                 {t(`links.${link.label}`)}
+                <NewTabHint />
               </ActionLink>
             ))}
             {project.privateRepo && (

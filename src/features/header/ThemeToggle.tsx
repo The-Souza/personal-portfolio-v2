@@ -39,6 +39,7 @@ export function ThemeToggle({ className }: { className?: string }) {
         className,
       )}
     >
+      {/* The name starts with the word on screen (WCAG 2.5.3): voice control users say "Noite". */}
       <span className="sr-only dark:hidden">{t("toNight")}</span>
       <span className="hidden dark:block dark:sr-only">{t("toDay")}</span>
       <span aria-hidden="true">

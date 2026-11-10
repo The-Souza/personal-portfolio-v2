@@ -7,6 +7,7 @@ import { ContactStage } from "@/features/contact/ContactStage";
 import { CopyEmail } from "@/features/contact/CopyEmail";
 import { ActionLink } from "@/features/shared/ActionLink";
 import { Container } from "@/features/shared/Container";
+import { NewTabHint } from "@/features/shared/NewTabHint";
 
 /**
  * Contact (brief, act 05 · B): the Alert poster over a dark stage. On the client it enters as a
@@ -42,6 +43,7 @@ export function ContactAct() {
               <div data-contact-item className="flex flex-wrap items-center gap-4">
                 <Button href={whatsappUrl(SITE.whatsapp, t("whatsappMessage"))} variant="solid" target="_blank" rel="noopener noreferrer">
                   {t("cta")}
+                  <NewTabHint />
                 </Button>
                 <Button href={mailtoUrl(SITE.email, t("emailSubject"))}>{t("email")}</Button>
               </div>
@@ -52,12 +54,15 @@ export function ContactAct() {
                 <CopyEmail email={SITE.email} />
                 <ActionLink href={SITE.companyUrl} external bare>
                   {t("site")}
+                  <NewTabHint />
                 </ActionLink>
                 <ActionLink href={SITE.linkedinUrl} external bare>
                   {t("linkedin")}
+                  <NewTabHint />
                 </ActionLink>
                 <ActionLink href={SITE.githubUrl} external bare>
                   {t("github")}
+                  <NewTabHint />
                 </ActionLink>
               </div>
             </Container>
