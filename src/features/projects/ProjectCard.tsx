@@ -1,6 +1,6 @@
 import { Terminal, type TerminalLine } from "@/components/Terminal";
 import type { Project } from "@/content/projects";
-import { ProjectMedia } from "@/features/projects/ProjectMedia";
+import { ProjectMedia, ProjectStack } from "@/features/projects/ProjectMedia";
 import { ActionLink } from "@/features/shared/ActionLink";
 import { useTranslations } from "next-intl";
 
@@ -34,10 +34,12 @@ export function ProjectCard({ project }: { project: Project }) {
           </p>
         </div>
       )}
-      <div className="chamfer relative grid bg-card [--cut:1.25rem] rail:grid-cols-2">
+      {/* One column: screenshot, text, stack. From `rail` up: screenshot over stack on the left,
+          the text spanning both rows on the right. */}
+      <div className="chamfer relative grid bg-card [--cut:1.25rem] rail:grid-cols-2 rail:grid-rows-[auto_1fr]">
         <ProjectMedia project={project} />
 
-        <div className="flex min-w-0 flex-col gap-3 px-7 pt-6.5 pb-7">
+        <div className="flex min-w-0 flex-col gap-3 px-7 pt-6.5 pb-7 rail:col-start-2 rail:row-span-2 rail:row-start-1">
           <p className="font-mono text-eyebrow text-primary-accessible uppercase">
             {project.code} · {t(item("category"))}
           </p>
@@ -76,6 +78,8 @@ export function ProjectCard({ project }: { project: Project }) {
             )}
           </div>
         </div>
+
+        <ProjectStack project={project} />
 
         {/* Curtain that opens before the reveal; collapsed in the server HTML so nothing is hidden without JS. */}
         <span
