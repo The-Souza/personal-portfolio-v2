@@ -1,6 +1,7 @@
 import { PROJECTS } from "@/content/projects";
 import { ProjectCard } from "@/features/projects/ProjectCard";
 import { ProjectsStage } from "@/features/projects/ProjectsStage";
+import { counterLabel } from "@/features/projects/track";
 import { Container } from "@/features/shared/Container";
 import { SectionHeading } from "@/features/shared/SectionHeading";
 import { useTranslations } from "next-intl";
@@ -53,9 +54,9 @@ export function ProjectsAct() {
               className="segments block h-full w-0 text-foreground"
             />
           </div>
-          <span data-projects-counter>
-            01 / {String(PROJECTS.length + 1).padStart(2, "0")}
-          </span>
+          {/* Counts the track's cards, like ProjectsStage does on the client: add one when the
+              ClientsBlock (also a `data-project-card`) comes back. */}
+          <span data-projects-counter>{counterLabel(0, PROJECTS.length)}</span>
         </Container>
       </ProjectsStage>
     </section>
