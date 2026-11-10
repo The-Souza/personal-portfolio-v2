@@ -52,6 +52,7 @@ function onResize() {
   // vh, need it.
   const heightCounts = ScrollTrigger.isTouch !== 1 && window.innerHeight !== height;
   if (window.innerWidth === width && nextVariant === variant && !heightCounts) return;
+  const bandChanged = nextVariant !== variant;
   width = window.innerWidth;
   height = window.innerHeight;
   variant = nextVariant;
@@ -59,7 +60,12 @@ function onResize() {
   else {
     settling = true;
     for (const listener of startListeners) listener();
-    run();
+    // A band change also swaps the acts through gsap.matchMedia, whose media listeners fire after
+    // this event, in the same frame. Rebuilt now, the acts were measured in the old band and the
+    // ScrollKeeper restored the place before the swap changed every height: the page drifted
+    // into another act. The next animation frame runs after the swap.
+    if (bandChanged) requestAnimationFrame(run);
+    else run();
   }
   window.clearTimeout(timer);
   timer = window.setTimeout(() => {

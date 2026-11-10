@@ -61,6 +61,18 @@ describe("relayout", () => {
     expect(rebuild).toHaveBeenCalledTimes(2);
   });
 
+  it("numa troca de faixa, avisa o início na hora e remonta só no frame seguinte, depois do matchMedia", async () => {
+    const { onRelayout, onRelayoutStart, registerRelayout } = await load();
+    const calls: string[] = [];
+    onRelayoutStart(() => calls.push("start"));
+    registerRelayout(first, () => calls.push("rebuild"));
+    onRelayout(() => calls.push("after"));
+    setWidth(700);
+    expect(calls).toEqual(["start"]);
+    vi.advanceTimersToNextFrame();
+    expect(calls).toEqual(["start", "rebuild", "after"]);
+  });
+
   it("não remonta de novo quando o tamanho parou no primeiro resize", async () => {
     const { registerRelayout } = await load();
     const rebuild = vi.fn();
