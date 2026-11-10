@@ -59,7 +59,7 @@
     "eyebrow": "// dev_web + automação · osasco, sp",
     "firstName": "Guilherme",
     "lastName": "Campos",
-    "bio": "Sites, sistemas e automações que tiram o trabalho manual da operação de pequenas e médias empresas. Sócio-fundador e desenvolvedor da The Souza Tech, com Next.js, React, TypeScript e Python e testes desde o início.",
+    "bio": "Sites, sistemas e automações que tiram o trabalho manual da operação de pequenas e médias empresas. Sou sócio-fundador e desenvolvedor da The Souza Tech. Numa transportadora, o envio das fotos de comprovante passou de horas para minutos.",
     "viewProjects": "Ver projetos",
     "contact": "Falar com a The Souza Tech",
     "now": {
@@ -97,8 +97,8 @@
         "description": "Estágio em desenvolvimento web: modernização incremental de um sistema usado em todo o estado, integrado ao legado em C# ASP.NET, APIs internas e DB2."
       },
       {
-        "year": "APP",
-        "code": "// marco_02 · transportadora",
+        "year": "2026",
+        "code": "// marco_02 · transportadora · jun",
         "title": "O app das fotos",
         "description": "Consulta de notas em lote, leitura do número por OCR e envio pela API. O envio das fotos passou de horas para minutos."
       },
@@ -248,13 +248,13 @@
           "status": "ok"
         }
       ],
-      "note": "Elas aceleram o trabalho, mas as decisões continuam sendo minhas. Desenvolvo com TDD e reviso tudo o que elas produzem.",
+      "note": "Desenvolvo com TDD e reviso tudo o que elas produzem.",
       "practices": "TDD · Clean Code · SRP · acessibilidade · Core Web Vitals · SEO técnico e local · GA4 com consentimento (LGPD)"
     }
   },
   "contact": {
     "aria": "Contato",
-    "eyebrow": "// contato · sinal aberto",
+    "eyebrow": "// contato",
     "warning": "sinal aberto",
     "title": "Automatizo o que trava a operação.",
     "lead": "Sites, sistemas e automações para pequenas e médias empresas.",
@@ -262,7 +262,7 @@
     "email": "Mandar um e-mail",
     "whatsappMessage": "Olá! Vim pelo portfólio do Guilherme e quero conversar sobre um projeto.",
     "emailSubject": "Projeto via portfólio",
-    "reassurance": "Atendo de forma remota ou presencial, dependendo da localidade, e respondo em até 3 dias úteis.",
+    "reassurance": "Me conte como a operação funciona hoje e onde ela trava. Respondo em até 3 dias úteis; o atendimento é remoto ou presencial, dependendo da localidade.",
     "site": "Site da The Souza Tech",
     "linkedin": "LinkedIn",
     "github": "GitHub"

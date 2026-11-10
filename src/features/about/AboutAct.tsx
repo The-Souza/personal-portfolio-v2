@@ -51,7 +51,7 @@ export function AboutAct() {
               <li key={milestone.code} data-about="milestone">
                 <BracketPanel className="grid grid-cols-[minmax(0,auto)_minmax(0,1fr)] items-start gap-6 p-5.5 max-about:grid-cols-1">
                   {/* The same width on every milestone (a year's, in em so it scales with the
-                      clamp): a narrower label like "APP" would pull its text to the left. */}
+                      clamp): a narrower label would pull its text to the left. */}
                   {/* Read by screen readers too: without the year the timeline loses its point. */}
                   <p
                     data-about="year"

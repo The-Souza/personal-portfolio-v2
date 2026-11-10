@@ -59,7 +59,7 @@
     "eyebrow": "// web_dev + automation · osasco, brazil",
     "firstName": "Guilherme",
     "lastName": "Campos",
-    "bio": "Websites, systems and automations that take the manual work out of small and mid-sized businesses. Co-founder and developer at The Souza Tech, with Next.js, React, TypeScript and Python and tests from day one.",
+    "bio": "Websites, systems and automations that take the manual work out of small and mid-sized businesses. I'm co-founder and developer at The Souza Tech. At a trucking company, sending the proof-of-delivery photos went from hours to minutes.",
     "viewProjects": "View projects",
     "contact": "Talk to The Souza Tech",
     "now": {
@@ -97,8 +97,8 @@
         "description": "Web development internship: incremental modernization of a system used across the state of São Paulo, integrated with legacy C# ASP.NET, internal APIs and DB2."
       },
       {
-        "year": "APP",
-        "code": "// milestone_02 · trucking company",
+        "year": "2026",
+        "code": "// milestone_02 · trucking company · jun",
         "title": "The photo app",
         "description": "Batch invoice lookup, OCR for the invoice number and batch upload through the API. Sending the photos went from hours to minutes."
       },
@@ -248,13 +248,13 @@
           "status": "ok"
         }
       ],
-      "note": "They speed up the work, but the decisions are still mine. I build with TDD and review everything they produce.",
+      "note": "I build with TDD and review everything they produce.",
       "practices": "TDD · Clean Code · SRP · accessibility · Core Web Vitals · technical & local SEO · consent-based GA4 (LGPD)"
     }
   },
   "contact": {
     "aria": "Contact",
-    "eyebrow": "// contact · signal open",
+    "eyebrow": "// contact",
     "warning": "signal open",
     "title": "I automate what holds your operation back.",
     "lead": "Websites, systems and automations for small and mid-sized businesses.",
@@ -262,7 +262,7 @@
     "email": "Send an email",
     "whatsappMessage": "Hi! I found Guilherme's portfolio and would like to talk about a project.",
     "emailSubject": "Project via portfolio",
-    "reassurance": "I work remotely or on site, depending on where you are, and reply within 3 business days.",
+    "reassurance": "Tell me how your operation runs today and where it gets stuck. I reply within 3 business days; I work remotely or on site, depending on where you are.",
     "site": "The Souza Tech website",
     "linkedin": "LinkedIn",
     "github": "GitHub"
