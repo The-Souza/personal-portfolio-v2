@@ -85,7 +85,7 @@
       "caption": "// dev_guilherme · osasco, brazil"
     },
     "paragraphs": [
-      "I started at CREA-SP, modernizing a large institutional system without breaking what already worked.",
+      "My first job as a developer was an internship at CREA-SP, in my last semester of college, modernizing a large institutional system without breaking what already worked.",
       "Later I spent a few days helping at my mother's trucking company (she's now my business partner) and built an app that cut the time to send proof-of-delivery photos from hours to minutes, with hundreds a day in peak season.",
       "That project made me see automation as a service and led to The Souza Tech, where I handle the code, the deployment and the direct conversation with clients."
     ],
@@ -118,8 +118,8 @@
       },
       {
         "value": "3",
-        "label": "years as a dev",
-        "note": "since 2023"
+        "label": "years coding",
+        "note": "since college, in 2023"
       }
     ]
   },
@@ -157,19 +157,19 @@
       "billwise": {
         "category": "fullstack",
         "title": "BillWise Dashboard",
-        "description": "Personal finance management with shared and isolated workspaces, role-based permissions, installments, budgets, analytics, cron-based recurrences, CSV/XLSX import and Turnstile.",
+        "description": "Household finances in one place: everyone gets their own space, the family shares bills and budgets, and installments and recurring bills log themselves, with CSV/XLSX spreadsheet import. Under the hood: role-based permissions, cron-based recurrences and bot protection with Turnstile.",
         "result": "In production and used by my family. 723 tests, TDD, CI on GitHub Actions and Git Flow."
       },
       "souzaTech": {
         "category": "company website",
         "title": "The Souza Tech",
-        "description": "Lead capture with a thank-you page, consent-based GA4, local SEO with structured data and 70+ tests. Git Flow with versioned releases.",
+        "description": "The site takes quote requests, sends whoever submits one to a thank-you page and is ready for local searches (local SEO with structured data). Visits are only measured with the visitor's consent (GA4). 70+ tests and versioned releases with Git Flow.",
         "result": "Currently at v1.5.1."
       },
       "souzaTransportes": {
         "category": "corporate website",
         "title": "The Souza Transportes",
-        "description": "Scroll-driven animated story, respects prefers-reduced-motion, content visible without JavaScript, video that skips slow connections and WhatsApp quotes with a prefilled message.",
+        "description": "The site tells the trucking company's story as you scroll and leads straight to a WhatsApp quote, with the message already written. It works on slow connections (the video doesn't load) and without JavaScript, and respects visitors who prefer less motion.",
         "result": "A project for the Souza group, with AI-generated images."
       }
     }

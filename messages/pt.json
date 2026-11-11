@@ -85,7 +85,7 @@
       "caption": "// dev_guilherme · osasco, sp"
     },
     "paragraphs": [
-      "Comecei no CREA-SP, modernizando um sistema institucional de grande porte sem quebrar o que já funcionava.",
+      "Meu primeiro trabalho como dev foi um estágio no CREA-SP, no último semestre da faculdade, modernizando um sistema institucional de grande porte sem quebrar o que já funcionava.",
       "Depois, passei alguns dias ajudando na transportadora da minha mãe, hoje minha sócia, e criei um app que reduziu de horas para minutos o envio das fotos de comprovantes, que chega a centenas por dia conforme a época.",
       "Esse projeto me fez enxergar a automação como serviço e levou à The Souza Tech, onde cuido do código, da publicação e da conversa direta com quem contrata."
     ],
@@ -118,8 +118,8 @@
       },
       {
         "value": "3",
-        "label": "anos como dev",
-        "note": "desde 2023"
+        "label": "anos programando",
+        "note": "desde a faculdade, em 2023"
       }
     ]
   },
@@ -157,19 +157,19 @@
       "billwise": {
         "category": "fullstack",
         "title": "BillWise Dashboard",
-        "description": "Gestão financeira pessoal com workspaces compartilhados e isolados, permissões por perfil, parcelamentos, orçamentos, analytics, recorrências com cron, importação CSV/XLSX e Turnstile.",
+        "description": "As finanças da casa num lugar só: cada pessoa tem seu espaço, a família divide contas e orçamentos, e parcelas e contas fixas se lançam sozinhas, com importação de planilhas CSV/XLSX. Por baixo: permissões por perfil, recorrências com cron e proteção contra robôs com Turnstile.",
         "result": "Em produção e usado pela família. 723 testes, TDD, CI no GitHub Actions e Git Flow."
       },
       "souzaTech": {
         "category": "site da empresa",
         "title": "The Souza Tech",
-        "description": "Captação de leads com página de agradecimento, GA4 com consentimento, SEO local com dados estruturados e mais de 70 testes. Git Flow com releases versionadas.",
+        "description": "O site recebe os pedidos de orçamento, leva quem enviou para uma página de agradecimento e está preparado para as buscas da região (SEO local com dados estruturados). As visitas só são medidas com o consentimento do visitante (GA4). Mais de 70 testes e releases versionadas com Git Flow.",
         "result": "Hoje na v1.5.1."
       },
       "souzaTransportes": {
         "category": "site institucional",
         "title": "The Souza Transportes",
-        "description": "Narrativa animada na rolagem, respeito a prefers-reduced-motion, conteúdo visível sem JavaScript, vídeo que não carrega em conexões lentas e cotação pelo WhatsApp com mensagem pré-preenchida.",
+        "description": "O site conta a história da transportadora enquanto a pessoa rola a página e leva direto a uma cotação pelo WhatsApp, com a mensagem já escrita. Funciona em conexão lenta (o vídeo não carrega) e sem JavaScript, e respeita quem prefere menos movimento na tela.",
         "result": "Projeto para o grupo Souza, com imagens geradas por IA."
       }
     }
