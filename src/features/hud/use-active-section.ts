@@ -18,7 +18,8 @@ export function useActiveSection() {
         const rect = document.getElementById(id)?.getBoundingClientRect();
         return rect ? { top: rect.top, height: rect.height } : { top: Infinity, height: 0 };
       });
-      const next = resolveActiveSection(boxes, window.innerHeight);
+      const remaining = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+      const next = resolveActiveSection(boxes, window.innerHeight, Math.max(0, remaining));
       setActive((prev) => (prev.index === next.index && prev.progress === next.progress ? prev : next));
     };
 

@@ -12,6 +12,8 @@ import { scramble, splitWords } from "@/lib/motion/text";
 
 const CORNER_OFFSETS = { x: [-24, 24, -24, 24], y: [-24, -24, 24, 24] };
 const INTRO_KEY = "hero-intro";
+/** Timed glitches after the entrance; hover still plays one at any time. */
+const AUTO_GLITCHES = 3;
 
 /**
  * Client shell for the hero (brief, act 01 · A): grid, entrance, name glitch and the scroll crack.
@@ -55,18 +57,38 @@ export function HeroStage({ children }: { children: ReactNode }) {
       const introPlayed = hasPlayed(INTRO_KEY);
       if (!introPlayed) gsap.set(hiddenUntilIntro, { autoAlpha: 0 });
 
-      // Glitch: on entrance, on mouse hover and every 6–11s while visible and the tab is active.
+      // Glitch: on entrance, on mouse hover, and every 6–11s while visible and the tab is active,
+      // up to AUTO_GLITCHES times: flicker that keeps coming back by itself next to the text would
+      // fail WCAG 2.2.2 (Pause, Stop, Hide).
+      // The timer only runs while the name is on screen: off screen it pauses (the observer starts
+      // it again on the way back), and once the glitches are spent it's never armed again.
       let glitchTimer = 0;
       let nameVisible = true;
+      let autoGlitches = 0;
+      let glitchStarted = false;
       const glitch = contextSafe((strength: number) => playGlitch(visual, name, strength));
+      const stopGlitchTimer = () => {
+        window.clearTimeout(glitchTimer);
+        glitchTimer = 0;
+      };
       const scheduleGlitch = () => {
+        glitchStarted = true;
+        stopGlitchTimer();
+        if (autoGlitches >= AUTO_GLITCHES || !nameVisible) return;
         glitchTimer = window.setTimeout(() => {
-          if (nameVisible && !document.hidden) glitch(0.8 + Math.random() * 0.6);
+          glitchTimer = 0;
+          if (!document.hidden) {
+            glitch(0.8 + Math.random() * 0.6);
+            autoGlitches++;
+          }
           scheduleGlitch();
         }, nextGlitchDelay());
       };
       const visibility = new IntersectionObserver(([entry]) => {
         nameVisible = entry.isIntersecting;
+        if (!glitchStarted) return;
+        if (!nameVisible) stopGlitchTimer();
+        else if (!glitchTimer) scheduleGlitch();
       });
       visibility.observe(name);
       const onNameEnter = (event: PointerEvent) => {
@@ -159,7 +181,7 @@ export function HeroStage({ children }: { children: ReactNode }) {
 
       return () => {
         stopWaiting();
-        clearTimeout(glitchTimer);
+        stopGlitchTimer();
         visibility.disconnect();
         name.removeEventListener("pointerenter", onNameEnter);
         scroll.revert();

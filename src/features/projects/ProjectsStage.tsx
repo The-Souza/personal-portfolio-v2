@@ -8,8 +8,10 @@ import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
 import { SPRINGS } from "@/lib/motion/spring";
 import { scramble } from "@/lib/motion/text";
-import { registerRelayout } from "@/lib/motion/relayout";
-import { holdPageHeight } from "@/lib/motion/viewport";
+import { useLenis } from "@/lib/scroll/lenis";
+import { registerRelayout } from "@/lib/scroll/relayout";
+import { settleScrubs } from "@/lib/scroll/scroll-keeper";
+import { holdPageHeight } from "@/lib/scroll/viewport";
 
 interface CardState {
   /** Session key in `played.ts`. */
@@ -25,8 +27,6 @@ interface CardState {
   lit: boolean;
 }
 
-const INACTIVE_OPACITY = 0.4;
-
 /**
  * Client shell for Projects (brief, act 03 · A): the pinned horizontal track on wide screens,
  * the vertical list on phones and short screens, the image reveals, the title scramble and
@@ -34,6 +34,7 @@ const INACTIVE_OPACITY = 0.4;
  */
 export function ProjectsStage({ children }: { children: ReactNode }) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const lenis = useLenis();
 
   useGSAP(
     () => {
@@ -107,7 +108,8 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
         cards.forEach((state, i) => {
           const active = i === activeIndex;
           state.card.dataset.active = String(active);
-          gsap.to(state.card, { opacity: active ? 1 : INACTIVE_OPACITY, duration: 0.25, overwrite: "auto" });
+          // The cards away from the center recede down to the theme's floor (`recede` in globals.css).
+          gsap.to(state.card, { "--dim": active ? 0 : 1, duration: 0.25, overwrite: "auto" });
         });
         if (counter && activeIndex >= 0) counter.textContent = counterLabel(activeIndex, cards.length);
       };
@@ -115,7 +117,7 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
       const buildTrack = () => {
         // Both axes: the track moves by transform, so nothing in here should scroll on its own.
         gsap.set(viewport, { overflow: "hidden" });
-        gsap.set(cards.map((state) => state.card), { opacity: INACTIVE_OPACITY });
+        gsap.set(cards.map((state) => state.card), { "--dim": 1 });
         cards.forEach((state) => restore(state, false));
 
         // A card taller than the space between the title and the progress bar (the clients block
@@ -166,14 +168,22 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
 
         // One pinned ScrollTrigger drives a timeline measured in pixels: a hold on the first card
         // (its terminal lines appear), then for each card a move that centers it and a dwell.
-        const timeline = gsap.timeline({ onUpdate: () => update() });
+        // The first line stays out of it: a visitor stopped at the pin's start saw an empty
+        // terminal on the lit card.
+        // Reverting the timeline (a relayout, or useGSAP's own cleanup when Next hides and shows the
+        // page) renders it back to the start, which runs this `onUpdate`: at progress 0 there's
+        // nothing to update, and the card at the center would be revealed by the teardown itself.
+        const timeline = gsap.timeline({ onUpdate: () => timeline.progress() > 0 && update() });
         timeline.to({}, { duration: hold }, 0);
-        const firstLines = cards[0]?.lines ?? [];
+        const firstLines = cards[0]?.lines.slice(1) ?? [];
         if (firstLines.length) {
           timeline.fromTo(firstLines, { opacity: 0, x: -8 }, { opacity: 1, x: 0, stagger: hold * 0.18, duration: hold * 0.2, ease: "none" }, 0);
         }
+        // Where each card sits at the center, for the keyboard (see `onFocus`).
+        timeline.addLabel("card-0", hold);
         for (let i = 1; i < stops.length; i++) {
           timeline.to(track, { x: stops[i], duration: Math.max(Math.abs(stops[i] - stops[i - 1]), height * 0.2), ease: "power1.inOut" });
+          timeline.addLabel(`card-${i}`);
           timeline.to({}, { duration: dwell });
         }
 
@@ -189,25 +199,52 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
           },
         });
 
-        // The first card opens with the section, before the pin starts.
+        // The first card opens and lights up with the section, before the pin starts. Its image
+        // waits for the pin like the others (`update` reveals it once the track starts to move):
+        // revealed on the way in, the mosaic was over before the card settled on screen.
         const first = cards[0];
         const sectionTop = root.getBoundingClientRect().top;
         if (first) {
           if (sectionTop < height * 0.7) wipeIn(first, true);
           else ScrollTrigger.create({ trigger: root, start: "top 70%", once: true, onEnter: () => wipeIn(first, false) });
-          const light = (instant: boolean) => {
+          const light = () => {
             setActive(0);
             active = 0;
-            reveal(first, instant, false);
           };
-          if (sectionTop < height * 0.35) light(true);
-          else ScrollTrigger.create({ trigger: root, start: "top 35%", once: true, onEnter: () => light(false) });
+          if (sectionTop < height * 0.35) light();
+          else ScrollTrigger.create({ trigger: root, start: "top 35%", once: true, onEnter: light });
         }
 
         // Loaded mid-track (reload, language switch, #hash): jump to the current state, no replay.
         trigger.refresh();
         timeline.progress(trigger.progress);
         if (trigger.progress > 0) update(true);
+
+        // Tabbing into a card: the browser would scroll the clipped viewport sideways to show the
+        // link, around the pin, leaving the card dim and the track offset for good. Instead the page
+        // scrolls to where that card is centered and the card shows at once, as on a mid-track load.
+        const keepTrack = () => {
+          if (viewport.scrollLeft !== 0) viewport.scrollLeft = 0;
+        };
+        const onFocus = (event: FocusEvent) => {
+          keepTrack();
+          // Keyboard focus only: a mouse click on a card's link focuses it too, and jumping the
+          // page to that card's stop would move it right under the pointer as the link opens.
+          if (!(event.target as Element | null)?.matches(":focus-visible")) return;
+          const card = (event.target as Element | null)?.closest("[data-project-card]");
+          const index = cards.findIndex((state) => state.card === card);
+          if (index < 0) return;
+          lenis.jumpTo(trigger.labelToScroll(`card-${index}`));
+          settleScrubs();
+          timeline.progress(trigger.progress);
+          update(true);
+        };
+        viewport.addEventListener("scroll", keepTrack);
+        root.addEventListener("focusin", onFocus);
+        return () => {
+          viewport.removeEventListener("scroll", keepTrack);
+          root.removeEventListener("focusin", onFocus);
+        };
       };
 
       const buildList = () => {
@@ -266,10 +303,14 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
             // The active-card fades start in scroll callbacks, outside the context, so the revert
             // misses them: without this the list (phone width) keeps the track's dimmed cards.
             for (const { card } of cards) {
-              gsap.killTweensOf(card, "opacity");
-              card.style.opacity = "";
+              gsap.killTweensOf(card, "--dim");
+              card.style.removeProperty("--dim");
               delete card.dataset.active;
             }
+            // Reverting the hold timeline can leave the first card's terminal lines at their hidden
+            // start, and a setup that runs again (React's dev double run) would take that as their
+            // original state: the list would then keep the terminal empty.
+            gsap.set(cards[0]?.lines ?? [], { clearProps: "opacity,transform" });
           };
         }
         if (narrow || short) {

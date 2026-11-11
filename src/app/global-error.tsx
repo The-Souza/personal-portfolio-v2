@@ -4,13 +4,17 @@ import { NextIntlClientProvider } from "next-intl";
 import { usePathname } from "next/navigation";
 import en from "../../messages/en.json";
 import pt from "../../messages/pt.json";
-import { ErrorView } from "@/features/special/ErrorView";
+import { ErrorView } from "@/features/special/error/ErrorView";
 import { htmlLang } from "@/i18n/locale";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import "@/app/globals.css";
 
+// Static on purpose, though it puts both catalogs in a chunk every page loads (~17 KB gzipped;
+// Turbopack doesn't tree-shake JSON). This is the last error boundary: loaded lazily, its texts
+// failed exactly when it shows most (a stale tab's ChunkLoadError after a deploy, or offline),
+// and the visitor got a blank page.
 const MESSAGES = { pt, en } as const;
 
 /**

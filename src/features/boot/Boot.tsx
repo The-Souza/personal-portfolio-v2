@@ -8,8 +8,8 @@ import { completeBoot } from "@/features/boot/boot-state";
 import { runBootSequence } from "@/features/boot/boot-sequence";
 import { Container } from "@/features/shared/Container";
 import { gsap, ScrollTrigger } from "@/lib/motion/gsap";
-import { useLenis } from "@/lib/motion/lenis-provider";
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion";
+import { useLenis } from "@/lib/scroll/lenis";
 
 /**
  * Full-screen CRT over the page while it gets ready. The hero renders underneath, so the

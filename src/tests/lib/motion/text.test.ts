@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { gsap } from "@/lib/motion/gsap";
 import { SCRAMBLE_GLYPHS, scramble, scrambleFrame, splitChars, splitWordChars, splitWords } from "@/lib/motion/text";
 
 let el: HTMLParagraphElement;
@@ -122,5 +123,22 @@ describe("scramble", () => {
     const tween = scramble(el, "GUILHERME");
     tween.progress(0.5);
     expect(el.querySelector(".text-primary-accessible")).not.toBeNull();
+  });
+
+  it("volta ao texto final quando a animação é interrompida no meio", () => {
+    const tween = scramble(el, "GUILHERME");
+    tween.progress(0.5);
+    tween.kill();
+    expect(el.textContent).toBe("GUILHERME");
+  });
+
+  it("volta ao texto final quando o contexto que a criou é revertido", () => {
+    let tween: gsap.core.Tween | undefined;
+    const context = gsap.context(() => {
+      tween = scramble(el, "GUILHERME");
+    });
+    tween?.progress(0.5);
+    context.revert();
+    expect(el.textContent).toBe("GUILHERME");
   });
 });

@@ -8,7 +8,7 @@ const stopNavigation = (event: Event) => event.preventDefault();
 async function load() {
   vi.resetModules();
   const { LanguageSwitcher } = await import("@/features/header/LanguageSwitcher");
-  const { markPageReady } = await import("@/lib/motion/page-ready");
+  const { markPageReady } = await import("@/lib/scroll/page-ready");
   const { renderWithIntl } = await import("@/tests/helpers");
   return { LanguageSwitcher, markPageReady, renderWithIntl };
 }

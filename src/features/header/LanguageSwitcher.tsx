@@ -5,6 +5,7 @@ import { requestBootSkip } from "@/features/boot/boot-session";
 import {
   anchorAt,
   consumeScrollAnchor,
+  hashSection,
   localeHref,
   type ScrollAnchor,
   saveScrollAnchor,
@@ -15,8 +16,9 @@ import {
 import { useActiveSection } from "@/features/hud/use-active-section";
 import { routing } from "@/i18n/routing";
 import { ScrollTrigger } from "@/lib/motion/gsap";
-import { onPageReady } from "@/lib/motion/page-ready";
-import { settleScrubs } from "@/lib/motion/scroll-keeper";
+import { landingFor } from "@/lib/scroll/landing";
+import { onPageReady } from "@/lib/scroll/page-ready";
+import { settleScrubs } from "@/lib/scroll/scroll-keeper";
 import { cn } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import { type MouseEvent, useLayoutEffect } from "react";
@@ -61,10 +63,21 @@ export function LanguageSwitcher({ className }: { className?: string }) {
       if (current) saveScrollAnchor(current);
     };
     window.addEventListener("pagehide", saveOnLeave);
+    // A new navigation to `/pt#contact` has the same problem: the browser jumps to the hash on
+    // the server HTML, before the pins exist, and lands acts too early. It goes where a click
+    // on the link would (the section's landing point, e.g. Contact's finished poster).
+    const hashId = anchor ? null : hashSection(window.location.hash, ACT_IDS);
+    const target = () => {
+      if (anchor) {
+        const top = sectionTop(anchor.section);
+        return top === null ? null : scrollTargetFor(anchor, top);
+      }
+      return hashId ? (landingFor(hashId) ?? sectionTop(hashId)) : null;
+    };
     const restore = () => {
-      const top = anchor && sectionTop(anchor.section);
-      if (!anchor || top === null) return;
-      window.scrollTo(0, scrollTargetFor(anchor, top));
+      const y = target();
+      if (y === null) return;
+      window.scrollTo(0, y);
       // Without this the Contact blade would sweep in again after the jump.
       settleScrubs();
     };
@@ -73,7 +86,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
 
     // Before paint, so the acts below (later in the tree) measure what is already on screen.
     restore();
-    if (!anchor) {
+    if (!anchor && !hashId) {
       const frame = requestAnimationFrame(reveal);
       return () => {
         window.removeEventListener("pagehide", saveOnLeave);
@@ -85,19 +98,27 @@ export function LanguageSwitcher({ className }: { className?: string }) {
     // has hydrated, which Next does after the header; until then the offset lands too low (in
     // Contact). So the page stays hidden until then: refresh, restore again and show it, then
     // restore once more after any refresh in the next 2s (the window load event refreshes too).
+    // The visitor's own scroll ends that window at once: a refresh must not pull back someone who
+    // already started moving (a shared `/pt#contact` link shows the page right away).
     let stopListening = 0;
+    const INPUTS = ["wheel", "touchstart", "keydown", "pointerdown"] as const;
+    const stopRestoring = () => {
+      window.clearTimeout(stopListening);
+      ScrollTrigger.removeEventListener("refresh", restore);
+      for (const type of INPUTS) window.removeEventListener(type, stopRestoring);
+    };
     const cancelReady = onPageReady(() => {
       ScrollTrigger.refresh();
       restore();
       reveal();
       ScrollTrigger.addEventListener("refresh", restore);
-      stopListening = window.setTimeout(() => ScrollTrigger.removeEventListener("refresh", restore), 2000);
+      for (const type of INPUTS) window.addEventListener(type, stopRestoring, { passive: true });
+      stopListening = window.setTimeout(stopRestoring, 2000);
     });
     return () => {
       window.removeEventListener("pagehide", saveOnLeave);
       cancelReady();
-      window.clearTimeout(stopListening);
-      ScrollTrigger.removeEventListener("refresh", restore);
+      stopRestoring();
     };
   }, []);
 
@@ -130,7 +151,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
           hrefLang={locale}
           aria-current={locale === current ? "true" : undefined}
           onClick={(event) => handleClick(event, locale)}
-          className="px-2.25 py-2 font-mono text-xs leading-none tracking-widest text-muted-foreground uppercase transition-colors duration-150 ease-entrance hover:text-primary-accessible aria-current:bg-primary aria-current:text-primary-foreground"
+          className="tap-area px-2.25 py-2 font-mono text-xs leading-none tracking-widest text-muted-foreground uppercase transition-colors duration-150 ease-entrance hover:text-primary-accessible aria-current:bg-primary aria-current:text-primary-foreground"
         >
           {locale}
         </a>

@@ -83,15 +83,15 @@ export function AboutStage({ children }: { children: ReactNode }) {
         }
       }
 
-      // Milestone years assemble letter by letter, then settle at 40%.
+      // Milestone years assemble letter by letter at full strength, then settle to the theme's
+      // `--figure-rest` (the `settle` utility).
       for (const [i, milestone] of all("milestone").entries()) {
         const key = `about-year-${i}`;
         const year = milestone.querySelector<HTMLElement>('[data-about="year"]');
         if (!year || skip(key, milestone, 0.75)) continue;
         const split = splitChars(year);
         splits.push(split);
-        // The letters carry the fade now, so the year itself goes back to full opacity.
-        gsap.set(year, { opacity: 1 });
+        gsap.set(year, { "--settle": 0 });
         gsap.set(split.parts, { opacity: 0 });
         ScrollTrigger.create({
           trigger: milestone,
@@ -102,7 +102,7 @@ export function AboutStage({ children }: { children: ReactNode }) {
             gsap
               .timeline()
               .fromTo(split.parts, { opacity: 0, y: "0.3em" }, { opacity: 1, y: 0, stagger: 0.07, ...SPRINGS.FIGURE })
-              .to(split.parts, { opacity: 0.4, duration: 1.2, ease: "power2.inOut" }, "+=0.5");
+              .to(year, { "--settle": 1, duration: 1.2, ease: "power2.inOut" }, "+=0.5");
           },
         });
       }

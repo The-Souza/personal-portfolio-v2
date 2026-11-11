@@ -2,20 +2,20 @@ import { cn } from "@/lib/utils";
 import type { ElementType, ReactNode } from "react";
 
 export interface BracketPanelProps {
-  /** Eyebrow em mono, ex.: "// Projeto atual". */
+  /** Mono eyebrow, e.g. "// Projeto atual". */
   eyebrow?: string;
-  /** Título em negrito da lista (dt). */
-  title?: string;
-  /** Linhas abaixo do título (dd), em `muted-foreground`. */
+  /** Bold title of the list (dt). A node, so it can carry an aria-hidden mark (StatusDot). */
+  title?: ReactNode;
+  /** Lines below the title (dd), in `muted-foreground`. */
   details?: ReactNode[];
-  /** "focus": cantos em `foreground` — o painel que importa na tela. */
+  /** "focus": corners in `foreground` — the panel that matters on the screen. */
   tone?: "default" | "focus";
-  /** Fundo `card`, para quando o painel fica sobre imagem/WebGL. */
+  /** `card` background, for when the panel sits over an image/WebGL. */
   filled?: boolean;
   children?: ReactNode;
   as?: ElementType;
   className?: string;
-  /** Desenha os cantos como 4 elementos (`data-corner`) em vez de fundo, para animá-los um a um. */
+  /** Draws the corners as 4 elements (`data-corner`) instead of a background, to animate them one by one. */
   animatedCorners?: boolean;
 }
 
@@ -26,7 +26,7 @@ const CORNERS = [
   { name: "br", className: "right-0 bottom-0 border-r border-b" },
 ];
 
-/** Caixa de conteúdo marcada só por quatro cantos de 10px. */
+/** Content box marked only by four 10px corners. */
 export function BracketPanel({
   eyebrow,
   title,

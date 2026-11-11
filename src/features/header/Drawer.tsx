@@ -1,6 +1,7 @@
 "use client";
 
 import { BracketPanel } from "@/components/BracketPanel";
+import { StatusDot } from "@/components/HudMarkers";
 import { ACT_IDS } from "@/content/acts";
 import { SITE } from "@/content/site";
 import { LanguageSwitcher } from "@/features/header/LanguageSwitcher";
@@ -99,7 +100,7 @@ export function Drawer({ open, visible, activeIndex, panelRef, onClose, onNaviga
           <button
             type="button"
             onClick={() => onClose()}
-            className="border border-field-border px-3 py-2.25 font-mono text-xs leading-none tracking-widest uppercase transition-colors duration-150 ease-entrance hover:border-primary hover:text-primary-accessible"
+            className="tap-area border border-field-border px-3 py-2.25 font-mono text-xs leading-none tracking-widest uppercase transition-colors duration-150 ease-entrance hover:border-primary hover:text-primary-accessible"
           >
             <span aria-hidden="true">[ </span>
             {t("menuClose")}
@@ -143,7 +144,10 @@ export function Drawer({ open, visible, activeIndex, panelRef, onClose, onNaviga
 
         <div data-drawer-extra className="mt-auto">
           <BracketPanel className="font-mono text-xs leading-relaxed tracking-wider uppercase">
-            <p>{t("status")}</p>
+            <p>
+              <StatusDot />
+              {t("status")}
+            </p>
             {/* One long word: on narrow phones it breaks after the @, and anywhere as a last resort. */}
             <p className="normal-case wrap-anywhere">
               {SITE.email.split("@")[0]}@<wbr />

@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it } from "vitest";
 import { SiteHeader } from "@/features/header/SiteHeader";
-import { ThemeProvider } from "@/features/theme/ThemeProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import { mockMediaQueries } from "@/tests/media-query";
 import messages from "../../../../messages/pt.json";
 
@@ -28,6 +28,15 @@ async function openDrawer() {
   await user.click(menuButton());
   return user;
 }
+
+describe("Pular para o conteúdo", () => {
+  it("é o primeiro link da página e aponta para o conteúdo principal", () => {
+    renderHeader();
+    const [first] = screen.getAllByRole("link");
+    expect(first).toHaveTextContent("Pular para o conteúdo");
+    expect(first).toHaveAttribute("href", "#main");
+  });
+});
 
 describe("Drawer", () => {
   afterEach(() => {

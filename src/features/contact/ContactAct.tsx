@@ -2,10 +2,12 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/Button";
 import { WarningMark } from "@/components/HudMarkers";
 import { SITE } from "@/content/site";
+import { mailtoUrl, whatsappUrl } from "@/features/contact/contact-links";
 import { ContactStage } from "@/features/contact/ContactStage";
 import { CopyEmail } from "@/features/contact/CopyEmail";
 import { ActionLink } from "@/features/shared/ActionLink";
 import { Container } from "@/features/shared/Container";
+import { NewTabHint } from "@/features/shared/NewTabHint";
 
 /**
  * Contact (brief, act 05 · B): the Alert poster over a dark stage. On the client it enters as a
@@ -37,18 +39,31 @@ export function ContactAct() {
               <p data-contact-item className="max-w-[56ch] text-lead text-muted-foreground">
                 {t("lead")}
               </p>
-              <div data-contact-item>
-                <Button href={SITE.companyUrl} variant="solid" target="_blank" rel="noopener noreferrer">
+              {/* Two direct channels, so the conversation starts here instead of on another site. */}
+              <div data-contact-item className="flex flex-wrap items-center gap-4">
+                <Button href={whatsappUrl(SITE.whatsapp, t("whatsappMessage"))} variant="solid" target="_blank" rel="noopener noreferrer">
                   {t("cta")}
+                  <NewTabHint />
                 </Button>
+                <Button href={mailtoUrl(SITE.email, t("emailSubject"))}>{t("email")}</Button>
               </div>
-              <div data-contact-item className="flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-sm tracking-wider">
+              <p data-contact-item className="max-w-[56ch] text-sm text-muted-foreground">
+                {t("reassurance")}
+              </p>
+              {/* On touch screens the rows open up so the links' 44px tap areas (`tap-area`) don't overlap. */}
+              <div data-contact-item className="flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-sm tracking-wider pointer-coarse:gap-y-7.5">
                 <CopyEmail email={SITE.email} />
+                <ActionLink href={SITE.companyUrl} external bare>
+                  {t("site")}
+                  <NewTabHint />
+                </ActionLink>
                 <ActionLink href={SITE.linkedinUrl} external bare>
                   {t("linkedin")}
+                  <NewTabHint />
                 </ActionLink>
                 <ActionLink href={SITE.githubUrl} external bare>
                   {t("github")}
+                  <NewTabHint />
                 </ActionLink>
               </div>
             </Container>

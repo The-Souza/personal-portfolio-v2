@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { BracketPanel } from "@/components/BracketPanel";
 import { Button } from "@/components/Button";
-import { Rail, Target } from "@/components/HudMarkers";
+import { Rail, StatusDot, Target } from "@/components/HudMarkers";
 import { HeroStage } from "@/features/hero/HeroStage";
 import { ActionLink } from "@/features/shared/ActionLink";
 import { Container } from "@/features/shared/Container";
@@ -39,9 +39,11 @@ export function HeroAct() {
             <p data-hero="bio" className="max-w-[56ch] text-lead text-muted-foreground">
               {t("bio")}
             </p>
+            {/* The page's one action carries the button; the proof stays a step away. On phones
+                the header has no Contato, so this is the contact entry until the last act. */}
             <div data-hero="actions" className="flex flex-wrap items-center gap-x-7 gap-y-5">
-              <Button href="#projects">{t("viewProjects")}</Button>
-              <ActionLink href="#contact">{t("contact")}</ActionLink>
+              <Button href="#contact">{t("contact")}</Button>
+              <ActionLink href="#projects">{t("viewProjects")}</ActionLink>
             </div>
           </div>
 
@@ -59,7 +61,12 @@ export function HeroAct() {
               <BracketPanel
                 animatedCorners
                 eyebrow={t("status.eyebrow")}
-                title={`● ${t("status.online")}`}
+                title={
+                  <>
+                    <StatusDot />
+                    {t("status.online")}
+                  </>
+                }
                 details={[t("status.line"), t("status.place")]}
               />
             </div>

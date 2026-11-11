@@ -9,8 +9,13 @@ export interface ActiveSection {
   progress: number;
 }
 
-/** The active section is the last one whose top has crossed the middle of the viewport. */
-export function resolveActiveSection(boxes: SectionBox[], viewportHeight: number): ActiveSection {
+/**
+ * The active section is the last one whose top has crossed the middle of the viewport.
+ * `scrollRemaining` is how far the page can still scroll: the last act's middle line never
+ * reaches its end (only the footer follows), so it fills by what's left to scroll instead, and
+ * reads 100 at the bottom of the page.
+ */
+export function resolveActiveSection(boxes: SectionBox[], viewportHeight: number, scrollRemaining = Infinity): ActiveSection {
   const line = viewportHeight / 2;
   let index = 0;
   boxes.forEach((box, i) => {
@@ -20,6 +25,9 @@ export function resolveActiveSection(boxes: SectionBox[], viewportHeight: number
   const box = boxes[index];
   if (!box) return { index: 0, progress: 0 };
 
-  const ratio = box.height > 0 ? (line - box.top) / box.height : 1;
+  const passed = line - box.top;
+  const isLast = index === boxes.length - 1;
+  const span = isLast ? Math.min(box.height, passed + scrollRemaining) : box.height;
+  const ratio = span > 0 ? passed / span : 1;
   return { index, progress: Math.round(Math.min(1, Math.max(0, ratio)) * 100) };
 }

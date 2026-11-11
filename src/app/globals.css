@@ -1,7 +1,7 @@
 /* Cyberpunk — globals.css (Tailwind v4)
-   Gerado de tokens.json. Os papéis seguem os nomes do shadcn/ui, então os seus
-   componentes shadcn também herdam o tema. Mantenha os seus outros @import
-   (tw-animate-css, shadcn/tailwind.css) logo abaixo do tailwindcss. */
+   Generated from tokens.json. The roles follow shadcn/ui's names, so shadcn components
+   inherit the theme too. Keep any other @import (tw-animate-css, shadcn/tailwind.css)
+   right below tailwindcss. */
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
@@ -115,11 +115,10 @@
   --text-code: 13px;
   --text-code--line-height: 1.5;
   --text-code--font-weight: 400;
-  --shadow-glow-accent: 0 0 0 1px rgba(2, 210, 227, 0.35), 0 0 24px rgba(2, 210, 227, 0.28);
-  --shadow-glow-hot: 0 0 0 1px rgba(255, 42, 109, 0.35), 0 0 24px rgba(255, 42, 109, 0.28);
   --ease-entrance: cubic-bezier(0.2, 0, 0, 1);
   --ease-plate: cubic-bezier(0.33, 0, 0, 1);
-  --animate-blink-cursor: blink-cursor 1.2s step-end infinite;
+  /* Four blinks (4.8s), then the cursor stays lit: under the 5s of WCAG 2.2.2 (Pause, Stop, Hide). */
+  --animate-blink-cursor: blink-cursor 1.2s step-end 4;
   @keyframes blink-cursor {
     0%,
     49% {
@@ -132,7 +131,7 @@
   }
 }
 
-/* Chanfro de 45° no canto inferior direito. Tamanho: [--cut:12px]. */
+/* 45° chamfer on the bottom-right corner. Size: [--cut:12px]. */
 @utility chamfer {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut, 12px)), calc(100% - var(--cut, 12px)) 100%, 0 100%);
 }
@@ -167,11 +166,55 @@
 @utility band-tape {
   background-image: repeating-linear-gradient(135deg, var(--foreground) 0 1rem, var(--background) 1rem 2rem);
 }
-/* Dois cantos cortados (superior esquerdo e inferior direito). */
+/* Dot grid behind the project card's stack panel. */
+/* The side HUD's column (tablet and up). Content that moves across the screen (the projects track,
+   the stack circuit) dissolves before reaching it, so the marks always sit on the background;
+   the still acts clear it with the Container's right padding instead. */
+@utility hud-fade {
+  mask-image: linear-gradient(to left, transparent 4.5rem, black 6.5rem);
+}
+
+/* On touch screens, grows a small control's tap target to 44px tall without moving anything: an
+   invisible box centered on it (the inset is a percentage of the control's own height). */
+@utility tap-area {
+  @media (pointer: coarse) {
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      inset-block: min(0px, calc((100% - 2.75rem) / 2));
+    }
+  }
+}
+
+/* Receding states (a track card away from the center, a stack node the trace has passed). GSAP
+   tweens `--dim` from 0 to 1; the floor is the theme's `--recede`, so a theme switch re-dims at
+   once and the text keeps 4.5:1 in each theme. `recede-content` dims the children only, through
+   `filter` so it multiplies with the opacity GSAP sets on them. */
+@utility recede {
+  opacity: calc(1 - var(--dim, 0) * (1 - var(--recede)));
+}
+/* A figure that lights up and then settles to the theme's `--figure-rest`. It rests there by
+   default (server HTML, an entrance already played); GSAP sets `--settle` to 0 and tweens it back. */
+@utility settle {
+  opacity: calc(1 - var(--settle, 1) * (1 - var(--figure-rest)));
+}
+@utility recede-content {
+  & > * {
+    filter: opacity(calc(1 - var(--dim, 0) * (1 - var(--recede))));
+  }
+}
+
+@utility dot-grid {
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1.4px);
+  background-size: 0.875rem 0.875rem;
+}
+/* Two cut corners (top left and bottom right). */
 @utility chamfer-2 {
   clip-path: polygon(var(--cut, 16px) 0, 100% 0, 100% calc(100% - var(--cut, 16px)), calc(100% - var(--cut, 16px)) 100%, 0 100%, 0 var(--cut, 16px));
 }
-/* Quatro cantos em colchete de 10px. Cor: [--bc:var(--foreground)]. */
+/* Four 10px bracket corners. Color: [--bc:var(--foreground)]. */
 @utility brackets {
   --b: var(--bc, var(--field-border));
   background-image:
@@ -181,11 +224,11 @@
   background-position: top left, top left, top right, top right, bottom left, bottom left, bottom right, bottom right;
   background-size: 10px 1px, 1px 10px, 10px 1px, 1px 10px, 10px 1px, 1px 10px, 10px 1px, 1px 10px;
 }
-/* Preenchimento segmentado da barra de progresso (usa currentColor). */
+/* Segmented fill of the progress bar (uses currentColor). */
 @utility segments {
   background-image: repeating-linear-gradient(90deg, currentColor 0 7px, transparent 7px 10px);
 }
-/* Retícula de 16px. */
+/* 16px reticle. */
 @utility reticle {
   --b: var(--foreground);
   width: 16px; height: 16px;
@@ -197,7 +240,7 @@
   background-position: top left, top left, top right, top right, bottom left, bottom left, bottom right, bottom right, center;
   background-size: 5px 2px, 2px 5px, 5px 2px, 2px 5px, 5px 2px, 2px 5px, 5px 2px, 2px 5px, 4px 4px;
 }
-/* Alvo em X de 72px. */
+/* 72px X target. */
 @utility target {
   --b: var(--foreground);
   width: 72px; height: 72px;
@@ -211,7 +254,7 @@
   background-size: 44px 44px, 44px 44px, 14px 2px, 2px 14px, 14px 2px, 2px 14px, 14px 2px, 2px 14px, 14px 2px, 2px 14px;
 }
 
-/* Dia */
+/* Day */
 :root,
 [data-theme="day"] {
   --background: #f7fafb;
@@ -253,9 +296,14 @@
   --live: #d1f700;
   --live-foreground: #07080c;
   --radius: 0rem;
+  /* How far a receding element dims (see `recede`): the lowest opacity at which its faintest text
+     still passes 4.5:1. Day's accent ink on a card has little headroom (4.88:1 at full). */
+  --recede: 0.96;
+  /* Where the About milestone years rest (see `settle`): large text, so the floor is 3:1. */
+  --figure-rest: 0.48;
 }
 
-/* Noite */
+/* Night */
 .dark,
 [data-theme="night"] {
   --background: #07080c;
@@ -296,9 +344,12 @@
   --hot-accessible: #ff5c8d;
   --live: #d1f700;
   --live-foreground: #07080c;
+  /* Muted ink on a card is the limit: 4.5:1 down to 0.81. */
+  --recede: 0.82;
+  --figure-rest: 0.4;
 }
 
-/* Alerta. The special pages (404, error) carry it up to <html>: the reserved scrollbar gutter and
+/* Alert. The special pages (404, error) carry it up to <html>: the reserved scrollbar gutter and
    the bar itself are painted with the root's colors, which would stay Night's next to the page. */
 .alert,
 [data-theme="alert"],
@@ -350,6 +401,18 @@ html:has([data-special]) {
   body {
     @apply bg-background text-foreground font-sans;
     font-optical-sizing: auto;
+  }
+  /* Prose pulls a word down beside a lone last one; headings even out their lines. The hero's
+     h1 is left out: its name breaks by hand. */
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
   }
   /* Brief section 5: a visible 2px ring with a 2px offset on every interactive element. */
   :focus-visible {
@@ -412,12 +475,36 @@ html:has([data-special]) {
   html.locale-restoring {
     scrollbar-color: transparent transparent;
   }
+  /* The boot is always Night (it carries `.dark`), but being fixed it stops short of the reserved
+     gutter, which shows the root's own background: on Day, a light strip beside the dark veil.
+     Night's background on <html> fills it; the body paints its own box, so the page keeps its theme. */
+  html.js:has(#boot):not(.boot-skip) {
+    background-color: #07080c;
+  }
   html.js:has(#boot):not(.boot-skip)::-webkit-scrollbar-track,
   html.js:has(#boot):not(.boot-skip)::-webkit-scrollbar-thumb,
   html.locale-restoring::-webkit-scrollbar-track,
   html.locale-restoring::-webkit-scrollbar-thumb {
     background: transparent;
     border-color: transparent;
+  }
+}
+
+/* Theme switch (brief 7.4): no crossfade; the new theme sweeps down over the old one. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  animation: theme-sweep 0.55s var(--ease-plate);
+}
+@keyframes theme-sweep {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0);
   }
 }
 

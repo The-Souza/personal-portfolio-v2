@@ -37,8 +37,8 @@ describe.each([
 });
 
 describe("conteúdo", () => {
-  it("tem os cinco projetos e os quatro clientes do briefing", () => {
-    expect(PROJECTS).toHaveLength(5);
+  it("tem os quatro projetos e os quatro clientes", () => {
+    expect(PROJECTS).toHaveLength(4);
     expect(CLIENTS).toHaveLength(4);
   });
 

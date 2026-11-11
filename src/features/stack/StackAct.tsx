@@ -8,7 +8,7 @@ import { SectionHeading } from "@/features/shared/SectionHeading";
 import { StackStage } from "@/features/stack/StackStage";
 import { pad2 } from "@/lib/format";
 
-const NODE_CLASS = "flex flex-col gap-4 bg-background p-7 in-data-compact:gap-2.5 in-data-compact:px-4.5 in-data-compact:py-4";
+const NODE_CLASS = "recede-content flex flex-col gap-4 bg-background p-7 in-data-compact:gap-2.5 in-data-compact:px-4.5 in-data-compact:py-4";
 const TITLE_CLASS = "font-heading text-heading in-data-compact:text-2xl";
 
 /**
@@ -32,7 +32,7 @@ export function StackAct() {
           <Container data-stack-head className="pt-30">
             <SectionHeading eyebrow={t("eyebrow")} title={t("title")} />
           </Container>
-          <div data-stack-stage>
+          <div data-stack-stage className="tablet:hud-fade">
             <Container
               data-stack-board
               className="relative grid grid-cols-[repeat(auto-fill,minmax(min(100%,21.25rem),1fr))] gap-x-8 gap-y-10 pt-10 pb-30"
@@ -63,7 +63,8 @@ export function StackAct() {
                     <Terminal lines={aiLines} blink />
                   </div>
                   <p className="text-sm text-muted-foreground">{t("ai.note")}</p>
-                  <p className="font-mono text-xs leading-relaxed tracking-wider text-muted-foreground uppercase">{t("ai.practices")}</p>
+                  {/* A list as long as a sentence, so no uppercase (DESIGN.md keeps it to labels). */}
+                  <p className="font-mono text-xs leading-relaxed tracking-wide text-muted-foreground">{t("ai.practices")}</p>
                 </BracketPanel>
               </div>
 

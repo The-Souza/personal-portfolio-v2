@@ -1,3 +1,5 @@
+import { hashId } from "@/lib/scroll/hash";
+
 const SCROLL_KEY = "locale-switch-scroll";
 
 /**
@@ -35,6 +37,12 @@ export function consumeScrollAnchor(): ScrollAnchor | null {
   } catch {
     return null;
   }
+}
+
+/** The act a page was opened at (`/pt#contact`), or null when the hash isn't one of them. */
+export function hashSection(hash: string, ids: readonly string[]) {
+  const id = hashId(hash);
+  return id && ids.includes(id) ? id : null;
 }
 
 /** The anchor for a scroll position: the last section that starts at or above it. */

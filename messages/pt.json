@@ -1,7 +1,14 @@
 {
+  "meta": {
+    "title": "Guilherme Campos · Desenvolvedor Frontend e Fullstack",
+    "description": "Sócio-fundador da The Souza Tech. Sites, sistemas e automações com Next.js, React, TypeScript e Python, com testes e foco em performance e acessibilidade.",
+    "jobTitle": "Desenvolvedor frontend e fullstack",
+    "ogAlt": "Guilherme Campos, desenvolvedor frontend e fullstack · The Souza Tech"
+  },
   "header": {
     "aria": "Topo",
-    "logoAria": "Guilherme, voltar ao topo",
+    "skip": "Pular para o conteúdo",
+    "logoAria": "Guilherme_dev, voltar ao topo",
     "logoName": "Guilherme",
     "logoSuffix": "_dev",
     "sectionsAria": "Seções",
@@ -11,9 +18,20 @@
     "menu": "Menu",
     "menuEyebrow": "// menu",
     "menuClose": "Fechar",
-    "menuItems": { "hero": "Início", "about": "Sobre", "projects": "Projetos", "stack": "Stack", "contact": "Contato" },
-    "status": "● online · Osasco, SP",
-    "theme": { "night": "Noite", "day": "Dia", "toNight": "Mudar para o tema Noite", "toDay": "Mudar para o tema Dia" }
+    "menuItems": {
+      "hero": "Início",
+      "about": "Sobre",
+      "projects": "Projetos",
+      "stack": "Stack",
+      "contact": "Contato"
+    },
+    "status": "online · Osasco, SP",
+    "theme": {
+      "night": "Noite",
+      "day": "Dia",
+      "toNight": "Dia, mudar para o tema Noite",
+      "toDay": "Noite, mudar para o tema Dia"
+    }
   },
   "boot": {
     "loading": "Carregando portfólio",
@@ -26,20 +44,36 @@
   },
   "hud": {
     "label": "Atos da página",
-    "goTo": "Ir para {act}",
+    "goTo": "{number} · Ir para {act}",
     "reading": "ato {number} · {act} · {percent}%",
-    "acts": { "hero": "Hero", "about": "Sobre", "projects": "Projetos", "stack": "Stack", "contact": "Contato" }
+    "acts": {
+      "hero": "Início",
+      "about": "Sobre",
+      "projects": "Projetos",
+      "stack": "Stack",
+      "contact": "Contato"
+    }
   },
   "hero": {
     "aria": "Apresentação",
     "eyebrow": "// dev_web + automação · osasco, sp",
     "firstName": "Guilherme",
     "lastName": "Campos",
-    "bio": "Sócio-fundador e desenvolvedor da The Souza Tech. Crio sites, sistemas e automações com Next.js, React, TypeScript e Python, com testes desde o início e atenção a performance e acessibilidade.",
+    "bio": "Sites, sistemas e automações que tiram o trabalho manual da operação de pequenas e médias empresas. Sou sócio-fundador e desenvolvedor da The Souza Tech. Numa transportadora, o envio das fotos de comprovante passou de horas para minutos.",
     "viewProjects": "Ver projetos",
-    "contact": "Contato",
-    "now": { "eyebrow": "// Agora", "company": "The Souza Tech", "role": "sócio-fundador · dev", "since": "desde 2026" },
-    "status": { "eyebrow": "// Status", "online": "online", "line": "sites, sistemas e automações", "place": "Osasco, SP" },
+    "contact": "Falar com a The Souza Tech",
+    "now": {
+      "eyebrow": "// Agora",
+      "company": "The Souza Tech",
+      "role": "sócio-fundador · dev",
+      "since": "desde 2026"
+    },
+    "status": {
+      "eyebrow": "// Status",
+      "online": "online",
+      "line": "sites, sistemas e automações",
+      "place": "Osasco, SP"
+    },
     "rail": "自動化システム"
   },
   "about": {
@@ -48,35 +82,65 @@
     "title": "Sobre",
     "photo": {
       "alt": "Guilherme Campos, sócio-fundador da The Souza Tech",
-      "caption": "// dev_guilherme · osasco, sp",
-      "placeholder": "imagem · vazia"
+      "caption": "// dev_guilherme · osasco, sp"
     },
     "paragraphs": [
-      "Comecei no CREA-SP, modernizando um sistema institucional de grande porte sem quebrar o que já funcionava.",
+      "Meu primeiro trabalho como dev foi um estágio no CREA-SP, no último semestre da faculdade, modernizando um sistema institucional de grande porte sem quebrar o que já funcionava.",
       "Depois, passei alguns dias ajudando na transportadora da minha mãe, hoje minha sócia, e criei um app que reduziu de horas para minutos o envio das fotos de comprovantes, que chega a centenas por dia conforme a época.",
       "Esse projeto me fez enxergar a automação como serviço e levou à The Souza Tech, onde cuido do código, da publicação e da conversa direta com quem contrata."
     ],
     "milestones": [
-      { "year": "2025", "code": "// marco_01 · jun–dez", "title": "CREA-SP", "description": "Estágio em desenvolvimento web: modernização incremental de um sistema usado em todo o estado, integrado ao legado em C# ASP.NET, APIs internas e DB2." },
-      { "year": "APP", "code": "// marco_02 · transportadora", "title": "O app das fotos", "description": "Consulta de notas em lote, leitura do número por OCR e envio pela API. O envio das fotos passou de horas para minutos." },
-      { "year": "2026", "code": "// marco_03 · atual", "title": "The Souza Tech", "description": "Sites, automações e sistemas para pequenas e médias empresas. Cuido do código, da publicação e da conversa com quem contrata." }
+      {
+        "year": "2025",
+        "code": "// marco_01 · jun–dez",
+        "title": "CREA-SP",
+        "description": "Estágio em desenvolvimento web: modernização incremental de um sistema usado em todo o estado, integrado ao legado em C# ASP.NET, APIs internas e DB2."
+      },
+      {
+        "year": "2026",
+        "code": "// marco_02 · transportadora · jun",
+        "title": "O app das fotos",
+        "description": "Consulta de notas em lote, leitura do número por OCR e envio pela API. O envio das fotos passou de horas para minutos."
+      },
+      {
+        "year": "2026",
+        "code": "// marco_03 · atual",
+        "title": "The Souza Tech",
+        "description": "Sites, automações e sistemas para pequenas e médias empresas. Cuido do código, da publicação e da conversa com quem contrata."
+      }
     ],
     "stats": [
       { "value": "723", "label": "testes", "note": "no BillWise, com TDD" },
-      { "value": "150", "label": "fotos por dia", "note": "de 100 a 150, centenas na alta" },
-      { "value": "v1.5.1", "label": "release", "note": "site da The Souza Tech" }
+      {
+        "value": "150",
+        "label": "fotos por dia",
+        "note": "de 100 a 150, centenas na alta"
+      },
+      {
+        "value": "3",
+        "label": "anos programando",
+        "note": "desde a faculdade, em 2023"
+      }
     ]
   },
   "projects": {
     "aria": "Projetos",
-    "eyebrow": "// projetos · 04 + lab + clientes",
+    "eyebrow": "// projetos · 04",
     "title": "Projetos",
+    "code": "projeto_{number}",
     "result": "Resultado",
+    "status": "Status",
     "privateRepo": "repositório privado",
     "live": "em produção",
     "imagePlaceholder": "imagem · vazia",
+    "imageAlt": "Tela do projeto {name}",
+    "stackLabel": "// stack",
     "ghost": "account management · v1 · versão anterior",
-    "links": { "site": "Ver site", "repo": "Repositório", "v1": "v1: Account Management" },
+    "links": {
+      "site": "Ver site",
+      "repo": "Repositório",
+      "v1": "v1: Account Management"
+    },
     "items": {
       "nfe": {
         "category": "automação desktop",
@@ -93,26 +157,20 @@
       "billwise": {
         "category": "fullstack",
         "title": "BillWise Dashboard",
-        "description": "Gestão financeira com workspaces compartilhados e isolados, permissões por perfil, parcelamentos, orçamentos, analytics, recorrências com cron, importação CSV/XLSX e Turnstile.",
+        "description": "As finanças da casa num lugar só: cada pessoa tem seu espaço, a família divide contas e orçamentos, e parcelas e contas fixas se lançam sozinhas, com importação de planilhas CSV/XLSX. Por baixo: permissões por perfil, recorrências com cron e proteção contra robôs com Turnstile.",
         "result": "Em produção e usado pela família. 723 testes, TDD, CI no GitHub Actions e Git Flow."
       },
       "souzaTech": {
         "category": "site da empresa",
         "title": "The Souza Tech",
-        "description": "Captação de leads com página de agradecimento, GA4 com consentimento, SEO local com dados estruturados e mais de 70 testes. Git Flow com releases versionadas.",
+        "description": "O site recebe os pedidos de orçamento, leva quem enviou para uma página de agradecimento e está preparado para as buscas da região (SEO local com dados estruturados). As visitas só são medidas com o consentimento do visitante (GA4). Mais de 70 testes e releases versionadas com Git Flow.",
         "result": "Hoje na v1.5.1."
       },
       "souzaTransportes": {
         "category": "site institucional",
         "title": "The Souza Transportes",
-        "description": "Narrativa animada na rolagem, respeito a prefers-reduced-motion, conteúdo visível sem JavaScript, vídeo que não carrega em conexões lentas e cotação pelo WhatsApp com mensagem pré-preenchida.",
-        "result": "Projeto do grupo, com imagens geradas por IA."
-      },
-      "jsonGenerator": {
-        "category": "experimento",
-        "title": "Gerador de JSON",
-        "description": "Gera arquivos JSON grandes com processamento paralelo.",
-        "result": "Um arquivo de 400 MB levou cerca de 10 segundos no exemplo do README."
+        "description": "O site conta a história da transportadora enquanto a pessoa rola a página e leva direto a uma cotação pelo WhatsApp, com a mensagem já escrita. Funciona em conexão lenta (o vídeo não carrega) e sem JavaScript, e respeita quem prefere menos movimento na tela.",
+        "result": "Projeto para o grupo Souza, com imagens geradas por IA."
       }
     }
   },
@@ -124,10 +182,30 @@
     "code": "cliente_0{number}",
     "preview": "prévia do projeto · {name}",
     "items": {
-      "frotaAgil": { "name": "Frota Ágil Entregas", "segment": "Logística · last-mile", "challenge": "Rotas montadas à mão numa planilha toda manhã.", "result": "<b>1h30 → 10 min</b> para fechar o roteiro do dia." },
-      "odontoLume": { "name": "Odonto Lume", "segment": "Saúde · odontologia", "challenge": "Agenda só por telefone e muitas faltas sem aviso.", "result": "<b>−35%</b> de faltas com agenda online e lembretes." },
-      "emporioVilaNova": { "name": "Empório Vila Nova", "segment": "Varejo · mercearia", "challenge": "Pedidos por áudio, sem lista de preços atualizada.", "result": "<b>+18%</b> no ticket médio com o catálogo no WhatsApp." },
-      "baseFirme": { "name": "Base Firme Construções", "segment": "Construção civil", "challenge": "Relatório semanal de obra montado à mão.", "result": "<b>1 dia → 20 min</b> com o PDF gerado por Python." }
+      "frotaAgil": {
+        "name": "Frota Ágil Entregas",
+        "segment": "Logística · last-mile",
+        "challenge": "Rotas montadas à mão numa planilha toda manhã.",
+        "result": "<b>1h30 → 10 min</b> para fechar o roteiro do dia."
+      },
+      "odontoLume": {
+        "name": "Odonto Lume",
+        "segment": "Saúde · odontologia",
+        "challenge": "Agenda só por telefone e muitas faltas sem aviso.",
+        "result": "<b>−35%</b> de faltas com agenda online e lembretes."
+      },
+      "emporioVilaNova": {
+        "name": "Empório Vila Nova",
+        "segment": "Varejo · mercearia",
+        "challenge": "Pedidos por áudio, sem lista de preços atualizada.",
+        "result": "<b>+18%</b> no ticket médio com o catálogo no WhatsApp."
+      },
+      "baseFirme": {
+        "name": "Base Firme Construções",
+        "segment": "Construção civil",
+        "challenge": "Relatório semanal de obra montado à mão.",
+        "result": "<b>1 dia → 20 min</b> com o PDF gerado por Python."
+      }
     }
   },
   "stack": {
@@ -148,24 +226,45 @@
       "eyebrow": "// ia no dia a dia",
       "title": "Cada ferramenta no que faz melhor",
       "terminal": [
-        { "prefix": ">", "text": "claude code:", "status": "dev, agents e sub-agents" },
-        { "prefix": ">", "text": "claude design:", "status": "templates e design systems" },
-        { "prefix": ">", "text": "gemini:", "status": "vídeo, imagem, pesquisa" },
-        { "prefix": ">", "text": "textos:", "status": "claude + gemini" },
+        {
+          "prefix": ">",
+          "text": "claude code:",
+          "status": "dev, agents e sub-agents"
+        },
+        {
+          "prefix": ">",
+          "text": "claude design:",
+          "status": "templates e design systems"
+        },
+        {
+          "prefix": ">",
+          "text": "gemini:",
+          "status": "vídeo, imagem, pesquisa"
+        },
+        { "prefix": ">", "text": "revisão de texto:", "status": "claude + gemini" },
         { "prefix": "//", "text": "as decisões continuam sendo minhas" },
-        { "prefix": ">", "text": "reviso testes, diffs, prs e merges:", "status": "ok" }
+        {
+          "prefix": ">",
+          "text": "reviso testes, diffs, prs e merges:",
+          "status": "ok"
+        }
       ],
-      "note": "Elas aceleram o trabalho, mas as decisões continuam sendo minhas. Desenvolvo com TDD e reviso tudo o que elas produzem.",
+      "note": "Desenvolvo com TDD e reviso tudo o que elas produzem.",
       "practices": "TDD · Clean Code · SRP · acessibilidade · Core Web Vitals · SEO técnico e local · GA4 com consentimento (LGPD)"
     }
   },
   "contact": {
     "aria": "Contato",
-    "eyebrow": "// contato · sinal aberto",
+    "eyebrow": "// contato",
     "warning": "sinal aberto",
     "title": "Automatizo o que trava a operação.",
     "lead": "Sites, sistemas e automações para pequenas e médias empresas.",
-    "cta": "Falar com a The Souza Tech",
+    "cta": "Chamar no WhatsApp",
+    "email": "Mandar um e-mail",
+    "whatsappMessage": "Olá! Vim pelo portfólio do Guilherme e quero conversar sobre um projeto.",
+    "emailSubject": "Projeto via portfólio",
+    "reassurance": "Me conte como a operação funciona hoje e onde ela trava. Respondo em até 3 dias úteis; o atendimento é remoto ou presencial, dependendo da localidade.",
+    "site": "Site da The Souza Tech",
     "linkedin": "LinkedIn",
     "github": "GitHub"
   },
@@ -174,17 +273,25 @@
     "copied": "> copiado: ok",
     "selected": "> selecionado: ctrl+c"
   },
+  "shared": {
+    "newTab": "(abre em nova aba)"
+  },
   "footer": {
     "navAria": "Rodapé",
-    "status": "● online · Osasco, SP",
+    "status": "online · Osasco, SP",
     "company": "The Souza Tech · 2026",
     "mark": "GC-026",
-    "nav": { "about": "Sobre", "projects": "Projetos", "stack": "Stack", "top": "Topo" },
+    "nav": {
+      "about": "Sobre",
+      "projects": "Projetos",
+      "stack": "Stack",
+      "top": "Topo"
+    },
     "opportunity": "Também estou aberto a oportunidades como desenvolvedor Frontend ou Fullstack.",
     "copyright": "© 2026 The Souza Tech"
   },
   "special": {
-    "logoLabel": "Guilherme, voltar ao início",
+    "logoLabel": "Guilherme_dev, voltar ao início",
     "place": "The Souza Tech · Osasco, SP",
     "mark": "GC-026",
     "home": "Voltar pro início"
@@ -198,11 +305,16 @@
     "warning": "sinal perdido",
     "log": "// log da requisição",
     "aim": "alvo",
-    "foot": "● erro_404 · not-found.tsx",
+    "foot": "erro_404 · not-found.tsx",
     "lines": [
       { "prefix": ">", "text": "get {path}" },
       { "prefix": ">", "text": "status:", "status": "404", "tone": "err" },
-      { "prefix": "//", "label": "erro_404:", "text": "página não encontrada", "tone": "err" },
+      {
+        "prefix": "//",
+        "label": "erro_404:",
+        "text": "página não encontrada",
+        "tone": "err"
+      },
       { "prefix": ">", "text": "rotas vivas: / · /#projects · /#contact" },
       { "prefix": "//", "text": "sugestão: voltar pra base" }
     ]
@@ -212,21 +324,31 @@
     "eyebrow": "// falha_de_sistema · {file}",
     "big": "Falha",
     "title": "Algo quebrou do meu lado.",
-    "lead": "Não foi você. Tente de novo; se continuar, me avisa em {email} com o digest do relatório.",
+    "lead": "Não foi você. Tente de novo; se continuar, me avise em {email} com o digest do relatório.",
     "retry": "Tentar de novo",
     "warning": "falha detectada",
     "report": "// relatório de falha",
     "barLabel": "Renderização",
-    "foot": "● falha · {file} · digest {digest}",
+    "foot": "falha · {file} · digest {digest}",
     "noDigest": "—",
     "lines": [
       { "prefix": ">", "text": "render {path}" },
-      { "prefix": "//", "label": "falha:", "text": "erro inesperado no componente", "tone": "err" },
+      {
+        "prefix": "//",
+        "label": "falha:",
+        "text": "erro inesperado no componente",
+        "tone": "err"
+      },
       { "prefix": ">", "text": "digest: {digest}" }
     ],
     "wait": { "prefix": ">", "text": "retry():", "status": "aguardando você" },
     "retrying": { "prefix": ">", "text": "retry(): tentando…" },
-    "again": { "prefix": "//", "label": "falha:", "text": "de novo.", "tone": "err" },
+    "again": {
+      "prefix": "//",
+      "label": "falha:",
+      "text": "de novo.",
+      "tone": "err"
+    },
     "copyDigest": "Copiar digest",
     "copiedDigest": "Copiado"
   }

@@ -1,5 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { formatReadout, isArmDot, revealRadius, toGridPoint } from "@/features/hero/hero-grid";
+import { formatReadout, isArmDot, revealRadius, toGridPoint, tracksPointer } from "@/features/hero/hero-grid";
+
+describe("tracksPointer", () => {
+  it("segue o mouse numa tela com ponteiro fino", () => {
+    expect(tracksPointer("mouse", true)).toBe(true);
+  });
+
+  it("não segue toque nem caneta", () => {
+    expect(tracksPointer("touch", true)).toBe(false);
+    expect(tracksPointer("pen", true)).toBe(false);
+  });
+
+  it("não segue nada quando a tela não tem ponteiro fino (celular ou a emulação do DevTools)", () => {
+    expect(tracksPointer("mouse", false)).toBe(false);
+  });
+});
 
 describe("toGridPoint", () => {
   const rect = { left: 100, top: 50, width: 800, height: 400 };

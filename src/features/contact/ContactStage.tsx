@@ -3,14 +3,17 @@
 import { type ReactNode, useRef } from "react";
 import { BLADE, bladeAt, bladeClip, isBladeDone, isTitleReady } from "@/features/contact/blade";
 import { lineIndexes, lineOffsets } from "@/features/contact/title-lines";
-import { ACT_VARIANT_CONDITIONS } from "@/lib/motion/breakpoints";
+import { ACT_VARIANT_CONDITIONS, MEDIA } from "@/lib/motion/breakpoints";
 import { playGlitch } from "@/lib/motion/glitch";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
-import { registerRelayout } from "@/lib/motion/relayout";
 import { SPRINGS } from "@/lib/motion/spring";
 import { splitWordChars } from "@/lib/motion/text";
-import { holdPageHeight } from "@/lib/motion/viewport";
+import { registerLanding } from "@/lib/scroll/landing";
+import { useLenis } from "@/lib/scroll/lenis";
+import { registerRelayout } from "@/lib/scroll/relayout";
+import { settleScrubs } from "@/lib/scroll/scroll-keeper";
+import { holdPageHeight } from "@/lib/scroll/viewport";
 
 const PLAYED_KEY = "contact-poster";
 /** Each title line shifts this much from the one above, to a random side, in em. */
@@ -24,6 +27,7 @@ const LINE_STEP = 0.3;
  */
 export function ContactStage({ children }: { children: ReactNode }) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const lenis = useLenis();
 
   useGSAP(
     () => {
@@ -34,7 +38,10 @@ export function ContactStage({ children }: { children: ReactNode }) {
       const title = root?.querySelector<HTMLElement>("[data-contact-title]");
       const text = root?.querySelector<HTMLElement>("[data-contact-title-text]");
       if (!root || !stage || !poster || !edge || !title || !text) return;
-      const items = [...root.querySelectorAll<HTMLElement>("[data-contact-item]")];
+      // The first item (the eyebrow and the ⚠ mark, top right) is never hidden: it is what the blade
+      // uncovers first, so the yellow carries a signal while the title still waits for the cut.
+      // Hidden too, the poster swept in empty for over a screen of scroll.
+      const [, ...items] = root.querySelectorAll<HTMLElement>("[data-contact-item]");
       // Outside any context on purpose: fired from scroll callbacks that can run while another
       // act's context is being built, `contextSafe` would nest the contexts in a loop. The glitch
       // removes its copies when it ends; the cleanup ends a running one early.
@@ -66,13 +73,18 @@ export function ContactStage({ children }: { children: ReactNode }) {
           if (reveal && isTitleReady(blade.s)) reveal();
         };
 
+        // The pin holds the stage for one screen, but the blade starts as the stage comes up from
+        // the bottom: started with the pin, the stage rose as a full screen of black after the
+        // Stack. Both end together (the blade's 200% from one screen above the pin's start).
+        if (pinned) ScrollTrigger.create({ trigger: stage, start: "top top", end: "+=100%", pin: true });
         const tween = gsap.to(blade, {
           s: BLADE.to,
           ease: "none",
           onUpdate: apply,
           scrollTrigger: {
             trigger: stage,
-            ...(pinned ? { start: "top top", end: "+=100%", pin: true } : { start: "top bottom", end: "top 15%" }),
+            start: "top bottom",
+            end: pinned ? "+=200%" : "top 15%",
             scrub: 0.6,
             // Only for a visitor scrolling past: a page loaded beyond the stage would fire it
             // inside this setup, nesting the glitch's context in the one being built.
@@ -85,6 +97,8 @@ export function ContactStage({ children }: { children: ReactNode }) {
         const trigger = tween.scrollTrigger as ScrollTrigger;
         trigger.refresh();
         tween.progress(trigger.progress);
+        // Links to #contact land where the blade is done, not on the dark stage before it.
+        const unregisterLanding = registerLanding("contact", () => trigger.end);
 
         // The lines shift by word blocks, to random sides drawn once, so a rewrap (measured again
         // on resize) keeps the same pattern.
@@ -101,7 +115,9 @@ export function ContactStage({ children }: { children: ReactNode }) {
           });
           const container = title.parentElement ?? title;
           const padding = parseFloat(getComputedStyle(container).paddingLeft) + parseFloat(getComputedStyle(container).paddingRight);
-          const step = parseFloat(getComputedStyle(title).fontSize) * LINE_STEP;
+          // Below `phone` the title breaks into four or five short lines, and shifting each one
+          // read as broken type ("I AUTOMATE / WHAT / HOLDS YOUR…"): there they stay aligned.
+          const step = window.matchMedia(MEDIA.phoneUp).matches ? parseFloat(getComputedStyle(title).fontSize) * LINE_STEP : 0;
           const offsets = lineOffsets(widths, container.clientWidth - padding, step, picks);
           words.forEach((word, i) => gsap.set(word, { x: offsets[lines[i]] }));
         };
@@ -112,8 +128,13 @@ export function ContactStage({ children }: { children: ReactNode }) {
         // Hidden only on the client, and only when the entrance is still ahead: a title already
         // past the cut at load stays visible.
         const entered = hasPlayed(PLAYED_KEY) || isTitleReady(bladeAt(trigger.progress));
-        if (entered) markPlayed(PLAYED_KEY);
-        else {
+        if (entered) {
+          markPlayed(PLAYED_KEY);
+          // The entrance starts from the blade's onUpdate, so it belongs to the layout context: a
+          // relayout reverting it mid-way (one fires right after a #contact load) leaves the items
+          // at their hidden start. A poster that already entered shows them, whatever came before.
+          gsap.set(items, { opacity: 1, y: 0 });
+        } else {
           gsap.set([...split.parts, ...items], { opacity: 0 });
           reveal = () => {
             reveal = null;
@@ -128,9 +149,22 @@ export function ContactStage({ children }: { children: ReactNode }) {
           if (event.pointerType === "mouse") glitch(1.1);
         };
         title.addEventListener("pointerenter", onTitleEnter);
+        // Tabbing into the poster before it entered would focus buttons still hidden on the dark
+        // stage: the page goes where the blade is done, which plays the entrance.
+        const onFocus = (event: FocusEvent) => {
+          // Keyboard focus only, as in the projects track: a click on WhatsApp or e-mail focuses
+          // the button too, and moving the poster under the pointer could lose the click.
+          if (!(event.target as Element | null)?.matches(":focus-visible")) return;
+          if (!reveal && !poster.style.clipPath) return;
+          lenis.jumpTo(trigger.end);
+          settleScrubs();
+        };
+        root.addEventListener("focusin", onFocus);
         live = true;
 
         return () => {
+          root.removeEventListener("focusin", onFocus);
+          unregisterLanding();
           rewrap.disconnect();
           title.removeEventListener("pointerenter", onTitleEnter);
           // Set by hand on every update, so the context can't revert them.

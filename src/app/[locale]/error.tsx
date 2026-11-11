@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
-import { ErrorView } from "@/features/special/ErrorView";
+import { ErrorView } from "@/features/special/error/ErrorView";
 
 /** Errors below the locale layout: the special error page, with the layout's providers. */
 export default function Error({ error, retry }: { error: unknown; retry: () => void }) {

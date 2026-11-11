@@ -5,13 +5,18 @@ import { circuitPoints, circuitSpacing, cumulativeLengths } from "@/features/sta
 import { ACT_VARIANT_CONDITIONS } from "@/lib/motion/breakpoints";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
-import { registerRelayout } from "@/lib/motion/relayout";
 import { SPRINGS } from "@/lib/motion/spring";
-import { holdPageHeight, isOnScreenAtLoad } from "@/lib/motion/viewport";
+import { registerRelayout } from "@/lib/scroll/relayout";
+import { holdPageHeight, isOnScreenAtLoad } from "@/lib/scroll/viewport";
 
 const HOLD = 0.55;
 const FIRST_HOLD = 0.45;
 const AI_LINES_KEY = "stack-ai-lines";
+/**
+ * Scroll per card, in screens. The brief's 72% held the act for five screens, over a third of the
+ * page; at this rate the seven cards take about two.
+ */
+const SCROLL_PER_CARD = 0.3;
 
 /**
  * Client shell for Stack (brief, act 04 · C): the pinned stair circuit, with the camera, the
@@ -90,18 +95,25 @@ export function StackStage({ children }: { children: ReactNode }) {
         const focus = ([x, y]: [number, number]) => ({ x: viewport.width / 2 - x, y: spacing.fy - y });
         gsap.set(board, focus(points[0]));
         gsap.set(dot, { display: "block", x: points[0][0], y: points[0][1], xPercent: -50, yPercent: -50 });
-        // The cards stay opaque, so the dot disappears behind them; only their content fades.
-        nodes.slice(1).forEach((node) => gsap.set(body(node), { opacity: 0.22 }));
+        // The cards stay opaque, so the dot disappears behind them; only their content is hidden
+        // until the trace arrives (faded, it was text below 4.5:1). The frames and the dashed
+        // trace still show the circuit ahead.
+        nodes.slice(1).forEach((node) => gsap.set(body(node), { opacity: 0 }));
+        // A node the trace has passed recedes to the theme's floor (`recede-content` in StackAct).
+        gsap.set(nodes, { "--dim": 0 });
 
         const timeline = gsap.timeline();
         let at = FIRST_HOLD;
         for (let k = 1; k < points.length; k++) {
-          timeline.to(body(nodes[k - 1]), { opacity: 0.4, duration: 0.3 }, at + 0.05);
+          timeline.to(nodes[k - 1], { "--dim": 1, duration: 0.3 }, at + 0.05);
           timeline.to(board, { ...focus(points[k]), duration: 1, ease: "power2.inOut" }, at);
           timeline.to(live, { strokeDashoffset: total - lengths[k], duration: 1, ease: "power2.inOut" }, at);
           timeline.to(dot, { x: points[k][0], y: points[k][1], duration: 1, ease: "power2.inOut" }, at);
-          timeline.to(body(nodes[k]), { opacity: 1, duration: 0.25 }, at + 0.85);
-          timeline.from(nodes[k].querySelectorAll("li, span.inline-flex, [data-stack-terminal] p"), { opacity: 0, y: 8, stagger: 0.04, duration: 0.25 }, at + 0.9);
+          // The card fills in while the camera lands (it arrives at `at + 1`), so the hold that
+          // follows always shows full-strength text: with a per-tag stagger, a card of 11 tags
+          // finished deep in the hold, and a visitor stopping there saw tags at 1.7:1.
+          timeline.to(body(nodes[k]), { opacity: 1, duration: 0.25 }, at + 0.6);
+          timeline.from(nodes[k].querySelectorAll("li, span.inline-flex, [data-stack-terminal] p"), { opacity: 0, y: 8, stagger: { amount: 0.15 }, duration: 0.2 }, at + 0.65);
           at += 1 + HOLD;
         }
         timeline.to({}, { duration: 0.1 }, at - 0.1);
@@ -110,7 +122,7 @@ export function StackStage({ children }: { children: ReactNode }) {
           animation: timeline,
           trigger: pinTarget,
           start: "top top",
-          end: `+=${nodes.length * 72}%`,
+          end: `+=${Math.round(nodes.length * SCROLL_PER_CARD * 100)}%`,
           pin: true,
           scrub: 0.8,
         });
@@ -126,11 +138,34 @@ export function StackStage({ children }: { children: ReactNode }) {
         };
       };
 
+      // Phones in portrait: no pin, the server grid (one column there) as a list whose cards bring
+      // in their tags as they enter. The circuit's camera moves a full screen per card, which on a
+      // phone read as a long detour through six lists of tags.
+      const buildList = () => {
+        const height = window.innerHeight;
+        for (const node of allNodes) {
+          if (node.getBoundingClientRect().top < height * 0.85) continue;
+          const items = [...node.querySelectorAll<HTMLElement>("li, span.inline-flex, [data-stack-terminal] p")];
+          gsap.set(items, { opacity: 0, y: 8 });
+          ScrollTrigger.create({
+            trigger: node,
+            start: "top 85%",
+            once: true,
+            onEnter: () => gsap.to(items, { opacity: 1, y: 0, stagger: 0.04, ...SPRINGS.ITEM }),
+          });
+        }
+      };
+
       const media = gsap.matchMedia();
       media.add(ACT_VARIANT_CONDITIONS, (context) => {
         const { full, narrow, short } = context.conditions ?? {};
         if (!full && !narrow && !short) {
           // Reduced motion: the grid from the server HTML, as is.
+          ready();
+          return;
+        }
+        if (narrow) {
+          buildList();
           ready();
           return;
         }

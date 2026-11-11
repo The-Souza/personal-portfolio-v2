@@ -11,22 +11,22 @@ export interface ButtonProps extends Omit<
   "children"
 > {
   children: ReactNode;
-  /** Com href vira <a> (ou o componente de `as`, ex.: next/link). */
+  /** With href it becomes an <a> (or the `as` component, e.g. next/link). */
   href?: string;
-  /** "outline" (padrão): corpo `card`, contorno `primary`. "solid": preenchido em `primary`, flood em `live`. */
+  /** "outline" (default): `card` body, `primary` outline. "solid": filled with `primary`, `live` flood. */
   variant?: "outline" | "solid";
-  /** Mostra a seta → no fim. Padrão true. */
+  /** Shows the → arrow at the end. Default true. */
   arrow?: boolean;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
-  /** Componente de link, ex.: `Link` do next/link. */
+  /** Link component, e.g. `Link` from next/link. */
   as?: ElementType;
-  /** Repassados ao link, ex.: `target="_blank"` para sites externos. */
+  /** Passed on to the link, e.g. `target="_blank"` for external sites. */
   target?: string;
   rel?: string;
 }
 
-/** CTA chanfrado com flood que entra da esquerda no hover. */
+/** Chamfered CTA with a flood that comes in from the left on hover. */
 export function Button({
   children,
   href,
@@ -57,10 +57,11 @@ export function Button({
       <span className="chamfer block bg-primary p-px">
         <span
           className={cn(
-            "chamfer relative flex h-12.5 items-center gap-3 overflow-hidden px-6 text-base",
+            // A minimum, not a fixed height: a long label wraps on a 320px phone and needs the room.
+            "chamfer relative flex min-h-12.5 items-center gap-3 overflow-hidden px-6 py-2 text-base",
             solid
-              ? "bg-primary text-primary-foreground in-[.alert]:group-hover:text-foreground"
-              : "bg-card text-primary-accessible group-hover:text-primary-foreground",
+              ? "bg-primary text-primary-foreground in-[.alert]:group-hover:text-foreground in-[.alert]:group-focus-visible:text-foreground"
+              : "bg-card text-primary-accessible group-hover:text-primary-foreground group-focus-visible:text-primary-foreground",
             "transition-colors duration-250 ease-plate",
           )}
           style={{ "--cut": "11.6px" } as CSSProperties}
@@ -68,7 +69,8 @@ export function Button({
           <span
             aria-hidden="true"
             className={cn(
-              "absolute inset-0 origin-left scale-x-0 transition-transform duration-250 ease-plate group-hover:scale-x-100",
+              // DESIGN.md: hover and keyboard focus get the same flood.
+              "absolute inset-0 origin-left scale-x-0 transition-transform duration-250 ease-plate group-hover:scale-x-100 group-focus-visible:scale-x-100",
               solid ? "bg-live in-[.alert]:bg-secondary" : "bg-primary",
             )}
           />
@@ -76,7 +78,7 @@ export function Button({
           {arrow && (
             <span
               aria-hidden="true"
-              className="relative transition-transform duration-150 ease-entrance group-hover:translate-x-1"
+              className="relative transition-transform duration-150 ease-entrance group-hover:translate-x-1 group-focus-visible:translate-x-1"
             >
               →
             </span>
