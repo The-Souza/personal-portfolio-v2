@@ -34,6 +34,17 @@ export function wantsHtml(headers: Headers) {
 }
 
 /**
+ * Copies what next-intl set (its locale cookie, alternate links) onto the proxy's own response,
+ * but not its routing instructions (an `x-middleware-next` would tell Next to carry on with the
+ * unknown path and show its own 404) nor its content-type.
+ */
+export function carryIntlHeaders(from: Headers, to: Headers) {
+  from.forEach((value, key) => {
+    if (key !== "content-type" && !key.startsWith("x-middleware-")) to.set(key, value);
+  });
+}
+
+/**
  * Whether the proxy's fetch got the 404 route's own page. Anything else (a protected preview's
  * login page, an error, a redirect) must not be served as the 404: the proxy falls back to a
  * rewrite, which shows the right page with a 200.

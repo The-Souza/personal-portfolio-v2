@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isNotFoundPage, NOT_FOUND_PATH, unknownRouteTarget, wantsHtml } from "@/i18n/unknown-route";
+import { carryIntlHeaders, isNotFoundPage, NOT_FOUND_PATH, unknownRouteTarget, wantsHtml } from "@/i18n/unknown-route";
 
 const locales = ["pt", "en"];
 
@@ -36,6 +36,32 @@ describe("wantsHtml", () => {
 
   it("um header rsc que ainda chegue vence o accept", () => {
     expect(wantsHtml(new Headers({ accept: "text/html", rsc: "1" }))).toBe(false);
+  });
+});
+
+describe("carryIntlHeaders", () => {
+  const intl = () =>
+    new Headers({
+      "set-cookie": "NEXT_LOCALE=pt; Path=/",
+      link: '</en>; rel="alternate"',
+      "content-type": "text/plain",
+      "x-middleware-next": "1",
+      "x-middleware-rewrite": "https://site.dev/pt/x",
+    });
+
+  it("leva o cookie de idioma e os outros headers do next-intl", () => {
+    const to = new Headers();
+    carryIntlHeaders(intl(), to);
+    expect(to.get("set-cookie")).toBe("NEXT_LOCALE=pt; Path=/");
+    expect(to.get("link")).toContain("alternate");
+  });
+
+  it("não leva as instruções de roteamento nem o content-type", () => {
+    const to = new Headers({ "x-middleware-rewrite": "https://site.dev/pt/off-the-map", "content-type": "text/html" });
+    carryIntlHeaders(intl(), to);
+    expect(to.get("x-middleware-next")).toBeNull();
+    expect(to.get("x-middleware-rewrite")).toBe("https://site.dev/pt/off-the-map");
+    expect(to.get("content-type")).toBe("text/html");
   });
 });
 
