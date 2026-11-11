@@ -28,6 +28,14 @@ const controls = {
     stopRequested = false;
     instance?.start();
   },
+  /**
+   * An instant jump to `y`, through Lenis when it runs: a native window.scrollTo was undone on the
+   * next frame by a smooth scroll still under way (wheel inertia), back toward Lenis's target.
+   */
+  jumpTo: (y: number) => {
+    if (instance) instance.scrollTo(y, { immediate: true, force: true });
+    else window.scrollTo(0, y);
+  },
   scrollTo: (requested: ScrollTarget) => {
     const target = withLanding(requested);
     if (instance) {

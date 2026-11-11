@@ -10,6 +10,7 @@ import { hasPlayed, markPlayed } from "@/lib/motion/played";
 import { SPRINGS } from "@/lib/motion/spring";
 import { splitWordChars } from "@/lib/motion/text";
 import { registerLanding } from "@/lib/scroll/landing";
+import { useLenis } from "@/lib/scroll/lenis";
 import { registerRelayout } from "@/lib/scroll/relayout";
 import { settleScrubs } from "@/lib/scroll/scroll-keeper";
 import { holdPageHeight } from "@/lib/scroll/viewport";
@@ -26,6 +27,7 @@ const LINE_STEP = 0.3;
  */
 export function ContactStage({ children }: { children: ReactNode }) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const lenis = useLenis();
 
   useGSAP(
     () => {
@@ -154,7 +156,7 @@ export function ContactStage({ children }: { children: ReactNode }) {
           // the button too, and moving the poster under the pointer could lose the click.
           if (!(event.target as Element | null)?.matches(":focus-visible")) return;
           if (!reveal && !poster.style.clipPath) return;
-          window.scrollTo(0, trigger.end);
+          lenis.jumpTo(trigger.end);
           settleScrubs();
         };
         root.addEventListener("focusin", onFocus);

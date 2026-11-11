@@ -8,6 +8,7 @@ import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
 import { SPRINGS } from "@/lib/motion/spring";
 import { scramble } from "@/lib/motion/text";
+import { useLenis } from "@/lib/scroll/lenis";
 import { registerRelayout } from "@/lib/scroll/relayout";
 import { settleScrubs } from "@/lib/scroll/scroll-keeper";
 import { holdPageHeight } from "@/lib/scroll/viewport";
@@ -33,6 +34,7 @@ interface CardState {
  */
 export function ProjectsStage({ children }: { children: ReactNode }) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const lenis = useLenis();
 
   useGSAP(
     () => {
@@ -232,7 +234,7 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
           const card = (event.target as Element | null)?.closest("[data-project-card]");
           const index = cards.findIndex((state) => state.card === card);
           if (index < 0) return;
-          window.scrollTo(0, trigger.labelToScroll(`card-${index}`));
+          lenis.jumpTo(trigger.labelToScroll(`card-${index}`));
           settleScrubs();
           timeline.progress(trigger.progress);
           update(true);
