@@ -156,6 +156,13 @@ export function StackStage({ children }: { children: ReactNode }) {
         }
       };
 
+      // Reverting the circuit isn't enough on its own. The pinned element keeps a snapshot of its
+      // inline styles taken after build()'s own sets, and the pin puts that snapshot back once the
+      // context has restored them: after the compact circuit (a phone on its side) the stage kept
+      // `height: 100vh`, and back in portrait the list overflowed it, under Contact. None of these
+      // carry inline styles from the server, so they're cleared outright.
+      const clearLayout = () => gsap.set([head, stage, board, trace, dot, ...allNodes], { clearProps: "all" });
+
       const media = gsap.matchMedia();
       media.add(ACT_VARIANT_CONDITIONS, (context) => {
         const { full, narrow, short } = context.conditions ?? {};
@@ -183,12 +190,14 @@ export function StackStage({ children }: { children: ReactNode }) {
         const unregister = registerRelayout(root, () => {
           undo();
           layout.revert();
+          clearLayout();
           layout = layOut();
         });
         return () => {
           unregister();
           undo();
           layout.revert();
+          clearLayout();
         };
       });
 
