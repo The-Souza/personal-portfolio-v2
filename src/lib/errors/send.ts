@@ -16,7 +16,13 @@ export function sendClientError(report: ClientErrorReport) {
   sent.add(key);
 
   const body = JSON.stringify(report);
-  if (navigator.sendBeacon?.(ENDPOINT, new Blob([body], { type: "application/json" }))) return;
+  // Some Chromium versions threw on a Blob whose type isn't CORS-safelisted (application/json);
+  // a throw here would skip the fetch below and raise one more error on top of the reported one.
+  try {
+    if (navigator.sendBeacon?.(ENDPOINT, new Blob([body], { type: "application/json" }))) return;
+  } catch {
+    // Falls through to fetch.
+  }
   fetch(ENDPOINT, { method: "POST", body, keepalive: true, headers: { "Content-Type": "application/json" } }).catch(() => {
     // Reporting must never throw on top of the error it reports.
   });

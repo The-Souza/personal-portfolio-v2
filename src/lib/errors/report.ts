@@ -14,10 +14,20 @@ export interface ClientErrorReport {
   digest?: string;
 }
 
+/** Any thrown value as text. Some don't convert (no prototype, a throwing toString): the report
+ * must not throw inside the very listener that is reporting an error. */
+function textOf(value: unknown) {
+  try {
+    return String(value);
+  } catch {
+    return "(valor sem texto)";
+  }
+}
+
 /** Builds a report that always fits the schema, from any thrown value. */
 export function toClientReport(error: unknown, source: ClientErrorReport["source"], path: string): ClientErrorReport {
   const isError = error instanceof Error;
-  const message = (isError ? error.message : String(error)) || "(sem mensagem)";
+  const message = (isError ? error.message : textOf(error)) || "(sem mensagem)";
   const digest = isError ? (error as Error & { digest?: string }).digest : undefined;
   return {
     source,

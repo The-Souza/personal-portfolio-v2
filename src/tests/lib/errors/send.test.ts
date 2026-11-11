@@ -38,6 +38,15 @@ describe("sendClientError", () => {
     expect(sendBeacon).toHaveBeenCalledTimes(10);
   });
 
+  it("se o sendBeacon lançar (Blob JSON recusado), cai no fetch sem lançar nada", async () => {
+    vi.stubGlobal("navigator", { ...navigator, sendBeacon: vi.fn(() => { throw new TypeError("not a CORS-safelisted type"); }) });
+    const fetch = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
+    vi.stubGlobal("fetch", fetch);
+    const { sendClientError } = await load();
+    expect(() => sendClientError(report("quebrou"))).not.toThrow();
+    expect(fetch).toHaveBeenCalledOnce();
+  });
+
   it("sem sendBeacon, usa fetch com keepalive", async () => {
     vi.stubGlobal("navigator", { ...navigator, sendBeacon: undefined });
     const fetch = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));

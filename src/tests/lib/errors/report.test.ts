@@ -19,6 +19,14 @@ describe("toClientReport", () => {
     expect(toClientReport("texto lançado", "promise", "/en")).toMatchObject({ message: "texto lançado", stack: undefined });
   });
 
+  it("não lança com um valor que não vira texto (sem toString, ou um toString que lança)", () => {
+    const bare = Object.create(null) as object;
+    const hostile = { toString: () => { throw new Error("toString quebrado"); } };
+    expect(() => toClientReport(bare, "promise", "/pt")).not.toThrow();
+    expect(toClientReport(bare, "promise", "/pt").message).toBe("(valor sem texto)");
+    expect(toClientReport(hostile, "promise", "/pt").message).toBe("(valor sem texto)");
+  });
+
   it("usa um texto padrão para uma mensagem vazia", () => {
     expect(toClientReport(new Error(""), "window", "/pt").message).toBe("(sem mensagem)");
   });
