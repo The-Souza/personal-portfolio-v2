@@ -62,8 +62,15 @@ export function useOverPoster(marksRef: RefObject<HTMLElement | null>, readingRe
     const poster = document.querySelector<HTMLElement>("[data-contact-poster]");
     const footer = document.querySelector<HTMLElement>("footer.alert");
     let frame = 0;
+    // The surfaces within a screen of the viewport. Far from them (the hero, the projects, the
+    // stack) nothing can be covered, so the frame skips the layout reads below entirely.
+    const near = new Set<Element>();
     const check = () => {
       frame = 0;
+      if (!near.size) {
+        setOver((current) => (current.reading || current.marks.some(Boolean) ? { marks: [], reading: false } : current));
+        return;
+      }
       const surfaces: Surface[] = [];
       if (poster) surfaces.push(surfaceOf(poster, parseBladeClip(poster.style.clipPath)));
       if (footer) surfaces.push(surfaceOf(footer, null));
@@ -79,6 +86,17 @@ export function useOverPoster(marksRef: RefObject<HTMLElement | null>, readingRe
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(check);
     };
+    const nearby = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) near.add(entry.target);
+          else near.delete(entry.target);
+        }
+        schedule();
+      },
+      { rootMargin: "100% 0px" },
+    );
+    for (const surface of [poster, footer]) if (surface) nearby.observe(surface);
     // The blade is scrubbed, so its cut keeps changing for a moment after the scroll stops.
     const blade = new MutationObserver(schedule);
     if (poster) blade.observe(poster, { attributes: true, attributeFilter: ["style"] });
@@ -87,6 +105,7 @@ export function useOverPoster(marksRef: RefObject<HTMLElement | null>, readingRe
     schedule();
     return () => {
       cancelAnimationFrame(frame);
+      nearby.disconnect();
       blade.disconnect();
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
