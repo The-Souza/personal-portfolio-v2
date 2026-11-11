@@ -23,9 +23,13 @@ export function ThemeToggle({ className }: { className?: string }) {
       return;
     }
     document.startViewTransition(() => {
-      // The transition snapshots the page once this returns, but next-themes applies the class
-      // in an effect, after the render: set it here, the same way it will.
-      document.documentElement.classList.toggle("dark", next === "dark");
+      // The transition snapshots the page once this returns, but next-themes applies the theme
+      // in an effect, after the render: apply it here the same way it will (both classes and the
+      // color-scheme, or native scrollbars and controls would sweep in with the old scheme).
+      const root = document.documentElement;
+      root.classList.remove("light", "dark");
+      root.classList.add(next);
+      root.style.colorScheme = next;
       setTheme(next);
     });
   };

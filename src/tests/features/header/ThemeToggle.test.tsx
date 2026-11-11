@@ -62,13 +62,16 @@ describe("ThemeToggle", () => {
 
     const stubTransition = () => {
       const classDuringUpdate: boolean[] = [];
+      const stateDuringUpdate: { classes: string; colorScheme: string }[] = [];
       const startViewTransition = vi.fn((update: () => void) => {
         update();
-        classDuringUpdate.push(document.documentElement.classList.contains("dark"));
+        const root = document.documentElement;
+        classDuringUpdate.push(root.classList.contains("dark"));
+        stateDuringUpdate.push({ classes: root.className, colorScheme: root.style.colorScheme });
         return { finished: Promise.resolve() };
       });
       Object.defineProperty(document, "startViewTransition", { configurable: true, value: startViewTransition });
-      return { startViewTransition, classDuringUpdate };
+      return { startViewTransition, classDuringUpdate, stateDuringUpdate };
     };
 
     it("troca o tema dentro de uma View Transition, já com a classe nova no callback", async () => {
@@ -78,6 +81,15 @@ describe("ThemeToggle", () => {
       await user.click(screen.getByRole("button"));
       expect(startViewTransition).toHaveBeenCalledOnce();
       expect(classDuringUpdate).toEqual([false]);
+    });
+
+    it("no callback já aplica o tema inteiro, como o next-themes: classe light e color-scheme", async () => {
+      const user = userEvent.setup();
+      const { stateDuringUpdate } = stubTransition();
+      renderToggle();
+      await user.click(screen.getByRole("button"));
+      expect(stateDuringUpdate[0].classes.split(" ")).toContain("light");
+      expect(stateDuringUpdate[0].colorScheme).toBe("light");
     });
 
     it("troca direto com movimento reduzido", async () => {
