@@ -142,7 +142,8 @@ export function createReveal(canvas: HTMLCanvasElement, effect: RevealEffect, se
   // Placeholder colors come from the theme tokens, so a theme switch repaints them.
   const themeObserver = new MutationObserver(repaint);
   themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-  // The image may load after the reveal is set up (it's lazy): swap the placeholder for it.
+  // The image can still be loading when the reveal is set up (it's eager on purpose, see
+  // RevealImage: the clipped, moving track never triggered lazy loading): swap the placeholder in.
   image?.addEventListener("load", repaint);
 
   return {
