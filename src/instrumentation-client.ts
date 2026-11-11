@@ -1,9 +1,10 @@
-import { toClientReport } from "@/lib/errors/report";
+import { isNoise, toClientReport } from "@/lib/errors/report";
 import { sendClientError } from "@/lib/errors/send";
 
 // Browser errors no component catches, sent to the server log (see /api/client-error). The ones
 // the error page catches are reported by ErrorView itself: React keeps them from reaching here.
 window.addEventListener("error", (event) => {
+  if (isNoise(event.message, event.error)) return;
   sendClientError(toClientReport(event.error ?? event.message, "window", window.location.pathname));
 });
 

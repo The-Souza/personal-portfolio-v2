@@ -1,6 +1,26 @@
 import { describe, expect, it } from "vitest";
-import { logLine, toClientReport } from "@/lib/errors/report";
+import { isNoise, logLine, toClientReport } from "@/lib/errors/report";
 import { clientErrorSchema } from "@/lib/errors/schema";
+
+describe("isNoise", () => {
+  it("descarta o aviso de loop do ResizeObserver, que o navegador dispara sem ser um erro", () => {
+    expect(isNoise("ResizeObserver loop completed with undelivered notifications.", null)).toBe(true);
+    expect(isNoise("ResizeObserver loop limit exceeded", null)).toBe(true);
+  });
+
+  it("descarta o 'Script error.' sem detalhes, de scripts de outra origem (extensões)", () => {
+    expect(isNoise("Script error.", null)).toBe(true);
+    expect(isNoise("Script error", undefined)).toBe(true);
+  });
+
+  it("mantém um erro de verdade", () => {
+    expect(isNoise("Cannot read properties of undefined", new TypeError("x"))).toBe(false);
+  });
+
+  it("mantém um evento sem objeto de erro quando a mensagem não é uma das conhecidas", () => {
+    expect(isNoise("Uncaught something", null)).toBe(false);
+  });
+});
 
 describe("toClientReport", () => {
   it("monta o relato de um Error com mensagem, pilha, origem e rota", () => {

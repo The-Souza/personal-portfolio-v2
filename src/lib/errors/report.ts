@@ -24,6 +24,16 @@ function textOf(value: unknown) {
   }
 }
 
+/**
+ * Window error events that aren't bugs of the page: the ResizeObserver loop notice (the page uses
+ * several observers; browsers raise it on benign resizes) and the detail-less "Script error." of a
+ * cross-origin script, usually an extension. Reported, they buried the real errors in the log.
+ */
+export function isNoise(message: string, error: unknown) {
+  if (/^ResizeObserver loop/.test(message)) return true;
+  return error == null && /^Script error\.?$/.test(message);
+}
+
 /** Builds a report that always fits the schema, from any thrown value. */
 export function toClientReport(error: unknown, source: ClientErrorReport["source"], path: string): ClientErrorReport {
   const isError = error instanceof Error;
