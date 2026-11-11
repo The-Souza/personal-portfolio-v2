@@ -3,7 +3,7 @@
 import { type ReactNode, useRef } from "react";
 import { BLADE, bladeAt, bladeClip, isBladeDone, isTitleReady } from "@/features/contact/blade";
 import { lineIndexes, lineOffsets } from "@/features/contact/title-lines";
-import { ACT_VARIANT_CONDITIONS } from "@/lib/motion/breakpoints";
+import { ACT_VARIANT_CONDITIONS, MEDIA } from "@/lib/motion/breakpoints";
 import { playGlitch } from "@/lib/motion/glitch";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { hasPlayed, markPlayed } from "@/lib/motion/played";
@@ -17,8 +17,6 @@ import { holdPageHeight } from "@/lib/scroll/viewport";
 const PLAYED_KEY = "contact-poster";
 /** Each title line shifts this much from the one above, to a random side, in em. */
 const LINE_STEP = 0.3;
-/** The `phone` breakpoint (35rem) in globals.css. */
-const PHONE_UP = "(min-width: 35rem)";
 
 /**
  * Client shell for Contact (brief, act 05 · B): the pinned stage where the poster enters as a
@@ -117,7 +115,7 @@ export function ContactStage({ children }: { children: ReactNode }) {
           const padding = parseFloat(getComputedStyle(container).paddingLeft) + parseFloat(getComputedStyle(container).paddingRight);
           // Below `phone` the title breaks into four or five short lines, and shifting each one
           // read as broken type ("I AUTOMATE / WHAT / HOLDS YOUR…"): there they stay aligned.
-          const step = window.matchMedia(PHONE_UP).matches ? parseFloat(getComputedStyle(title).fontSize) * LINE_STEP : 0;
+          const step = window.matchMedia(MEDIA.phoneUp).matches ? parseFloat(getComputedStyle(title).fontSize) * LINE_STEP : 0;
           const offsets = lineOffsets(widths, container.clientWidth - padding, step, picks);
           words.forEach((word, i) => gsap.set(word, { x: offsets[lines[i]] }));
         };
@@ -151,7 +149,10 @@ export function ContactStage({ children }: { children: ReactNode }) {
         title.addEventListener("pointerenter", onTitleEnter);
         // Tabbing into the poster before it entered would focus buttons still hidden on the dark
         // stage: the page goes where the blade is done, which plays the entrance.
-        const onFocus = () => {
+        const onFocus = (event: FocusEvent) => {
+          // Keyboard focus only, as in the projects track: a click on WhatsApp or e-mail focuses
+          // the button too, and moving the poster under the pointer could lose the click.
+          if (!(event.target as Element | null)?.matches(":focus-visible")) return;
           if (!reveal && !poster.style.clipPath) return;
           window.scrollTo(0, trigger.end);
           settleScrubs();

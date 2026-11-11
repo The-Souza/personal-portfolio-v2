@@ -10,6 +10,8 @@ export const MEDIA = {
   reducedMotion: "(prefers-reduced-motion: reduce)",
   short: `(max-height: ${BREAKPOINTS.shortBelowHeight - 0.02}px)`,
   narrow: `(max-width: ${BREAKPOINTS.narrowBelowWidth - 0.02}px)`,
+  /** The `phone` breakpoint (35rem) in globals.css, and up. */
+  phoneUp: "(min-width: 35rem)",
 } as const;
 
 /** One condition per variant, for `gsap.matchMedia()` inside each act. */
