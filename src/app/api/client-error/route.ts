@@ -1,8 +1,12 @@
 import { logLine } from "@/lib/errors/report";
 import { clientErrorSchema } from "@/lib/errors/schema";
 
-/** Larger than any report the client builds (see the limits in report.ts). */
-const MAX_BODY = 8192;
+/**
+ * Larger than any report the client builds. The limits in report.ts count characters, this counts
+ * bytes after JSON: a control character escapes to 6 (`\u0001`), so the worst case is about
+ * (500 + 4000 + 300 + 64) × 6 ≈ 29 KB. At 8 KB, a long stack with accents was refused and lost.
+ */
+const MAX_BODY = 32 * 1024;
 
 /**
  * The body as text, or null past `max` bytes. It stops reading there: `request.text()` buffered

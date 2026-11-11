@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "@/app/api/client-error/route";
+import { toClientReport } from "@/lib/errors/report";
 
 const post = (body: string) => POST(new Request("http://localhost/api/client-error", { method: "POST", body }));
 
@@ -48,17 +49,23 @@ describe("POST /api/client-error", () => {
     expect(error).not.toHaveBeenCalled();
   });
 
+  it("aceita o maior relato que o cliente monta, mesmo com acentos e caracteres de controle", async () => {
+    // Every field at its limit (report.ts), in characters that cost the most bytes once sent.
+    const report = toClientReport(Object.assign(new Error("ç".repeat(500)), { stack: "\u0001".repeat(4000) }), "window", `/${"ã".repeat(299)}`);
+    expect((await post(JSON.stringify(report))).status).toBe(204);
+  });
+
   it("recusa corpo grande demais com 413", async () => {
-    const huge = JSON.stringify({ source: "window", message: "x", path: "/pt", stack: "s".repeat(20000) });
+    const huge = JSON.stringify({ source: "window", message: "x", path: "/pt", stack: "s".repeat(40000) });
     expect((await post(huge)).status).toBe(413);
     expect(error).not.toHaveBeenCalled();
   });
 
   it("para de ler um corpo enorme logo depois do limite, sem consumi-lo inteiro", async () => {
-    // 100 MB announced in 1 KB pieces: the route must answer after about 8 KB.
+    // 100 MB announced in 1 KB pieces: the route must answer right after the 32 KB cap.
     const { request, sent } = streamed(100 * 1024, 1024);
     expect((await POST(request)).status).toBe(413);
-    expect(sent.bytes).toBeLessThanOrEqual(16 * 1024);
+    expect(sent.bytes).toBeLessThanOrEqual(40 * 1024);
   });
 
   it("recusa pelo content-length declarado antes de ler o corpo", async () => {
