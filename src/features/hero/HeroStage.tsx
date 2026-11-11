@@ -60,14 +60,24 @@ export function HeroStage({ children }: { children: ReactNode }) {
       // Glitch: on entrance, on mouse hover, and every 6–11s while visible and the tab is active,
       // up to AUTO_GLITCHES times: flicker that keeps coming back by itself next to the text would
       // fail WCAG 2.2.2 (Pause, Stop, Hide).
+      // The timer only runs while the name is on screen: off screen it pauses (the observer starts
+      // it again on the way back), and once the glitches are spent it's never armed again.
       let glitchTimer = 0;
       let nameVisible = true;
       let autoGlitches = 0;
+      let glitchStarted = false;
       const glitch = contextSafe((strength: number) => playGlitch(visual, name, strength));
+      const stopGlitchTimer = () => {
+        window.clearTimeout(glitchTimer);
+        glitchTimer = 0;
+      };
       const scheduleGlitch = () => {
-        if (autoGlitches >= AUTO_GLITCHES) return;
+        glitchStarted = true;
+        stopGlitchTimer();
+        if (autoGlitches >= AUTO_GLITCHES || !nameVisible) return;
         glitchTimer = window.setTimeout(() => {
-          if (nameVisible && !document.hidden) {
+          glitchTimer = 0;
+          if (!document.hidden) {
             glitch(0.8 + Math.random() * 0.6);
             autoGlitches++;
           }
@@ -76,6 +86,9 @@ export function HeroStage({ children }: { children: ReactNode }) {
       };
       const visibility = new IntersectionObserver(([entry]) => {
         nameVisible = entry.isIntersecting;
+        if (!glitchStarted) return;
+        if (!nameVisible) stopGlitchTimer();
+        else if (!glitchTimer) scheduleGlitch();
       });
       visibility.observe(name);
       const onNameEnter = (event: PointerEvent) => {
@@ -168,7 +181,7 @@ export function HeroStage({ children }: { children: ReactNode }) {
 
       return () => {
         stopWaiting();
-        clearTimeout(glitchTimer);
+        stopGlitchTimer();
         visibility.disconnect();
         name.removeEventListener("pointerenter", onNameEnter);
         scroll.revert();
