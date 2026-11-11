@@ -98,19 +98,27 @@ export function LanguageSwitcher({ className }: { className?: string }) {
     // has hydrated, which Next does after the header; until then the offset lands too low (in
     // Contact). So the page stays hidden until then: refresh, restore again and show it, then
     // restore once more after any refresh in the next 2s (the window load event refreshes too).
+    // The visitor's own scroll ends that window at once: a refresh must not pull back someone who
+    // already started moving (a shared `/pt#contact` link shows the page right away).
     let stopListening = 0;
+    const INPUTS = ["wheel", "touchstart", "keydown", "pointerdown"] as const;
+    const stopRestoring = () => {
+      window.clearTimeout(stopListening);
+      ScrollTrigger.removeEventListener("refresh", restore);
+      for (const type of INPUTS) window.removeEventListener(type, stopRestoring);
+    };
     const cancelReady = onPageReady(() => {
       ScrollTrigger.refresh();
       restore();
       reveal();
       ScrollTrigger.addEventListener("refresh", restore);
-      stopListening = window.setTimeout(() => ScrollTrigger.removeEventListener("refresh", restore), 2000);
+      for (const type of INPUTS) window.addEventListener(type, stopRestoring, { passive: true });
+      stopListening = window.setTimeout(stopRestoring, 2000);
     });
     return () => {
       window.removeEventListener("pagehide", saveOnLeave);
       cancelReady();
-      window.clearTimeout(stopListening);
-      ScrollTrigger.removeEventListener("refresh", restore);
+      stopRestoring();
     };
   }, []);
 
