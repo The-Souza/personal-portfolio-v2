@@ -12,7 +12,12 @@ vi.mock("next-intl/server", async () => {
   };
 });
 
-// The address bar the visitor typed: the log reads it, not the route that rendered.
+// The router's pathname. A direct visit gets the page through the proxy's fetch of the 404 route,
+// so the router sits on that route; a client navigation is a rewrite, so it has the URL tried.
+const router = vi.hoisted(() => ({ pathname: "/pt/off-the-map" }));
+vi.mock("next/navigation", () => ({ usePathname: () => router.pathname }));
+
+// The address bar the visitor typed: on a direct visit the log reads it.
 window.history.replaceState(null, "", "/pt/rota-que-nao-existe");
 
 // jsdom has no ResizeObserver; the stage only uses it to place the slot.
@@ -48,6 +53,16 @@ describe("NotFoundView", () => {
   it("mostra no log a rota que o visitante tentou", async () => {
     await renderNotFound();
     expect(screen.getAllByText(/get \/pt\/rota-que-nao-existe/i).length).toBeGreaterThan(0);
+  });
+
+  it("numa navegação pelo cliente, mostra a rota nova mesmo antes de a barra de endereço mudar", async () => {
+    router.pathname = "/pt/outra-rota";
+    try {
+      await renderNotFound();
+      expect(screen.getAllByText(/get \/pt\/outra-rota/i).length).toBeGreaterThan(0);
+    } finally {
+      router.pathname = "/pt/off-the-map";
+    }
   });
 
   it("deixa o 404 gigante fora dos leitores de tela", async () => {
