@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NOT_FOUND_PATH, unknownRouteTarget } from "@/i18n/unknown-route";
+import { isNotFoundPage, NOT_FOUND_PATH, unknownRouteTarget, wantsHtml } from "@/i18n/unknown-route";
 
 const locales = ["pt", "en"];
 
@@ -21,5 +21,38 @@ describe("unknownRouteTarget", () => {
   it("deixa com o next-intl um caminho sem idioma, que ele redireciona", () => {
     expect(unknownRouteTarget("/", locales)).toBeNull();
     expect(unknownRouteTarget("/sobre", locales)).toBeNull();
+  });
+});
+
+describe("wantsHtml", () => {
+  it("uma visita do navegador pede HTML", () => {
+    expect(wantsHtml(new Headers({ accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" }))).toBe(true);
+  });
+
+  it("uma navegação do cliente (RSC) não pede, mesmo sem os headers que o Next tira antes do proxy", () => {
+    expect(wantsHtml(new Headers({ accept: "*/*" }))).toBe(false);
+    expect(wantsHtml(new Headers())).toBe(false);
+  });
+
+  it("um header rsc que ainda chegue vence o accept", () => {
+    expect(wantsHtml(new Headers({ accept: "text/html", rsc: "1" }))).toBe(false);
+  });
+});
+
+describe("isNotFoundPage", () => {
+  const page = (status: number, type = "text/html; charset=utf-8") => new Response("<html></html>", { status, headers: { "content-type": type } });
+
+  it("aceita o HTML da rota do 404 com status 200", () => {
+    expect(isNotFoundPage(page(200))).toBe(true);
+  });
+
+  it("recusa outro status: a tela de login de uma preview protegida, um erro, um redirecionamento", () => {
+    expect(isNotFoundPage(page(401))).toBe(false);
+    expect(isNotFoundPage(page(500))).toBe(false);
+    expect(isNotFoundPage(page(307))).toBe(false);
+  });
+
+  it("recusa uma resposta que não é HTML", () => {
+    expect(isNotFoundPage(page(200, "application/json"))).toBe(false);
   });
 });

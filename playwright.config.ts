@@ -21,6 +21,8 @@ export default defineConfig({
   webServer: {
     command: `pnpm start -p ${PORT}`,
     url: `http://localhost:${PORT}/pt`,
+    // Production refuses loopback origins in the 404 proxy (SSRF), except this exact one.
+    env: { TRUSTED_LOCAL_ORIGIN: `http://localhost:${PORT}` },
     reuseExistingServer: !CI,
     timeout: 120_000,
   },

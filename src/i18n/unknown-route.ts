@@ -9,6 +9,9 @@ const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "[::1]"]);
  * The origin the proxy may fetch the 404 page from: the request's own, but only when its host is
  * one of the app's (the site URL, the domains Vercel provides, the local server). The host comes
  * from the request's Host header, so anything else could point the fetch elsewhere (SSRF).
+ * Loopback hosts pass only in development: in production any port would do (`localhost:6379`
+ * reaching an internal service), so there only `TRUSTED_LOCAL_ORIGIN` does, the exact origin of
+ * a local production server (the e2e's).
  */
 export function trustedOrigin(requestUrl: string, env: Record<string, string | undefined> = process.env) {
   const url = new URL(requestUrl);
@@ -17,7 +20,26 @@ export function trustedOrigin(requestUrl: string, env: Record<string, string | u
       (host): host is string => Boolean(host),
     ),
   );
-  return hosts.has(url.host) || LOCAL_HOSTS.has(url.hostname) ? url.origin : null;
+  const local = LOCAL_HOSTS.has(url.hostname) && (env.NODE_ENV === "development" || env.TRUSTED_LOCAL_ORIGIN === url.origin);
+  return hosts.has(url.host) || local ? url.origin : null;
+}
+
+/**
+ * Whether the request is a document visit, which asks for HTML. A client navigation asks for the
+ * RSC payload instead, but Next's proxy adapter strips both its markers (the `rsc` header and the
+ * `_rsc` query) before the proxy runs; its fetch never accepts `text/html`, which is what stays.
+ */
+export function wantsHtml(headers: Headers) {
+  return !headers.has("rsc") && (headers.get("accept") ?? "").includes("text/html");
+}
+
+/**
+ * Whether the proxy's fetch got the 404 route's own page. Anything else (a protected preview's
+ * login page, an error, a redirect) must not be served as the 404: the proxy falls back to a
+ * rewrite, which shows the right page with a 200.
+ */
+export function isNotFoundPage(response: Response) {
+  return response.status === 200 && (response.headers.get("content-type") ?? "").startsWith("text/html");
 }
 
 /**

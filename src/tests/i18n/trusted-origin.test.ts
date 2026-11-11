@@ -13,9 +13,23 @@ describe("trustedOrigin", () => {
     expect(trustedOrigin("https://app.vercel.app/pt/x", env)).toBe("https://app.vercel.app");
   });
 
-  it("aceita o servidor local em qualquer porta", () => {
-    expect(trustedOrigin("http://localhost:3100/pt/x", {})).toBe("http://localhost:3100");
-    expect(trustedOrigin("http://127.0.0.1:3000/pt/x", {})).toBe("http://127.0.0.1:3000");
+  it("em desenvolvimento, aceita o servidor local em qualquer porta", () => {
+    const env = { NODE_ENV: "development" };
+    expect(trustedOrigin("http://localhost:3100/pt/x", env)).toBe("http://localhost:3100");
+    expect(trustedOrigin("http://127.0.0.1:3000/pt/x", env)).toBe("http://127.0.0.1:3000");
+  });
+
+  it("em produção, recusa o localhost (o Host pode apontar para um serviço interno)", () => {
+    const env = { NODE_ENV: "production" };
+    expect(trustedOrigin("http://localhost:6379/pt/x", env)).toBeNull();
+    expect(trustedOrigin("http://127.0.0.1:3000/pt/x", env)).toBeNull();
+    expect(trustedOrigin("http://[::1]:3000/pt/x", env)).toBeNull();
+  });
+
+  it("em produção, aceita só a origem local declarada (o servidor do e2e)", () => {
+    const env = { NODE_ENV: "production", TRUSTED_LOCAL_ORIGIN: "http://localhost:3100" };
+    expect(trustedOrigin("http://localhost:3100/pt/x", env)).toBe("http://localhost:3100");
+    expect(trustedOrigin("http://localhost:6379/pt/x", env)).toBeNull();
   });
 
   it("recusa qualquer outro host, que veio do cabeçalho Host da requisição", () => {
