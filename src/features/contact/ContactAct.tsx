@@ -1,0 +1,75 @@
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/Button";
+import { WarningMark } from "@/components/HudMarkers";
+import { SITE } from "@/content/site";
+import { mailtoUrl, whatsappUrl } from "@/features/contact/contact-links";
+import { ContactStage } from "@/features/contact/ContactStage";
+import { CopyEmail } from "@/features/contact/CopyEmail";
+import { ActionLink } from "@/features/shared/ActionLink";
+import { Container } from "@/features/shared/Container";
+import { NewTabHint } from "@/features/shared/NewTabHint";
+
+/**
+ * Contact (brief, act 05 · B): the Alert poster over a dark stage. On the client it enters as a
+ * diagonal blade (see ContactStage); without JS, or with reduced motion, it is simply there.
+ */
+export function ContactAct() {
+  const t = useTranslations("contact");
+
+  return (
+    <section id="contact" aria-label={t("aria")} className="relative z-5 bg-background">
+      <ContactStage>
+        <div data-contact-stage className="relative">
+          <div data-contact-edge aria-hidden="true" className="alert absolute inset-0 hidden bg-foreground" />
+          <div data-contact-poster className="alert relative flex min-h-screen items-center bg-background text-foreground">
+            <Container className="flex flex-col gap-6 pt-24 pb-12">
+              <div data-contact-item className="flex items-start justify-between gap-6">
+                <p className="font-mono text-eyebrow text-primary-accessible uppercase">{t("eyebrow")}</p>
+                <WarningMark>{t("warning")}</WarningMark>
+              </div>
+              <h2
+                data-contact-title
+                className="relative max-w-[15ch] font-heading text-[clamp(2.875rem,7.4vw,7rem)] leading-impact font-bold text-balance uppercase"
+              >
+                {/* The layer the glitch copies, laid over the title (see playGlitch). */}
+                <span data-contact-title-text className="block">
+                  {t("title")}
+                </span>
+              </h2>
+              <p data-contact-item className="max-w-[56ch] text-lead text-muted-foreground">
+                {t("lead")}
+              </p>
+              {/* Two direct channels, so the conversation starts here instead of on another site. */}
+              <div data-contact-item className="flex flex-wrap items-center gap-4">
+                <Button href={whatsappUrl(SITE.whatsapp, t("whatsappMessage"))} variant="solid" target="_blank" rel="noopener noreferrer">
+                  {t("cta")}
+                  <NewTabHint />
+                </Button>
+                <Button href={mailtoUrl(SITE.email, t("emailSubject"))}>{t("email")}</Button>
+              </div>
+              <p data-contact-item className="max-w-[56ch] text-sm text-muted-foreground">
+                {t("reassurance")}
+              </p>
+              {/* On touch screens the rows open up so the links' 44px tap areas (`tap-area`) don't overlap. */}
+              <div data-contact-item className="flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-sm tracking-wider pointer-coarse:gap-y-7.5">
+                <CopyEmail email={SITE.email} />
+                <ActionLink href={SITE.companyUrl} external bare>
+                  {t("site")}
+                  <NewTabHint />
+                </ActionLink>
+                <ActionLink href={SITE.linkedinUrl} external bare>
+                  {t("linkedin")}
+                  <NewTabHint />
+                </ActionLink>
+                <ActionLink href={SITE.githubUrl} external bare>
+                  {t("github")}
+                  <NewTabHint />
+                </ActionLink>
+              </div>
+            </Container>
+          </div>
+        </div>
+      </ContactStage>
+    </section>
+  );
+}

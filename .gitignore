@@ -49,6 +49,8 @@ claude*
 
 # playwright
 .playwright*
+/test-results/
+/playwright-report/
 
 # agents
 .agents
@@ -60,3 +62,5 @@ agents*
 # documentation
 DESIGN.md
 PRODUCT.md
+
+portfolio-kit/
