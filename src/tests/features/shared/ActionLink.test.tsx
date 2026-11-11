@@ -12,6 +12,16 @@ describe("ActionLink", () => {
     expect(container.querySelector("a")?.textContent).toContain("↗︎");
   });
 
+  it("desenha a seta externa na fonte mono, que tem o glifo (a do texto não tem, e o iOS caía numa seta maior)", () => {
+    const { container } = render(
+      <ActionLink href="https://example.com" external>
+        Ver site
+      </ActionLink>,
+    );
+    const arrow = [...container.querySelectorAll("span")].find((span) => span.textContent === "↗︎");
+    expect(arrow).toHaveClass("font-mono");
+  });
+
   it("mantém a seta de um link interno", () => {
     const { container } = render(<ActionLink href="#contact">Contato</ActionLink>);
     expect(container.querySelector("a")?.textContent).toContain("→");

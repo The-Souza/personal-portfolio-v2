@@ -13,8 +13,9 @@ interface ActionLinkProps {
 
 /** Action link in brackets with an arrow: [ Contato → ]. Brackets and arrow are hidden from screen readers. */
 export function ActionLink({ href, children, external, bare, className }: ActionLinkProps) {
-  // U+FE0E asks for the text glyph: "↗" has an emoji form, and iOS used it wherever the font lacks
-  // the arrow (Space Grotesk in the project cards; the mono links had it).
+  // The external arrow is drawn in the mono face, which has its own "↗": Space Grotesk (the label
+  // face) lacks it, and iOS fell back to a system glyph twice the size, unlike the mono links in
+  // Contact. U+FE0E keeps it a text glyph wherever a font would offer the emoji form.
   const arrow = external ? "↗︎" : "→";
 
   return (
@@ -31,7 +32,7 @@ export function ActionLink({ href, children, external, bare, className }: Action
       {children}
       <span aria-hidden="true">
         {" "}
-        {arrow}
+        <span className={cn(external && "font-mono")}>{arrow}</span>
         {!bare && " ]"}
       </span>
     </a>
