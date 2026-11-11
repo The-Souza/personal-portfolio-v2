@@ -1,4 +1,5 @@
 import type Lenis from "lenis";
+import { hashId } from "@/lib/scroll/hash";
 import { landingFor } from "@/lib/scroll/landing";
 
 type ScrollTarget = string | HTMLElement | number;
@@ -13,7 +14,8 @@ let stopRequested = false;
 /** A `#section` target goes to the section's landing point when it registered one. */
 function withLanding(target: ScrollTarget): ScrollTarget {
   if (typeof target !== "string" || !target.startsWith("#")) return target;
-  return landingFor(decodeURIComponent(target.slice(1))) ?? target;
+  const id = hashId(target);
+  return (id && landingFor(id)) ?? target;
 }
 
 const controls = {
@@ -48,8 +50,8 @@ function onAnchorClick(event: MouseEvent) {
   if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   const link = (event.target as Element | null)?.closest?.('a[href^="#"]');
   const hash = link?.getAttribute("href");
-  if (!hash || hash === "#") return;
-  const id = decodeURIComponent(hash.slice(1));
+  const id = hash ? hashId(hash) : null;
+  if (!hash || !id) return;
   const target = document.getElementById(id);
   if (!target) return;
 
@@ -66,7 +68,8 @@ function onAnchorClick(event: MouseEvent) {
  * the browser jump to the section's top; a section with a landing point goes there instead.
  */
 function onHashChange() {
-  const landing = landingFor(decodeURIComponent(window.location.hash.slice(1)));
+  const id = hashId(window.location.hash);
+  const landing = id ? landingFor(id) : null;
   if (instance && landing !== null) instance.scrollTo(landing, { immediate: true });
 }
 
