@@ -4,6 +4,8 @@ import { routing } from "@/i18n/routing";
 import { carryIntlHeaders, isNotFoundPage, trustedOrigin, unknownRouteTarget, wantsHtml } from "@/i18n/unknown-route";
 
 const intl = createMiddleware(routing);
+/** How long the proxy waits for its own 404 page before falling back to the rewrite. */
+const FETCH_TIMEOUT_MS = 2000;
 
 export default async function proxy(request: NextRequest) {
   const response = intl(request);
@@ -30,7 +32,12 @@ export default async function proxy(request: NextRequest) {
   // through the rewrite, rather than a 500 or someone else's HTML.
   let page: Response;
   try {
-    page = await fetch(new URL(target, origin), { headers: { accept: "text/html" }, redirect: "manual" });
+    // Bounded: a slow 404 route (a cold start, a deploy in progress) must not hold the visit.
+    page = await fetch(new URL(target, origin), {
+      headers: { accept: "text/html" },
+      redirect: "manual",
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
   } catch {
     return rewrite();
   }

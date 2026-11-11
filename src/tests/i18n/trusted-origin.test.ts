@@ -26,6 +26,10 @@ describe("trustedOrigin", () => {
     expect(trustedOrigin("http://[::1]:3000/pt/x", env)).toBeNull();
   });
 
+  it("em produção sem nenhuma variável, não confia no localhost:3000 que o siteUrl usa como padrão", () => {
+    expect(trustedOrigin("http://localhost:3000/pt/x", { NODE_ENV: "production" })).toBeNull();
+  });
+
   it("em produção, aceita só a origem local declarada (o servidor do e2e)", () => {
     const env = { NODE_ENV: "production", TRUSTED_LOCAL_ORIGIN: "http://localhost:3100" };
     expect(trustedOrigin("http://localhost:3100/pt/x", env)).toBe("http://localhost:3100");

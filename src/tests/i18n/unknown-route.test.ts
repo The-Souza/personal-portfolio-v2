@@ -25,17 +25,21 @@ describe("unknownRouteTarget", () => {
 });
 
 describe("wantsHtml", () => {
-  it("uma visita do navegador pede HTML", () => {
-    expect(wantsHtml(new Headers({ accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" }))).toBe(true);
+  it("uma visita do navegador (Sec-Fetch-Dest: document) recebe o 404 de verdade", () => {
+    expect(wantsHtml(new Headers({ "sec-fetch-dest": "document", accept: "text/html,*/*;q=0.8" }))).toBe(true);
   });
 
-  it("uma navegação do cliente (RSC) não pede, mesmo sem os headers que o Next tira antes do proxy", () => {
-    expect(wantsHtml(new Headers({ accept: "*/*" }))).toBe(false);
-    expect(wantsHtml(new Headers())).toBe(false);
+  it("uma navegação do cliente (RSC) é um fetch, mesmo sem os headers que o Next tira antes do proxy", () => {
+    expect(wantsHtml(new Headers({ "sec-fetch-dest": "empty", accept: "*/*" }))).toBe(false);
   });
 
-  it("um header rsc que ainda chegue vence o accept", () => {
-    expect(wantsHtml(new Headers({ accept: "text/html", rsc: "1" }))).toBe(false);
+  it("curl, monitores e verificadores de links, sem Sec-Fetch-Dest, também recebem o 404 de verdade", () => {
+    expect(wantsHtml(new Headers({ accept: "*/*" }))).toBe(true);
+    expect(wantsHtml(new Headers())).toBe(true);
+  });
+
+  it("um header rsc que ainda chegue manda para o rewrite", () => {
+    expect(wantsHtml(new Headers({ "sec-fetch-dest": "document", rsc: "1" }))).toBe(false);
   });
 });
 
@@ -48,6 +52,15 @@ describe("carryIntlHeaders", () => {
       "x-middleware-next": "1",
       "x-middleware-rewrite": "https://site.dev/pt/x",
     });
+
+  it("leva todos os cookies, não só o último", () => {
+    const from = new Headers();
+    from.append("set-cookie", "NEXT_LOCALE=pt; Path=/");
+    from.append("set-cookie", "other=1; Path=/");
+    const to = new Headers();
+    carryIntlHeaders(from, to);
+    expect(to.getSetCookie()).toEqual(["NEXT_LOCALE=pt; Path=/", "other=1; Path=/"]);
+  });
 
   it("leva o cookie de idioma e os outros headers do next-intl", () => {
     const to = new Headers();

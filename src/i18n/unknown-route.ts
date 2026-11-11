@@ -15,8 +15,11 @@ const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "[::1]"]);
  */
 export function trustedOrigin(requestUrl: string, env: Record<string, string | undefined> = process.env) {
   const url = new URL(requestUrl);
+  // The site URL only when it's set: siteUrl() falls back to localhost:3000, which would make that
+  // host trusted in production too.
+  const site = env.NEXT_PUBLIC_SITE_URL ? new URL(siteUrl(env)).host : null;
   const hosts = new Set(
-    [new URL(siteUrl(env)).host, env.VERCEL_URL, env.VERCEL_BRANCH_URL, env.VERCEL_PROJECT_PRODUCTION_URL].filter(
+    [site, env.VERCEL_URL, env.VERCEL_BRANCH_URL, env.VERCEL_PROJECT_PRODUCTION_URL].filter(
       (host): host is string => Boolean(host),
     ),
   );
@@ -25,12 +28,16 @@ export function trustedOrigin(requestUrl: string, env: Record<string, string | u
 }
 
 /**
- * Whether the request is a document visit, which asks for HTML. A client navigation asks for the
+ * Whether the request gets the 404 page's HTML with a real 404. A client navigation asks for the
  * RSC payload instead, but Next's proxy adapter strips both its markers (the `rsc` header and the
- * `_rsc` query) before the proxy runs; its fetch never accepts `text/html`, which is what stays.
+ * `_rsc` query) before the proxy runs. What stays is the browser's `Sec-Fetch-Dest`: `document`
+ * for a visit, `empty` for the router's fetch. Clients that don't send it (curl, uptime and link
+ * checkers) get the real 404 too; an old browser without it would just reload into the page.
  */
 export function wantsHtml(headers: Headers) {
-  return !headers.has("rsc") && (headers.get("accept") ?? "").includes("text/html");
+  if (headers.has("rsc")) return false;
+  const dest = headers.get("sec-fetch-dest");
+  return dest === null || dest === "document";
 }
 
 /**
@@ -40,8 +47,11 @@ export function wantsHtml(headers: Headers) {
  */
 export function carryIntlHeaders(from: Headers, to: Headers) {
   from.forEach((value, key) => {
-    if (key !== "content-type" && !key.startsWith("x-middleware-")) to.set(key, value);
+    if (key === "set-cookie" || key === "content-type" || key.startsWith("x-middleware-")) return;
+    to.set(key, value);
   });
+  // Appended one by one: `set` would keep only the last of several cookies.
+  for (const cookie of from.getSetCookie()) to.append("set-cookie", cookie);
 }
 
 /**
