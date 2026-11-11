@@ -226,6 +226,9 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
         };
         const onFocus = (event: FocusEvent) => {
           keepTrack();
+          // Keyboard focus only: a mouse click on a card's link focuses it too, and jumping the
+          // page to that card's stop would move it right under the pointer as the link opens.
+          if (!(event.target as Element | null)?.matches(":focus-visible")) return;
           const card = (event.target as Element | null)?.closest("[data-project-card]");
           const index = cards.findIndex((state) => state.card === card);
           if (index < 0) return;
