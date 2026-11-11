@@ -50,11 +50,13 @@ const surfaceOf = (element: HTMLElement, clip: Clip): Surface => {
 
 /**
  * Which parts of the side HUD sit over an Alert surface (the Contact poster, also while its blade
- * sweeps in, or the footer): the act marks and the reading. Fixed outside them, they would keep
- * the page theme's colors on yellow.
+ * sweeps in, or the footer): each act mark (the children of `marksRef`) and the reading. Fixed
+ * outside them, they would keep the page theme's colors on yellow. Per mark, not for the whole
+ * rail: the blade's diagonal edge crosses the column, and for a stretch of scroll the lower marks
+ * sat on yellow in Night ink (1.39:1) while the upper ones were still on black.
  */
 export function useOverPoster(marksRef: RefObject<HTMLElement | null>, readingRef: RefObject<HTMLElement | null>) {
-  const [over, setOver] = useState({ marks: false, reading: false });
+  const [over, setOver] = useState<{ marks: boolean[]; reading: boolean }>({ marks: [], reading: false });
 
   useEffect(() => {
     const poster = document.querySelector<HTMLElement>("[data-contact-poster]");
@@ -65,10 +67,14 @@ export function useOverPoster(marksRef: RefObject<HTMLElement | null>, readingRe
       const surfaces: Surface[] = [];
       if (poster) surfaces.push(surfaceOf(poster, parseBladeClip(poster.style.clipPath)));
       if (footer) surfaces.push(surfaceOf(footer, null));
-      const covered = (element: HTMLElement | null) => !!element && anyCovers(surfaces, element.getBoundingClientRect());
-      const marks = covered(marksRef.current);
+      const covered = (element: Element | null) => !!element && anyCovers(surfaces, element.getBoundingClientRect());
+      const marks = [...(marksRef.current?.children ?? [])].map(covered);
       const reading = covered(readingRef.current);
-      setOver((current) => (current.marks === marks && current.reading === reading ? current : { marks, reading }));
+      setOver((current) =>
+        current.reading === reading && current.marks.length === marks.length && current.marks.every((mark, i) => mark === marks[i])
+          ? current
+          : { marks, reading },
+      );
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(check);
