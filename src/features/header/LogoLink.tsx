@@ -45,7 +45,7 @@ export function LogoLink({ name, suffix, label, href = "#hero" }: { name: string
         if (event.pointerType === "mouse") play();
       }}
       onFocus={play}
-      className="group inline-flex items-center font-heading text-base font-bold tracking-wide text-foreground uppercase"
+      className="tap-area group inline-flex items-center font-heading text-base font-bold tracking-wide text-foreground uppercase"
     >
       <span aria-hidden="true" className={`mr-1.5 translate-x-1.5 font-mono text-sm font-medium text-primary-accessible ${reveal}`}>
         [
