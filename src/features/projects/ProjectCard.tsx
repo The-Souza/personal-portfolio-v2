@@ -54,9 +54,11 @@ export function ProjectCard({ project, number }: { project: Project; number: str
           </h3>
           <p className="text-sm leading-normal">{t(item("description"))}</p>
           <p className="text-sm text-muted-foreground">
-            <b className="mr-1.5 font-mono text-xs font-medium tracking-widest text-primary-accessible uppercase">
+            {/* A real space after the label: with only a margin, screen readers ran it into the text
+                ("ResultadoO envio…"). The margin tops the space up to the old gap. */}
+            <b className="mr-0.5 font-mono text-xs font-medium tracking-widest text-primary-accessible uppercase">
               {t(project.outcome ?? "result")}
-            </b>
+            </b>{" "}
             {t(item("result"))}
           </p>
           {terminal && (

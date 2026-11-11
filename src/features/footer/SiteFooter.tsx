@@ -1,4 +1,5 @@
 import { HudFrame, HudFrameRow, HudMark } from "@/components/HudFrame";
+import { StatusDot } from "@/components/HudMarkers";
 import { NAV_IDS } from "@/content/acts";
 import { ClosingFrame } from "@/features/footer/ClosingFrame";
 import { Container } from "@/features/shared/Container";
@@ -20,6 +21,7 @@ export function SiteFooter() {
           <HudFrame>
             <HudFrameRow>
               <p className="font-mono text-xs leading-relaxed tracking-wider uppercase">
+                <StatusDot />
                 {t("status")}
                 <br />
                 {t("company")}

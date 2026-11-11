@@ -25,7 +25,7 @@
       "stack": "Stack",
       "contact": "Contact"
     },
-    "status": "● online · Osasco, Brazil",
+    "status": "online · Osasco, Brazil",
     "theme": {
       "night": "Night",
       "day": "Day",
@@ -278,7 +278,7 @@
   },
   "footer": {
     "navAria": "Footer",
-    "status": "● online · Osasco, Brazil",
+    "status": "online · Osasco, Brazil",
     "company": "The Souza Tech · 2026",
     "mark": "GC-026",
     "nav": {
@@ -305,7 +305,7 @@
     "warning": "signal lost",
     "log": "// request log",
     "aim": "target",
-    "foot": "● error_404 · not-found.tsx",
+    "foot": "error_404 · not-found.tsx",
     "lines": [
       { "prefix": ">", "text": "get {path}" },
       { "prefix": ">", "text": "status:", "status": "404", "tone": "err" },
@@ -329,7 +329,7 @@
     "warning": "fault detected",
     "report": "// fault report",
     "barLabel": "Rendering",
-    "foot": "● fault · {file} · digest {digest}",
+    "foot": "fault · {file} · digest {digest}",
     "noDigest": "—",
     "lines": [
       { "prefix": ">", "text": "render {path}" },

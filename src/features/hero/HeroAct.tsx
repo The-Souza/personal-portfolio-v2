@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { BracketPanel } from "@/components/BracketPanel";
 import { Button } from "@/components/Button";
-import { Rail, Target } from "@/components/HudMarkers";
+import { Rail, StatusDot, Target } from "@/components/HudMarkers";
 import { HeroStage } from "@/features/hero/HeroStage";
 import { ActionLink } from "@/features/shared/ActionLink";
 import { Container } from "@/features/shared/Container";
@@ -61,7 +61,12 @@ export function HeroAct() {
               <BracketPanel
                 animatedCorners
                 eyebrow={t("status.eyebrow")}
-                title={`● ${t("status.online")}`}
+                title={
+                  <>
+                    <StatusDot />
+                    {t("status.online")}
+                  </>
+                }
                 details={[t("status.line"), t("status.place")]}
               />
             </div>

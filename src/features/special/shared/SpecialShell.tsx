@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { HudFrame, HudFrameRow, HudMark } from "@/components/HudFrame";
+import { StatusDot } from "@/components/HudMarkers";
 import { LogoLink } from "@/features/header/LogoLink";
 import { cn } from "@/lib/utils";
 
@@ -57,6 +58,7 @@ export function SpecialShell({
         <HudFrame>
           <HudFrameRow>
             <p className="font-mono text-xs leading-relaxed tracking-wider uppercase">
+              <StatusDot />
               {foot}
               <br />
               {texts.place}

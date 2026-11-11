@@ -4,8 +4,8 @@ import type { ElementType, ReactNode } from "react";
 export interface BracketPanelProps {
   /** Mono eyebrow, e.g. "// Projeto atual". */
   eyebrow?: string;
-  /** Bold title of the list (dt). */
-  title?: string;
+  /** Bold title of the list (dt). A node, so it can carry an aria-hidden mark (StatusDot). */
+  title?: ReactNode;
   /** Lines below the title (dd), in `muted-foreground`. */
   details?: ReactNode[];
   /** "focus": corners in `foreground` — the panel that matters on the screen. */

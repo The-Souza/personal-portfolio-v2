@@ -1,6 +1,7 @@
 "use client";
 
 import { BracketPanel } from "@/components/BracketPanel";
+import { StatusDot } from "@/components/HudMarkers";
 import { ACT_IDS } from "@/content/acts";
 import { SITE } from "@/content/site";
 import { LanguageSwitcher } from "@/features/header/LanguageSwitcher";
@@ -143,7 +144,10 @@ export function Drawer({ open, visible, activeIndex, panelRef, onClose, onNaviga
 
         <div data-drawer-extra className="mt-auto">
           <BracketPanel className="font-mono text-xs leading-relaxed tracking-wider uppercase">
-            <p>{t("status")}</p>
+            <p>
+              <StatusDot />
+              {t("status")}
+            </p>
             {/* One long word: on narrow phones it breaks after the @, and anywhere as a last resort. */}
             <p className="normal-case wrap-anywhere">
               {SITE.email.split("@")[0]}@<wbr />

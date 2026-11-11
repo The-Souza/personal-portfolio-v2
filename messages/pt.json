@@ -25,7 +25,7 @@
       "stack": "Stack",
       "contact": "Contato"
     },
-    "status": "● online · Osasco, SP",
+    "status": "online · Osasco, SP",
     "theme": {
       "night": "Noite",
       "day": "Dia",
@@ -278,7 +278,7 @@
   },
   "footer": {
     "navAria": "Rodapé",
-    "status": "● online · Osasco, SP",
+    "status": "online · Osasco, SP",
     "company": "The Souza Tech · 2026",
     "mark": "GC-026",
     "nav": {
@@ -305,7 +305,7 @@
     "warning": "sinal perdido",
     "log": "// log da requisição",
     "aim": "alvo",
-    "foot": "● erro_404 · not-found.tsx",
+    "foot": "erro_404 · not-found.tsx",
     "lines": [
       { "prefix": ">", "text": "get {path}" },
       { "prefix": ">", "text": "status:", "status": "404", "tone": "err" },
@@ -329,7 +329,7 @@
     "warning": "falha detectada",
     "report": "// relatório de falha",
     "barLabel": "Renderização",
-    "foot": "● falha · {file} · digest {digest}",
+    "foot": "falha · {file} · digest {digest}",
     "noDigest": "—",
     "lines": [
       { "prefix": ">", "text": "render {path}" },

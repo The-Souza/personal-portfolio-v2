@@ -5,6 +5,11 @@ export function Reticle() {
   return <span aria-hidden="true" className="reticle inline-block" />;
 }
 
+/** The "●" before a status line. Visual only: read aloud it was "black circle online". */
+export function StatusDot() {
+  return <span aria-hidden="true">● </span>;
+}
+
 /** 72px X target — in a corner of the composition. */
 export function Target() {
   return <span aria-hidden="true" className="target inline-block" />;
