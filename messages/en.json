@@ -174,40 +174,6 @@
       }
     }
   },
-  "clients": {
-    "aria": "Clients, fictional examples",
-    "eyebrow": "// clients · case format",
-    "title": "Clients",
-    "fake": "⚠ fictional examples",
-    "code": "client_0{number}",
-    "preview": "project preview · {name}",
-    "items": {
-      "frotaAgil": {
-        "name": "Frota Ágil Entregas",
-        "segment": "Logistics · last mile",
-        "challenge": "Routes put together by hand in a spreadsheet every morning.",
-        "result": "<b>1h30 → 10 min</b> to close the day's routes."
-      },
-      "odontoLume": {
-        "name": "Odonto Lume",
-        "segment": "Health · dental clinic",
-        "challenge": "Bookings by phone only and lots of no-shows.",
-        "result": "<b>−35%</b> no-shows with online booking and reminders."
-      },
-      "emporioVilaNova": {
-        "name": "Empório Vila Nova",
-        "segment": "Retail · neighborhood grocery",
-        "challenge": "Orders by voice message and no up-to-date price list.",
-        "result": "<b>+18%</b> average ticket with the WhatsApp catalog."
-      },
-      "baseFirme": {
-        "name": "Base Firme Construções",
-        "segment": "Construction",
-        "challenge": "Weekly site report assembled by hand.",
-        "result": "<b>1 day → 20 min</b> with a Python-generated PDF."
-      }
-    }
-  },
   "stack": {
     "aria": "Stack",
     "eyebrow": "// stack · what i use to ship",

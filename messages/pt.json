@@ -174,40 +174,6 @@
       }
     }
   },
-  "clients": {
-    "aria": "Clientes, exemplos fictícios",
-    "eyebrow": "// clientes · formato do case",
-    "title": "Clientes",
-    "fake": "⚠ exemplos fictícios",
-    "code": "cliente_0{number}",
-    "preview": "prévia do projeto · {name}",
-    "items": {
-      "frotaAgil": {
-        "name": "Frota Ágil Entregas",
-        "segment": "Logística · last-mile",
-        "challenge": "Rotas montadas à mão numa planilha toda manhã.",
-        "result": "<b>1h30 → 10 min</b> para fechar o roteiro do dia."
-      },
-      "odontoLume": {
-        "name": "Odonto Lume",
-        "segment": "Saúde · odontologia",
-        "challenge": "Agenda só por telefone e muitas faltas sem aviso.",
-        "result": "<b>−35%</b> de faltas com agenda online e lembretes."
-      },
-      "emporioVilaNova": {
-        "name": "Empório Vila Nova",
-        "segment": "Varejo · mercearia",
-        "challenge": "Pedidos por áudio, sem lista de preços atualizada.",
-        "result": "<b>+18%</b> no ticket médio com o catálogo no WhatsApp."
-      },
-      "baseFirme": {
-        "name": "Base Firme Construções",
-        "segment": "Construção civil",
-        "challenge": "Relatório semanal de obra montado à mão.",
-        "result": "<b>1 dia → 20 min</b> com o PDF gerado por Python."
-      }
-    }
-  },
   "stack": {
     "aria": "Stack",
     "eyebrow": "// stack · o que uso para entregar",

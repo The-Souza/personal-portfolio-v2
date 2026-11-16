@@ -42,7 +42,6 @@ export function ProjectsAct() {
             {PROJECTS.map((project, i) => (
               <ProjectCard key={project.key} project={project} number={pad2(i + 1)} />
             ))}
-            {/* <ClientsBlock /> */}
           </Container>
         </div>
         <Container
@@ -55,8 +54,7 @@ export function ProjectsAct() {
               className="segments block h-full w-0 text-foreground"
             />
           </div>
-          {/* Counts the track's cards, like ProjectsStage does on the client: add one when the
-              ClientsBlock (also a `data-project-card`) comes back. */}
+          {/* Counts the track's cards, like ProjectsStage does on the client. */}
           <span data-projects-counter>{counterLabel(0, PROJECTS.length)}</span>
         </Container>
       </ProjectsStage>
