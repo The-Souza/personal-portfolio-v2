@@ -4,7 +4,7 @@
 
 ![Guilherme Campos · Desenvolvedor Frontend e Fullstack](public/og-pt.png)
 
-<!-- depois do deploy: **No ar:** [seu-dominio](https://seu-dominio) -->
+**No ar:** [guilherme-portfolio-dev.vercel.app](https://guilherme-portfolio-dev.vercel.app)
 
 O portfólio de desenvolvedor de Guilherme Campos, sócio-fundador e desenvolvedor da [The Souza Tech](https://thesouzatech.com.br). Uma página única contada em atos, com um design system de HUD escuro, movimento guiado pela rolagem e duas línguas, feita para ser lida inteira sem JavaScript.
 
@@ -29,7 +29,7 @@ Mais uma 404 (servida com status 404 de verdade) e uma página de erro com fluxo
 - **i18n:** next-intl, português (padrão) e inglês em `/pt` e `/en`
 - **Tema:** next-themes, Noite (padrão) e Dia, mais Alerta em seções inteiras
 - **Testes:** Vitest + React Testing Library, Playwright com axe
-- **Entrega:** pnpm, GitHub Actions, Vercel
+- **Entrega:** pnpm, GitHub Actions, Vercel (com Web Analytics e Speed Insights)
 
 ## Como rodar
 
