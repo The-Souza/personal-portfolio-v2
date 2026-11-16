@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { BOOT_SKIP_SCRIPT } from "@/features/boot/boot-session";
@@ -58,6 +60,9 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
         <script dangerouslySetInnerHTML={{ __html: BOOT_SKIP_SCRIPT }} />
         {/* The boot, header and HUD live in the (site) group; the special pages skip them. */}
         <AppProviders messages={clientMessages}>{children}</AppProviders>
+        {/* Cookieless page views and real-user Core Web Vitals, reported to the Vercel dashboard. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
