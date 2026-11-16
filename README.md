@@ -4,7 +4,7 @@ English · [Português](README.pt-BR.md)
 
 ![Guilherme Campos · Frontend and Fullstack developer](public/og-en.png)
 
-<!-- after the deploy: **Live:** [your-domain](https://your-domain) -->
+**Live:** [guilherme-portfolio-dev.vercel.app](https://guilherme-portfolio-dev.vercel.app)
 
 The developer portfolio of Guilherme Campos, co-founder and developer at [The Souza Tech](https://thesouzatech.com.br). A single page told in acts, with a dark HUD design system, scroll-driven motion and two languages, built to read fully without JavaScript.
 
@@ -29,7 +29,7 @@ Plus a 404 (served with a real 404 status) and an error page with a retry flow, 
 - **i18n:** next-intl, Portuguese (default) and English at `/pt` and `/en`
 - **Theme:** next-themes, Night (default) and Day, plus Alert for whole sections
 - **Tests:** Vitest + React Testing Library, Playwright with axe
-- **Delivery:** pnpm, GitHub Actions, Vercel
+- **Delivery:** pnpm, GitHub Actions, Vercel (with Web Analytics and Speed Insights)
 
 ## Getting started
 
