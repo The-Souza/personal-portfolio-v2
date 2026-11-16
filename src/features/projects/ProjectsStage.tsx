@@ -120,8 +120,8 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
         gsap.set(cards.map((state) => state.card), { "--dim": 1 });
         cards.forEach((state) => restore(state, false));
 
-        // A card taller than the space between the title and the progress bar (the clients block
-        // on screens like 768×768) has to scale down, keeping 16px above and below. It first gets
+        // A card taller than the space between the title and the progress bar (on short, square
+        // screens like 768×768) has to scale down, keeping 16px above and below. It first gets
         // wider, so its text wraps less and it gets shorter, until its on-screen width (after the
         // scale) is back to what it was. The scale keeps its center, so the measures below hold.
         // A binary search finds the widest layout whose scaled width doesn't pass the original:
