@@ -60,9 +60,15 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
         <script dangerouslySetInnerHTML={{ __html: BOOT_SKIP_SCRIPT }} />
         {/* The boot, header and HUD live in the (site) group; the special pages skip them. */}
         <AppProviders messages={clientMessages}>{children}</AppProviders>
-        {/* Cookieless page views and real-user Core Web Vitals, reported to the Vercel dashboard. */}
-        <Analytics />
-        <SpeedInsights />
+        {/* Cookieless page views and real-user Core Web Vitals, reported to the Vercel dashboard.
+            Their scripts live under /_vercel, which only exists on Vercel: outside it (CI, local
+            `pnpm start`) they would 404. */}
+        {process.env.VERCEL && (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        )}
       </body>
     </html>
   );
